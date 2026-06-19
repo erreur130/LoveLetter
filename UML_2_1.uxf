@@ -533,7 +533,7 @@ Duel</panel_attributes>
       <h>50</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
-- jeu : Jeu
+- jeu : Jeu*
 m1=1..1
 m2=0..1</panel_attributes>
     <additional_attributes>490.0;20.0;10.0;20.0</additional_attributes>
