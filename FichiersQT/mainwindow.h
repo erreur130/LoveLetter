@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "jeu.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -11,6 +12,7 @@ QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow{
         Q_OBJECT
+    Jeu* jeu;
     Ui::MainWindow *ui;
     public:
         explicit MainWindow(QWidget *parent = nullptr);
