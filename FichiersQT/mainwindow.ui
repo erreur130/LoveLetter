@@ -14,17 +14,47 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget"/>
+  <widget class="QStatusBar" name="statusbar"/>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>25</height>
+     <height>23</height>
     </rect>
    </property>
+   <addaction name="actionReges_de_jeu"/>
+   <addaction name="actionListe_des_cartes"/>
+   <addaction name="actionProjet"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionReges_de_jeu">
+   <property name="text">
+    <string>Règes de jeu</string>
+   </property>
+   <property name="shortcut">
+    <string>R</string>
+   </property>
+  </action>
+  <action name="actionListe_des_cartes">
+   <property name="text">
+    <string>Liste des cartes</string>
+   </property>
+   <property name="toolTip">
+    <string>Liste des cartes</string>
+   </property>
+   <property name="shortcut">
+    <string>L, C</string>
+   </property>
+  </action>
+  <action name="actionProjet">
+   <property name="text">
+    <string>Projet</string>
+   </property>
+   <property name="shortcut">
+    <string>P</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

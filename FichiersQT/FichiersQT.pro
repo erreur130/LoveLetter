@@ -7,6 +7,7 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    affichageactionscartes.cpp \
     carte.cpp \
     humain.cpp \
     ia.cpp \
@@ -14,19 +15,24 @@ SOURCES += \
     joueur.cpp \
     main.cpp \
     mainwindow.cpp \
+    nbjoueurswindow.cpp \
     paquet.cpp
 
 HEADERS += \
+    affichageactionscartes.h \
     carte.h \
     humain.h \
     ia.h \
     jeu.h \
     joueur.h \
     mainwindow.h \
+    nbjoueurswindow.h \
     paquet.h
 
 FORMS += \
-    mainwindow.ui
+    affichageactionscartes.ui \
+    mainwindow.ui \
+    nbjoueurswindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -22,21 +22,15 @@ class MainWindow : public QMainWindow{
         void miseAJourPioche();
         void miseAJourListCartesJouer();
         void creationCartesJoueurActuel();
-        void afficheActionCarte0();
-        void afficheActionCarte1();
-        void afficheActionCarte2();
-        void afficheActionCarte3();
-        void afficheActionCarte4();
-        void afficheActionCarte5();
-        void afficheActionCarte6();
-        void afficheActionCarte7();
-        void afficheActionCarte8();
-        void afficheActionCarte9();
         void afficherVictoireManche();
         void afficherVictoireJeu();
-        void afficheActionsCartes();
     private slots:
         //void on_ListWiged_listCartes_activated(index : int)
         //void recevoirJoueur(short int, short int);
+        void on_actionReges_de_jeu_triggered();
+        void on_actionListe_des_cartes_triggered();
+        void on_actionProjet_triggered();
+        void recevoirJoueur(short int, short int, short int);
+
 };
 #endif // MAINWINDOW_H
