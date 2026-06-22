@@ -1,0 +1,620 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.1">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>90</x>
+      <y>820</y>
+      <w>310</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>Humain
+--
+--
++ Constructeur(nom : QString)
++ Destructeur()
++ afficheCartes()
++ choisirCarte() : Carte*
++ choisirJoueur(type : TypeCarte) : Joueur*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>190</x>
+      <y>350</y>
+      <w>370</w>
+      <h>420</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Class abstraite&gt;&gt;
+/Joueur/
+--
+- nom : QString
+- points : short int
+- pointBonusManche : bool
+- protection : bool
+- enVie : bool
+--
++ Constructeur(nom : QString)
++ Destructeur()
++ estEnVie() : bool
++ estPorteger() : bool
++ avoirMain() : QVector&lt;Carte*&gt;
++ avoirNom() : QString
++ avoirPoints() : short int
++ avoirPointBonus() : bool
++ gainPoints()
++ ajouterPtBonus()
++ retirerPtBonus()
++ ajouterProtection()
++ retirerProtection()
++ reinitialiser()
++ eliminer()
++ jouerCarte(carte : Carte, joueur : Joueur* = nullptr)
+*/+ choisirCarte() : Carte*/*
+*/+ choisirJoueur(type : TypeCarte) : Joueur*/*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>410</x>
+      <y>860</y>
+      <w>370</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>IA
+--
+- intelligent : bool
+- cartesPotentiellesDesAutres : QVector&lt;QVector&lt;bool&gt; &gt;
+--
++ Constructeur(nom : string, intelligent : bool)
++ Destructeur()
++ choisirCarte() : Carte*
++ choisirJoueur(type : TypeCarte) : Joueur*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>280</x>
+      <y>760</y>
+      <w>30</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-
+</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>490</x>
+      <y>760</y>
+      <w>30</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-
+</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>900</x>
+      <y>200</y>
+      <w>290</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>Paquet
+--
+- nbCartesRestantes : short int
+--
++ Constructeur()
++ Destructeur()
++ avoirNbCartesRestantes() : short int
++ piocher() : Carte*
++ defausser(carte : Carte*)
++ remplir()
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>390</x>
+      <y>250</y>
+      <w>300</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+    - joueurs : QVector&lt;Joueur*&gt;
+  - joueurActuel : Joueur*
+m1=1..1
+m2=0..n
+</panel_attributes>
+    <additional_attributes>100.0;10.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>420</x>
+      <y>10</y>
+      <w>470</w>
+      <h>250</h>
+    </coordinates>
+    <panel_attributes>Jeu
+--
+- objectifPoints : short int
+--
++ Constructeur(nbAIntelect, nbAI : short int, nomHumain : QString)
++ Destructeur()
++ afficheJoueursRestant()
++ avoirJoueurActuel() : Joueur*
++ tourSuivant()
++ miseAJourCartesPotentiel(carteJouer : Carte*)
++ aGagnerLeJeu(joueur : Joueur*) : bool
++ verifSiGagnant() : Joueur*
++ reinitialiserManche()
++ eliminationJoueur(joueur : Joueur*)
++ lancer()
++ tourDeJeu()
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>680</x>
+      <y>250</y>
+      <w>240</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+         - pioche : Paquet
+m1=1..1
+m2=0..1
+</panel_attributes>
+    <additional_attributes>10.0;10.0;70.0;40.0;220.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>900</x>
+      <y>350</y>
+      <w>220</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+
+- cartes : QQueue&lt;Carte*&gt;
+m1=1..1
+m2=0..21
+</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>640</x>
+      <y>740</y>
+      <w>660</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>NomCarte
+--
+--
++ Constructeur(nbExemplaires, num : short int , description, nom : QString, type : TypeCarte)
++ Destructeur()
+/+ action(joueur1*, joueur2* : Joueur = nullptr)/</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1120</x>
+      <y>650</y>
+      <w>30</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-
+</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>550</x>
+      <y>510</y>
+      <w>230</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+- main : QVector&lt;Carte*&gt;
+m1=0..n
+m2=0..3</panel_attributes>
+    <additional_attributes>10.0;20.0;210.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>0</x>
+      <y>410</y>
+      <w>170</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Il y a plusieurs manches
+donc il faut savoir qui est
+éliminer sans le suprimer.
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>100</x>
+      <y>230</y>
+      <w>210</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>Jeu peut intéragire directement
+avec le joueur actuel.
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1090</x>
+      <y>410</y>
+      <w>270</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>Même s'il existe 10 cartes différantes,
+certaines existe en plusieurs exemplaires.
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>900</x>
+      <y>90</y>
+      <w>110</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Paquet existe
+pour simplifier
+la class Jeu.
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1000</x>
+      <y>810</y>
+      <w>180</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>-&gt; 10 classes concrètes
+qui sont comme NomCarte
+qui constitue les
+différentes cartes.
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>940</x>
+      <y>140</y>
+      <w>30</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>950</x>
+      <y>430</y>
+      <w>160</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>140.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>300</x>
+      <y>250</y>
+      <w>170</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;150.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>160</x>
+      <y>440</y>
+      <w>60</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>40.0;20.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1080</x>
+      <y>100</y>
+      <w>210</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>Defauser correspond à
+remettre la carte sous le paquet.
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1120</x>
+      <y>140</y>
+      <w>80</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>60.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>20</x>
+      <y>570</y>
+      <w>140</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>Le gain de points se
+calcule et se rajoute.
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>150</x>
+      <y>580</y>
+      <w>60</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;40.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>570</x>
+      <y>580</y>
+      <w>120</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>(Joueur = nullptr)
+car certaine carte
+n'influe pas sur
+un autre Joueur.
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>660</x>
+      <y>640</y>
+      <w>390</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;20.0;30.0;70.0;370.0;70.0;370.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>520</x>
+      <y>610</y>
+      <w>70</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>50.0;10.0;10.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>610</x>
+      <y>650</y>
+      <w>300</w>
+      <h>220</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;200.0;280.0;200.0;280.0;170.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>610</x>
+      <y>330</y>
+      <w>100</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Enum Class&gt;&gt;
+TypeCarte
+--
+Offensif
+Defensif
+Tous
+Duel</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>760</x>
+      <y>460</y>
+      <w>600</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Class abstraite&gt;&gt;
+/Carte/
+--
+- nbExemplaires : short int
+- num : short int
+- nom : QString
+- description : QString
+--
++ Constructeur(nbExemplaires, num : short int , description, nom : QString, type : TypeCarte)
++ Destructeur()
++ estType() : TypeCarte
++ avoirNum() : short int
+*/+ action(joueur1*, joueur2* : Joueur = nullptr)/*
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1370</x>
+      <y>0</y>
+      <w>350</w>
+      <h>260</h>
+    </coordinates>
+    <panel_attributes>MainWindow
+--
+--
++ Constructeur(parent : QWidget* = nullptr)
++ Destructeur()
+- miseAJourJoueursStatistiques()
+- miseAJourPioche()
+- miseAJourListCartesJouer()
+- creationCartesJoueurActuel()
+- on_ListWiged_listCartes_activated(index : int)
+- recevoirJoueur(h, i, ii : short int)
+- afficherVictoireManche()
+- afficherVictoireJeu()
+- on_actionReges_de_jeu_triggered()
+- on_actionListe_des_cartes_triggered()
+- on_actionProjet_triggered()
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>880</x>
+      <y>40</y>
+      <w>510</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+- jeu : Jeu*
+m1=1..1
+m2=0..1</panel_attributes>
+    <additional_attributes>490.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1420</x>
+      <y>360</y>
+      <w>320</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>NbJoueursWindow
+--
+--
++ Constructeur(parent : QWidget* = nullptr)
++ Destructeur()
+- envoyerJoueurs(h, i, ii : short int)
+- on_button_Jouer_clicked()
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1460</x>
+      <y>250</y>
+      <w>230</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;..
+- fenetre : NbJoueursWindow
+m1=1..1
+m2=0..1</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>700</x>
+      <y>370</y>
+      <w>190</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+  - type : TypeCarte
+m1=0..n
+m2=0..1</panel_attributes>
+    <additional_attributes>60.0;90.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1380</x>
+      <y>550</y>
+      <w>320</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>AffichageActionsCartes
+--
+--
++ Constructeur(parent : QWidget* = nullptr)
++ Destructeur()
+- on_ok_button_clicked()
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1390</x>
+      <y>250</y>
+      <w>270</w>
+      <h>320</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;..
+
+
+
+
+
+
+
+
+
+
+- fenetre : AffichageActionsCartes
+m1=1..1
+m2=0..1</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;300.0</additional_attributes>
+  </element>
+</diagram>
