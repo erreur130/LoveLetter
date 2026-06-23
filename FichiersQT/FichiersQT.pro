@@ -7,7 +7,6 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    affichageactionscartes.cpp \
     carte.cpp \
     humain.cpp \
     ia.cpp \
@@ -19,7 +18,6 @@ SOURCES += \
     paquet.cpp
 
 HEADERS += \
-    affichageactionscartes.h \
     carte.h \
     humain.h \
     ia.h \
@@ -30,6 +28,8 @@ HEADERS += \
     paquet.h
 
 FORMS += \
+    InfoProjet.ui \
+    affichageRegles.ui \
     affichageactionscartes.ui \
     mainwindow.ui \
     nbjoueurswindow.ui

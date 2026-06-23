@@ -91,22 +91,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
      </property>
     </widget>
    </item>
-   <item alignment="Qt::AlignmentFlag::AlignHCenter">
-    <widget class="QPushButton" name="ok_button">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>100</width>
-       <height>100</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>ok</string>
-     </property>
-    </widget>
-   </item>
   </layout>
  </widget>
  <resources/>
