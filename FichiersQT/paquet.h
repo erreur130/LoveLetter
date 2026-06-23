@@ -5,12 +5,11 @@
 #include "QQueue"
 
 class Paquet{
-    short int nbCartesRestantes;
     QQueue<Carte*> cartes;
 public:
     Paquet();
     ~Paquet();
-    short int avoirNbCartesRestantes() const;
+    inline short int avoirNbCartesRestantes() const {return cartes.length();};
     Carte* piocher();
     void defausser(Carte*);
     void remplir();

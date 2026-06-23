@@ -18,6 +18,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     fenetre->setWindowTitle("Choix des joueurs");
     fenetre->exec(); // bloque MainWindow
 
+    // début du jeu ----------------------------------------------------------------------------------------------------------------------
+
+
+
 }
 
 MainWindow::~MainWindow(){

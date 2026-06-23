@@ -2,7 +2,8 @@
 #define JEU_H
 
 #include "QVector"
-#include "joueur.h"
+#include "humain.h"
+#include "ia.h"
 #include "paquet.h"
 
 class Jeu {
@@ -11,10 +12,11 @@ class Jeu {
     Joueur* joueurActuel;
     Paquet pioche;
     public:
-        Jeu(short int, short int, QString);
+        Jeu(short int, short int, short int);
         ~Jeu();
         void afficheJoueursRestant() const;
-        Joueur* avoirJoueurActuel() const;
+        inline Joueur* avoirJoueurActuel() const {return joueurActuel;};
+        inline QVector<Joueur*> avoirJoueurs() const {return joueurs;};
         void tourSuivant();
         void miseAJourCartesPotentiel(Carte*);
         bool aGagnerLeJeu(Joueur*) const;

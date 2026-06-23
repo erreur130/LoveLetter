@@ -21,8 +21,8 @@ class Carte{
 public:
     Carte(short int, short int, QString, QString, TypeCarte);
     ~Carte();
-    TypeCarte estType() const;
-    short int avoirNum() const;
+    inline TypeCarte estType() const {return type;};
+    inline short int avoirNum() const {return num;};
     virtual void action(Joueur* = nullptr, Joueur* = nullptr) const = 0;
 };
 

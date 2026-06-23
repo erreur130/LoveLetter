@@ -4,7 +4,7 @@
 #include "joueur.h"
 #include "QVector"
 
-class IA{
+class IA : public Joueur{
     bool intelligent;
     QVector<QVector<bool>> cartesPotentiellesDesAutres;
 public:

@@ -2,8 +2,9 @@
 #define HUMAIN_H
 
 #include "joueur.h"
+#include "QDebug"
 
-class Humain{
+class Humain : public Joueur{
 public:
     Humain(QString);
     ~Humain();
