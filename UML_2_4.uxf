@@ -103,13 +103,12 @@
     <id>UMLClass</id>
     <coordinates>
       <x>900</x>
-      <y>200</y>
+      <y>210</y>
       <w>290</w>
-      <h>160</h>
+      <h>140</h>
     </coordinates>
     <panel_attributes>Paquet
 --
-- nbCartesRestantes : short int
 --
 + Constructeur()
 + Destructeur()
@@ -140,18 +139,19 @@ m2=0..n
     <id>UMLClass</id>
     <coordinates>
       <x>420</x>
-      <y>10</y>
+      <y>0</y>
       <w>470</w>
-      <h>250</h>
+      <h>260</h>
     </coordinates>
     <panel_attributes>Jeu
 --
 - objectifPoints : short int
 --
-+ Constructeur(nbAIntelect, nbAI : short int, nomHumain : QString)
++ Constructeur(h, i, ii : short int)
 + Destructeur()
 + afficheJoueursRestant()
 + avoirJoueurActuel() : Joueur*
++ avoirJoueurs() : QVector&lt;Joueur*&gt;
 + tourSuivant()
 + miseAJourCartesPotentiel(carteJouer : Carte*)
 + aGagnerLeJeu(joueur : Joueur*) : bool
@@ -184,9 +184,9 @@ m2=0..1
     <id>Relation</id>
     <coordinates>
       <x>900</x>
-      <y>350</y>
+      <y>340</y>
       <w>220</w>
-      <h>130</h>
+      <h>140</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 
@@ -194,7 +194,7 @@ m2=0..1
 m1=1..1
 m2=0..21
 </panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;120.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -313,10 +313,10 @@ bg=blue</panel_attributes>
       <x>940</x>
       <y>140</y>
       <w>30</w>
-      <h>80</h>
+      <h>90</h>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -370,10 +370,10 @@ bg=blue</panel_attributes>
       <x>1120</x>
       <y>140</y>
       <w>80</w>
-      <h>80</h>
+      <h>90</h>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
-    <additional_attributes>60.0;10.0;10.0;60.0</additional_attributes>
+    <additional_attributes>60.0;10.0;10.0;70.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
@@ -506,6 +506,7 @@ Duel</panel_attributes>
 - miseAJourListCartesJouer()
 - creationCartesJoueurActuel()
 - on_ListWiged_listCartes_activated(index : int)
+- on_ListWiged_listJoueurs_activated(index : int)
 - recevoirJoueur(h, i, ii : short int)
 - afficherVictoireManche()
 - afficherVictoireJeu()
