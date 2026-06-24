@@ -1,10 +1,12 @@
 #ifndef JEU_H
 #define JEU_H
 
-#include "QVector"
+#include <QVector>
 #include "humain.h"
 #include "ia.h"
 #include "paquet.h"
+#include <algorithm> // Pour std::sort et std::unique
+#include <iostream>
 
 class Jeu {
     short int objectifPoints;
@@ -14,13 +16,12 @@ class Jeu {
     public:
         Jeu(short int, short int, short int);
         ~Jeu();
-        void afficheJoueursRestant() const;
+        QVector<Joueur*> JoueursRestant() const;
         inline Joueur* avoirJoueurActuel() const {return joueurActuel;};
         inline QVector<Joueur*> avoirJoueurs() const {return joueurs;};
-        void tourSuivant();
-        void miseAJourCartesPotentiel(Carte*);
-        bool aGagnerLeJeu(Joueur*) const;
-        Joueur* verifSiGagnant() const;
+        bool tourSuivant();
+        void miseAJourCartesPotentiel(Carte* carteJouer, Joueur* autreJoueur = nullptr, Carte* cartePerdent = nullptr); // les deux autres paramètre sont nésésaire en cas de baron (num 3)
+        QVector<Joueur*> verifSiGagnants() const;
         void reinitialiserManche();
         void eliminationJoueur(Joueur*);
         void lancer();

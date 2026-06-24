@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "jeu.h"
+#include <QDebug>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {

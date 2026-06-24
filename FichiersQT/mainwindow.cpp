@@ -5,7 +5,6 @@
 #include "ui_InfoProjet.h"
 #include "ui_affichageRegles.h"
 #include "nbjoueurswindow.h"
-#include "QDebug"
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
     ui->setupUi(this);

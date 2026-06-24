@@ -2,6 +2,8 @@
 
 Humain::Humain(QString nom) : Joueur(nom) {}
 
+Humain::~Humain() {}
+
 void Humain::afficheCartes() const{
     qDebug() << "Main :";
     for(Carte *carte : avoirMain())

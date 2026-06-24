@@ -2,7 +2,7 @@
 #define HUMAIN_H
 
 #include "joueur.h"
-#include "QDebug"
+#include <QDebug>
 
 class Humain : public Joueur{
 public:
