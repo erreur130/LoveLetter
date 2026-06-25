@@ -9,7 +9,7 @@ public:
     Humain(QString);
     ~Humain();
     void afficheCartes() const; // juste dans QDebug()
-    Carte* choisirCarte() const;
+    Carte* choisirCarte(short int nbCartesRestantes) const;
     Joueur* choisirJoueur(TypeCarte) const;
 };
 

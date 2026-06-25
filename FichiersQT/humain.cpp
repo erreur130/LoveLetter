@@ -11,7 +11,7 @@ void Humain::afficheCartes() const{
         ;
 }
 
-Carte* Humain::choisirCarte() const{
+Carte* Humain::choisirCarte(short int) const{
     return nullptr; // permet à MainWindow de faire choisir une carte à un utilisateur avec l'ui
 }
 

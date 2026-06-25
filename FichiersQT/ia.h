@@ -12,7 +12,7 @@ class IA : public Joueur{
 public:
     IA(QString, bool, short int);
     ~IA();
-    Carte* choisirCarte() const;
+    Carte* choisirCarte(short int nbCartesRestantes) const;
     Joueur* choisirJoueur(TypeCarte) const;
     void miseAJourCartesPotentiel(QVector<short int> cartesJouer, Joueur* joueurActuel, short int carteJouer, Joueur* autreJoueur = nullptr, short int cartePerdent = 0);
 };

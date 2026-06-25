@@ -5,8 +5,107 @@ IA::IA(QString nom, bool inte, short int nbJoueurs) :
 
 IA::~IA() {}
 
-Carte* IA::choisirCarte() const{
+Carte* IA::choisirCarte(short int nbCartesRestantes) const{
+    // On considère que le joueur viens de pioché, donc il à 2 cartes (1ère carte est l'ancienne et la deuxème est celle pioché)
 
+    // cas obligatoires ---------------------------------------------------------------------------------- cas obligatoires
+    QVector<Carte *> main = avoirMain();
+    if (main.at(0) == main.at(1)) // cas où les deux cartes sont les mêmes
+        return main.at(0);
+
+    // si princesse (num 9) alors on joue l'autre carte
+    if (main.at(0)->avoirNum() == 9)
+        return main.at(1);
+    else if (main.at(1)->avoirNum() == 9)
+        return main.at(0);
+
+    // si contesse (num 8) et soit 5 soit 7 alors on joue la contesse
+    if (main.at(0)->avoirNum() == 8 && (main.at(1)->avoirNum() == 7 || main.at(1)->avoirNum() == 5) )
+        return main.at(1);
+    else if (main.at(1)->avoirNum() == 8 && (main.at(0)->avoirNum() == 7 || main.at(0)->avoirNum() == 5))
+        return main.at(0);
+
+    // cas d'algo ---------------------------------------------------------------------------------- cas d'algo
+    // cas prioritaires : -----------
+
+    // si servante (num 4) et que tu as une grosse carte connue alors on joue la servante
+    if (main.at(1)->avoirNum() == 4 && (estDecouvert() && main.at(0)->avoirNum() >= 7) ){
+        return main.at(1);
+    }
+
+    // si 1ère carte est connue par quelqu'un (si c'est une grosse carte et que l'ont est à la fin, on la garde)
+    if (estDecouvert() && (main.at(0)->avoirNum() <= 6 && nbCartesRestantes > cartesConnuesDesAutres.size())){ // "cartesConnuesDesAutres.size()" = nb de joueur
+        return main.at(0);
+    }
+
+    // si espionne (num 0) alors on la joue
+    if (main.at(0)->avoirNum() == 0)
+        return main.at(1);
+    else if (main.at(1)->avoirNum() == 0)
+        return main.at(0);
+
+    // si garde (num 1) et que l'on connais (sûr) une carte d'un autre alors on le joue
+    if (main.at(0)->avoirNum() == 1 || main.at(1)->avoirNum() == 1){
+        bool onConnais = false;
+        for (QVector<short int> const& listDunJoueur : cartesConnuesDesAutres){
+            if (not(listDunJoueur.isEmpty())){ // Si la liste contient quelque chause
+                onConnais = true;
+                break; // pas besoin de continuer
+            }
+        }
+        if (onConnais && main.at(0)->avoirNum() == 1)
+            return main.at(1);
+        else if (onConnais && main.at(1)->avoirNum() == 1)
+            return main.at(0);
+    }
+
+    // si baron (num 3) et que tu as une grosse carte (num 6 que au début) alors on joue le barron
+    if (main.at(1)->avoirNum() == 3 && main.at(0)->avoirNum() >= 6){
+        if (main.at(0)->avoirNum() > 6 || /*num 6 que si ->*/ nbCartesRestantes > 21/2)
+            return main.at(1);
+    } else if(main.at(0)->avoirNum() == 3 && main.at(1)->avoirNum() >= 6){
+        if (main.at(1)->avoirNum() > 6 || /*num 6 que si ->*/ nbCartesRestantes > 21/2)
+            return main.at(0);
+    }
+
+    // si prince (num 5) et que l'on connais (sûr) que quelqu'un à la princesse (num 9) alors on le joue
+    if (main.at(1)->avoirNum() == 5 && main.at(0)->avoirNum() >= 5){
+        bool onConnaisUn9 = false;
+        for (QVector<short int> const& listDunJoueur : cartesConnuesDesAutres){
+            if (listDunJoueur.contains(9)){ // Si la liste contient la princesse (num 9)
+                onConnaisUn9 = true;
+                break; // pas besoin de continuer
+            }
+        }
+        if (onConnaisUn9 && main.at(0)->avoirNum() == 5)
+            return main.at(1);
+        else if (onConnaisUn9 && main.at(1)->avoirNum() == 5)
+            return main.at(0);
+    }
+
+    // cas semi prioritaires : -----------
+
+    // si chancelier (num 6)
+    if (main.at(0)->avoirNum() == 6)
+        return main.at(1);
+    else if (main.at(1)->avoirNum() == 6)
+        return main.at(0);
+
+    // si prêtre (num 2)
+    if (main.at(0)->avoirNum() == 2)
+        return main.at(1);
+    else if (main.at(1)->avoirNum() == 2)
+        return main.at(0);
+
+    // cas non prioritaires : -----------
+
+    // si garde (num 1) ici, c'est un tir au pif (avec les supositions)
+    if (main.at(0)->avoirNum() == 1)
+        return main.at(1);
+    else if (main.at(1)->avoirNum() == 1)
+        return main.at(0);
+
+    return main.at(0); // au cas où
 }
 
 Joueur* IA::choisirJoueur(TypeCarte) const{

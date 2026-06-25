@@ -13,6 +13,7 @@ class Joueur{
     bool pointBonusManche;
     bool protection;
     bool enVie;
+    bool aDecouvert;
     QVector<Carte*> main;
     static short int idGlobal;
 public:
@@ -20,6 +21,7 @@ public:
     virtual ~Joueur();
     inline bool estEnVie() const {return enVie;};
     inline bool estPorteger() const {return protection;};
+    inline bool estDecouvert() const {return aDecouvert;};
     inline const QVector<Carte*>& avoirMain() const {return main;};
     inline const QString& avoirNom() const {return nom;};
     inline short int avoirPoints() const {return points;};
@@ -30,10 +32,12 @@ public:
     inline void retirerPtBonus() {pointBonusManche=false;};
     inline void ajouterProtection() {protection=true;};
     inline void retirerProtection() {protection=false;};
+    inline void ajouterDecouvert() {aDecouvert=true;};
+    inline void retirerDecouvert() {aDecouvert=false;};
     void reinitialiser();
     inline void eliminer() {protection=false;};
     void jouerCarte(Carte*, Joueur* = nullptr);
-    virtual Carte* choisirCarte() const = 0;
+    virtual Carte* choisirCarte(short int nbCartesRestantes) const = 0;
     virtual Joueur* choisirJoueur(TypeCarte) const = 0;
     virtual void miseAJourCartesPotentiel(QVector<short int> cartesJouer, Joueur* joueurActuel, short int carteJouer, Joueur* autreJoueur = nullptr, short int cartePerdent = 0); // les deux autres paramètre sont nésésaire en cas de baron (num 3)
 };

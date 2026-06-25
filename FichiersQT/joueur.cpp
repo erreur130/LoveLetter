@@ -3,7 +3,7 @@
 
 short int Joueur::idGlobal = 0;
 
-Joueur::Joueur(QString nom) : nom(nom), points(0), id(idGlobal++), pointBonusManche(0), protection(0), enVie(0), main(QVector<Carte*>()) {}
+Joueur::Joueur(QString nom) : nom(nom), points(0), id(idGlobal++), pointBonusManche(0), protection(0), enVie(0), aDecouvert(0), main(QVector<Carte*>()) {}
 
 Joueur::~Joueur(){}
 
