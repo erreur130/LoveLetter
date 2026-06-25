@@ -11,10 +11,10 @@ void Humain::afficheCartes() const{
         ;
 }
 
-Carte* Humain::choisirCarte(short int) const{
+Carte* Humain::choisirCarte(short int, QVector<bool>) const{
     return nullptr; // permet à MainWindow de faire choisir une carte à un utilisateur avec l'ui
 }
 
-Joueur* Humain::choisirJoueur(TypeCarte) const{
-    return nullptr; // permet à MainWindow de faire choisir une carte à un utilisateur avec l'ui
+short int  Humain::choisirJoueur(Carte*, QVector<bool>) const{
+    return -1; // permet à MainWindow de faire choisir une carte à un utilisateur avec l'ui
 }

@@ -1,0 +1,20 @@
+#include "ianul.h"
+
+IANul::IANul(QString nom, short int nbJoueurs):
+    Joueur(nom), cartesConnuesDesAutres(nbJoueurs, QVector<short int>()){}
+
+IANul::~IANul(){
+
+}
+
+Carte* IANul::choisirCarte(short int nbCartesRestantes, QVector<bool> joueursProteger) const{
+
+}
+
+short int  IANul::choisirJoueur(Carte* carte, QVector<bool> joueursProteger) const{
+
+}
+
+void IANul::miseAJourCartesPotentiel(QVector<short int> cartesJouer, Joueur* joueurActuel, short int carteJouer, Joueur* autreJoueur, short int cartePerdent){
+
+}

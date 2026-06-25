@@ -15,11 +15,12 @@ NbJoueursWindow::~NbJoueursWindow()
 
 void NbJoueursWindow::on_button_Jouer_clicked(){
     short int h = ui->spinBox_Humain->value();
-    short int i = ui->spinBox_IA->value();
-    short int ii = ui->spinBox_IA_Int->value();
+    short int inul = ui->spinBox_IANul->value();
+    short int inorm = ui->spinBox_IANorm->value();
+    short int itri = ui->spinBox_IATri->value();
 
-    if (h+i+ii <= 6 && h+i+ii >= 2){ // min 2 personnes et max 6
-        emit envoyerJoueur(h, i, ii);
+    if (h+inul+inorm+itri <= 6 && h+inul+inorm+itri >= 2){ // min 2 personnes et max 6
+        emit envoyerJoueur(h, inul, inorm, itri);
         close();
     }
 }

@@ -10,8 +10,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->setupUi(this);
     setWindowTitle("Love Letter");
 
+    // demande la répartition des joueurs
     NbJoueursWindow *fenetre = new NbJoueursWindow(this);
-    connect(fenetre, SIGNAL(envoyerJoueur(short int, short int, short int)), this, SLOT(recevoirJoueur(short int, short int, short int)));
+    connect(fenetre, SIGNAL(envoyerJoueur(short int, short int, short int, short int)), this, SLOT(recevoirJoueur(short int, short int, short int, short int)));
     fenetre->setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::WindowMinimizeButtonHint); // retire la croix et pein écrant
     fenetre->setFixedSize(fenetre->size());  // taille fixe basée sur la taille
     fenetre->setWindowTitle("Choix des joueurs");
@@ -19,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     // début du jeu ----------------------------------------------------------------------------------------------------------------------
 
-
+    // ...
 
 }
 
@@ -58,7 +59,7 @@ void MainWindow::on_actionProjet_triggered(){
     fenetre->show();
 }
 
-void MainWindow::recevoirJoueur(short int h, short int i, short int ii){
-    qDebug() << h << i << ii;
+void MainWindow::recevoirJoueur(short int h, short int inul, short int inorm, short int itri){
+    qDebug() << h << inul << inorm << itri;
 }
 

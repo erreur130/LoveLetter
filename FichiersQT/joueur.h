@@ -2,6 +2,8 @@
 #define JOUEUR_H
 
 #include <QVector>
+#include <QRandomGenerator>
+#include <iostream>
 
 class Carte; // forward declaration #include "carte.h" dans le .cpp
 enum class TypeCarte; // forward declaration #include "carte.h" dans le .cpp
@@ -37,8 +39,8 @@ public:
     void reinitialiser();
     inline void eliminer() {protection=false;};
     void jouerCarte(Carte*, Joueur* = nullptr);
-    virtual Carte* choisirCarte(short int nbCartesRestantes) const = 0;
-    virtual Joueur* choisirJoueur(TypeCarte) const = 0;
+    virtual Carte* choisirCarte(short int nbCartesRestantes, QVector<bool> joueursProteger) const = 0;
+    virtual short int choisirJoueur(Carte*, QVector<bool> joueursProteger) const = 0;
     virtual void miseAJourCartesPotentiel(QVector<short int> cartesJouer, Joueur* joueurActuel, short int carteJouer, Joueur* autreJoueur = nullptr, short int cartePerdent = 0); // les deux autres paramètre sont nésésaire en cas de baron (num 3)
 };
 

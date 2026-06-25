@@ -3,7 +3,9 @@
 
 #include <QVector>
 #include "humain.h"
-#include "ia.h"
+#include "ianul.h"
+#include "ianormale.h"
+#include "iatriche.h"
 #include "paquet.h"
 #include <algorithm> // Pour std::sort et std::unique
 #include <iostream>
@@ -14,7 +16,7 @@ class Jeu {
     Joueur* joueurActuel;
     Paquet pioche;
     public:
-        Jeu(short int, short int, short int);
+        Jeu(short int, short int, short int, short int);
         ~Jeu();
         QVector<Joueur*> JoueursRestant() const;
         inline Joueur* avoirJoueurActuel() const {return joueurActuel;};

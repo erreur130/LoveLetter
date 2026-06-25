@@ -19,7 +19,7 @@ private slots:
     void on_button_Jouer_clicked();
 
 signals:
-    void envoyerJoueur(short int, short int, short int);
+    void envoyerJoueur(short int, short int, short int, short int);
 
 private:
     Ui::NbJoueursWindow *ui;

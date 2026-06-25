@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>227</width>
-    <height>139</height>
+    <height>183</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -55,12 +55,12 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Nombre d'IA :</string>
+          <string>Nombre d'IA nuls :</string>
          </property>
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QSpinBox" name="spinBox_IA">
+        <widget class="QSpinBox" name="spinBox_IANul">
          <property name="maximum">
           <number>6</number>
          </property>
@@ -69,7 +69,7 @@
        <item row="2" column="0">
         <widget class="QLabel" name="label_3">
          <property name="text">
-          <string>Nombre d'IA intelligente :</string>
+          <string>Nombre d'IA normaux :</string>
          </property>
         </widget>
        </item>
@@ -87,7 +87,21 @@
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="QSpinBox" name="spinBox_IA_Int">
+        <widget class="QSpinBox" name="spinBox_IANorm">
+         <property name="maximum">
+          <number>6</number>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>Nombre d'IA tricheurs</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QSpinBox" name="spinBox_IATri">
          <property name="maximum">
           <number>6</number>
          </property>

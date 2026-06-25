@@ -31,7 +31,7 @@ class MainWindow : public QMainWindow{
         void on_actionReges_de_jeu_triggered();
         void on_actionListe_des_cartes_triggered();
         void on_actionProjet_triggered();
-        void recevoirJoueur(short int, short int, short int);
+        void recevoirJoueur(short int, short int, short int, short int);
 
 };
 #endif // MAINWINDOW_H

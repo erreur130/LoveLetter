@@ -9,7 +9,9 @@ CONFIG += c++17
 SOURCES += \
     carte.cpp \
     humain.cpp \
-    ia.cpp \
+    ianormale.cpp \
+    ianul.cpp \
+    iatriche.cpp \
     jeu.cpp \
     joueur.cpp \
     main.cpp \
@@ -20,7 +22,9 @@ SOURCES += \
 HEADERS += \
     carte.h \
     humain.h \
-    ia.h \
+    ianormale.h \
+    ianul.h \
+    iatriche.h \
     jeu.h \
     joueur.h \
     mainwindow.h \

@@ -1,14 +1,16 @@
 #include "jeu.h"
 
-Jeu::Jeu(short int h, short int i, short int ii)
+Jeu::Jeu(short int h, short int inul, short int inorm, short int itri)
     :objectifPoints(0), joueurs(QVector<Joueur*>()), joueurActuel(nullptr), pioche(Paquet()){
-    // création joueur
+    // création des différent type ce joueurs
     for (short int indice = 0; indice < h; indice++)
         joueurs.push_back(new Humain(QString("Joueur ") + QString::number(indice + 1)));
-    for (short int indice = 0; indice < i; indice++)
-        joueurs.push_back(new IA(QString("Joueur ") + QString::number(indice + 1), 0, h+i+ii));
-    for (short int indice = 0; indice < ii; indice++)
-        joueurs.push_back(new IA(QString("Joueur ") + QString::number(indice + 1), 1, h+i+ii));
+    for (short int indice = 0; indice < inul; indice++)
+        joueurs.push_back(new IANul(QString("Joueur ") + QString::number(indice + 1), h+inul+inorm+itri));
+    for (short int indice = 0; indice < inorm; indice++)
+        joueurs.push_back(new IANormale(QString("Joueur ") + QString::number(indice + 1), h+inul+inorm+itri));
+    for (short int indice = 0; indice < itri; indice++)
+        joueurs.push_back(new IATriche(QString("Joueur ") + QString::number(indice + 1), joueurs));
 }
 
 Jeu::~Jeu(){

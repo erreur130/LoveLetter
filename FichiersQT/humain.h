@@ -9,8 +9,8 @@ public:
     Humain(QString);
     ~Humain();
     void afficheCartes() const; // juste dans QDebug()
-    Carte* choisirCarte(short int nbCartesRestantes) const;
-    Joueur* choisirJoueur(TypeCarte) const;
+    Carte* choisirCarte(short int nbCartesRestantes, QVector<bool> joueursProteger) const;
+    short int  choisirJoueur(Carte*, QVector<bool> joueursProteger) const;
 };
 
 #endif // HUMAIN_H
