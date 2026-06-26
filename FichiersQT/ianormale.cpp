@@ -44,6 +44,11 @@ Carte* IANormale::choisirCarte(short int nbCartesRestantes, QVector<bool> joueur
     else if (main.at(1)->avoirNum() == 0)
         return main.at(0);
 
+    // si prince (num 5) et que on as une carte connue alors on joue le prince (si c'est une grosse carte et que l'ont est à la fin, on la garde)
+    if ( (estDecouvert() && main.at(1)->avoirNum() == 5) && (main.at(0)->avoirNum() <= 6 && nbCartesRestantes > cartesConnuesDesAutres.size()) ){ // "cartesConnuesDesAutres.size()" = nb de joueur
+        return main.at(5);
+    }
+
     // si garde (num 1) et que l'on connais (sûr) une carte d'un autre alors on le joue
     if (main.at(0)->avoirNum() == 1 || main.at(1)->avoirNum() == 1){
         bool onConnais = false;
@@ -171,6 +176,10 @@ short int  IANormale::choisirJoueur(Carte* carte, QVector<bool> joueursProteger)
             for (short int indice = 0; indice < cartesPotentiellesDesAutres.size(); indice++)
                 if (cartesPotentiellesDesAutres.at(indice).contains(9))
                     listeDesjoueurChoisi.append(indice);
+
+            // On vérifie si on est à découvert
+            if (estDecouvert())
+                return avoirID(); // On se choisis soit même (pas besoin de continuer)
             break;
         case 7: // si roi (num 7)
             // le choix n'est pas important
@@ -187,7 +196,7 @@ short int  IANormale::choisirJoueur(Carte* carte, QVector<bool> joueursProteger)
     for (short int indice = 0; indice < cartesPotentiellesDesAutres.size(); indice++)
         if (joueursProteger.at(indice))
             listeDesjoueurChoisi.removeOne(indice);
-    listeDesjoueurChoisi.removeOne(avoirID()); // On se retir (au cas où)
+    listeDesjoueurChoisi.removeOne(avoirID()); // On se retire (au cas où)
 
     if (listeDesjoueurChoisi.isEmpty())
         return -1;
@@ -346,4 +355,39 @@ void IANormale::miseAJourCartesPotentiel(QVector<short int> cartesJouer, Joueur*
     // On suprime les données qui nous concerne pour pas s'attaquer soit même plus tard
     cartesConnuesDesAutres[avoirID()].clear();
     cartesPotentiellesDesAutres[avoirID()].clear();
+}
+
+void IANormale::voirCarteDUnJoueur(Carte* carte, short int joueur){
+    // On retire ce qu'on croyait
+    cartesConnuesDesAutres[joueur].clear();
+    cartesPotentiellesDesAutres[joueur].clear();
+    // On rajoute la carte vue dans les certitudes
+    cartesConnuesDesAutres[joueur].append(carte->avoirNum());
+}
+
+short int IANormale::choisir1DeNos3Cartes() const{
+    // Ici, le joueur est censé avoir 3 cartes dans la main, mais si le paquet à moins de cartes alors il y aura moins de choix
+    // si c'est la princesse, on la garde obligatoirement (règle du maxi le fait pas défaut :)
+
+    // On prend la plus grosse carte si c'est un 7 ou 8 ou 9
+    Carte* maxi = nullptr;
+    short int idmaxi = -1;
+
+    for (short int indice = 0; indice < avoirMain().size(); indice++)
+        if (avoirMain().at(indice) > maxi){
+            maxi = avoirMain()[indice];
+            idmaxi = indice;
+        }
+    if (maxi != nullptr && maxi->avoirNum() >= 7)
+        return idmaxi;
+
+    // Sinon on prend dans l'ordre de priorité 0, 1, 5, 6, 4, 3, 2
+    QVector<short int> prio = {0, 1, 5, 6, 4, 3, 2};
+    for (short int carteprio : prio){
+        // On vérifie pour les 3 cartes ou moins et si c'est bon, on la return
+        for (short int indice = 0; indice < avoirMain().size(); indice++)
+            if (avoirMain().at(indice)->avoirNum() == carteprio)
+                return indice;
+    }
+    return 0; // au cas où mais cas impossible
 }

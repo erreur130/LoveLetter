@@ -18,3 +18,11 @@ short int  IANul::choisirJoueur(Carte* carte, QVector<bool> joueursProteger) con
 void IANul::miseAJourCartesPotentiel(QVector<short int> cartesJouer, Joueur* joueurActuel, short int carteJouer, Joueur* autreJoueur, short int cartePerdent){
 
 }
+
+void IANul::voirCarteDUnJoueur(Carte* carte, short int joueur){
+
+}
+
+short int IANul::choisir1DeNos3Cartes() const{
+
+}
