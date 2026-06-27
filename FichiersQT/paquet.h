@@ -3,10 +3,12 @@
 
 #include "carte.h"
 #include <QQueue>
+#include <QRandomGenerator>
 
 class Paquet{
     QQueue<Carte*> cartes;
     QVector<short int> cartesJouer;
+    QVector<Carte*> listeDesCartes;
 public:
     Paquet();
     ~Paquet();

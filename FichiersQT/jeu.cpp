@@ -11,6 +11,23 @@ Jeu::Jeu(short int h, short int inul, short int inorm, short int itri)
         joueurs.push_back(new IANormale(QString("Joueur ") + QString::number(indice + 1), h+inul+inorm+itri));
     for (short int indice = 0; indice < itri; indice++)
         joueurs.push_back(new IATriche(QString("Joueur ") + QString::number(indice + 1), joueurs));
+
+    // Détermine le nb de points à faire
+    if (joueurs.size() > 4) // 5,6
+        objectifPoints = 3;
+    else if (joueurs.size() == 4)
+        objectifPoints = 4;
+    else if (joueurs.size() == 3)
+        objectifPoints = 5;
+    else if (joueurs.size() == 2)
+        objectifPoints = 6;
+
+    // On mélange l'ordre des joueurs
+    for (int i = joueurs.size() - 1; i > 0; --i) {
+        int j = QRandomGenerator::global()->bounded(i + 1);
+        joueurs.swapItemsAt(i, j); // échange les cartes entre 2 endroit aléatoire
+    }
+    joueurActuel = joueurs[0]; // On choisis le premier joueur
 }
 
 Jeu::~Jeu(){
@@ -86,7 +103,7 @@ QVector<Joueur*> Jeu::verifSiGagnants() const{
     QVector<Joueur*> result;
     for (short int indice = 0; indice < joueurs.size(); indice++)
         if (joueurs[indice]->avoirPoints() >= maxi)
-            result.append(joueurs[indice]);
+            result.push_back(joueurs[indice]);
     return result;
 }
 

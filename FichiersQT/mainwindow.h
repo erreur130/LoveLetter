@@ -26,12 +26,14 @@ class MainWindow : public QMainWindow{
         void afficherVictoireManche();
         void afficherVictoireJeu();
     private slots:
-        //void on_ListWiged_listCartes_activated(index : int)
-        //void on_ListWiged_listJoueurs_activated(index : int)
+        //void on_ListWiged_listCartes_activated(index : int);
+        //void on_ListWiged_listJoueurs_activated(index : int);
         void on_actionReges_de_jeu_triggered();
         void on_actionListe_des_cartes_triggered();
         void on_actionProjet_triggered();
         void recevoirJoueur(short int, short int, short int, short int);
+    public slots:
+        //int afficheChoixToutesLesCartesSauf1();
 
 };
 #endif // MAINWINDOW_H
