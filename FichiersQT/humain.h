@@ -16,6 +16,7 @@ public:
     inline Carte* avoirCarteVue() const {return carteVue;};
     short int choisir1DeNos3Cartes() const;
     inline void retirerCarteVue() {carteVue = nullptr;};
+    short int demanderCarteAJoueur(Joueur*, QVector<short int>) const;
 };
 
 #endif // HUMAIN_H

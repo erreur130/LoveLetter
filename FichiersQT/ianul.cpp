@@ -26,3 +26,7 @@ void IANul::voirCarteDUnJoueur(Carte* carte, short int joueur){
 short int IANul::choisir1DeNos3Cartes() const{
 
 }
+
+short int IANul::demanderCarteAJoueur(Joueur*, QVector<short int> cartesJouer) const{
+
+}

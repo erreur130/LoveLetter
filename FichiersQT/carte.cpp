@@ -16,7 +16,7 @@ Carte0::Carte0(short int nbExemplaires_, short int num_, QString nom_, QString i
 
 Carte0::~Carte0() {}
 
-QString Carte0::action(Joueur* joueur1, Joueur*) const {
+QString Carte0::action(Joueur* joueur1, Joueur*, Carte*) const {
     joueur1->ajouterPtBonus();
     return " à jouer une espionne [0]";
 }
@@ -28,10 +28,11 @@ Carte1::Carte1(short int nbExemplaires_, short int num_, QString nom_, QString i
 
 Carte1::~Carte1() {}
 
-QString Carte1::action(Joueur* joueur1, Joueur*) const {
-    QString message = " à jouer un garde [1] contre " + joueur1->avoirNom() + " et pense que ça carte est" /* + rajouter la carte*/; //-------------------------------------------------
+QString Carte1::action(Joueur* joueur1, Joueur*, Carte* carte) const {
+    QString message = " à jouer un garde [1] contre " + joueur1->avoirNom() + " et pense que sa carte est : " + carte->avoirNom();
 
-    if (/*à modif*/ true){
+    // On verifie si il à bien deviné
+    if (carte->avoirNum() == joueur1->avoirMain().at(0)->avoirNum()){
         joueur1->eliminer();
         return message + "\n Ce qui est vrais ! " + joueur1->avoirNom() + " Eliminé !";
     }
@@ -45,7 +46,7 @@ Carte2::Carte2(short int nbExemplaires_, short int num_, QString nom_, QString i
 
 Carte2::~Carte2() {}
 
-QString Carte2::action(Joueur* joueur1, Joueur* joueur2) const {
+QString Carte2::action(Joueur* joueur1, Joueur* joueur2, Carte*) const {
     joueur1->voirCarteDUnJoueur(joueur2->avoirMain()[0], joueur2->avoirID());
     return " à jouer un prêtre pour voir la carte de " + joueur2->avoirNom();
 }
@@ -57,7 +58,7 @@ Carte3::Carte3(short int nbExemplaires_, short int num_, QString nom_, QString i
 
 Carte3::~Carte3() {}
 
-QString Carte3::action(Joueur* joueur1, Joueur* joueur2) const {
+QString Carte3::action(Joueur* joueur1, Joueur* joueur2, Carte*) const {
     QString message = " à jouer un baron [3] et défit " + joueur2->avoirNom();
     if (joueur1->avoirMain().at(0) < joueur2->avoirMain().at(0)){
         joueur1->eliminer();
@@ -77,7 +78,7 @@ Carte4::Carte4(short int nbExemplaires_, short int num_, QString nom_, QString i
 
 Carte4::~Carte4() {}
 
-QString Carte4::action(Joueur* joueur1, Joueur*) const {
+QString Carte4::action(Joueur* joueur1, Joueur*, Carte*) const {
     joueur1->ajouterProtection();
     return " à jouer la servante [4], il est maintenant protégé jusqu'au prochain tour.";
 }
@@ -89,7 +90,7 @@ Carte5::Carte5(short int nbExemplaires_, short int num_, QString nom_, QString i
 
 Carte5::~Carte5() {}
 
-QString Carte5::action(Joueur* joueur1, Joueur*) const {
+QString Carte5::action(Joueur* joueur1, Joueur*, Carte*) const {
     /* // pas encore implanté defausser() et piocher() ------------------------------------------------------------------------------------------------------------------
     pioche->defausser(joueur1->retirerCarte(0)); // la carte du joueur est mise sous la pioche
     joueur1->ajouterCarte(pioche->piocher()); // puis le joueur récupère la carte qui était sur la pioche
@@ -103,7 +104,7 @@ Carte6::Carte6(short int nbExemplaires_, short int num_, QString nom_, QString i
     : Carte(nbExemplaires_, num_, nom_, image_,  type_), pioche(pioche_) {}
 Carte6::~Carte6() {}
 
-QString Carte6::action(Joueur* joueur1, Joueur*) const {
+QString Carte6::action(Joueur* joueur1, Joueur*, Carte* carte) const {
     // il pioche 2 cartes
     /* // pas encore implanté piocher() ------------------------------------------------------------------------------------------------------------------
     joueur1->ajouterCarte(pioche->piocher());
@@ -127,7 +128,7 @@ Carte7::Carte7(short int nbExemplaires_, short int num_, QString nom_, QString i
 
 Carte7::~Carte7() {}
 
-QString Carte7::action(Joueur* joueur1, Joueur* joueur2) const {
+QString Carte7::action(Joueur* joueur1, Joueur* joueur2, Carte*) const {
     // On échange les mains (les 1 carte des joueurs)
     Carte* carteTmp = joueur1->avoirMain()[0];
     joueur1->retirerCarte(0);
@@ -146,7 +147,7 @@ Carte8::Carte8(short int nbExemplaires_, short int num_, QString nom_, QString i
 
 Carte8::~Carte8() {}
 
-QString Carte8::action(Joueur*, Joueur*) const {
+QString Carte8::action(Joueur*, Joueur*, Carte*) const {
     // ne fait rien
     return " à jouer la comtesse [8].";
 }
@@ -158,7 +159,7 @@ Carte9::Carte9(short int nbExemplaires_, short int num_, QString nom_, QString i
 
 Carte9::~Carte9() {}
 
-QString Carte9::action(Joueur* joueur1, Joueur*) const {
+QString Carte9::action(Joueur* joueur1, Joueur*, Carte*) const {
     // tue le joueur
     joueur1->eliminer();
     return " à jouer la princesse [9] et en meurt. Note du dev : Pourquoi tu fais ça :(";

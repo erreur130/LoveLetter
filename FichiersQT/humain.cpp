@@ -25,5 +25,9 @@ void Humain::voirCarteDUnJoueur(Carte* carte, short int){
 }
 
 short int Humain::choisir1DeNos3Cartes() const{
-    return -1;  // permet à MainWindow de faire choisir une carte à un utilisateur avec l'ui
+    return -1; // permet à MainWindow de faire choisir une carte à un utilisateur avec l'ui
+}
+
+short int Humain::demanderCarteAJoueur(Joueur*, QVector<short int>) const{
+    return -1; // permet à MainWindow de faire choisir une carte à un utilisateur avec l'ui
 }
