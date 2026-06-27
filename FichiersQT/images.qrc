@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Images/Baron.png</file>
+        <file>Images/Chancelier.png</file>
+        <file>Images/Comtesse.png</file>
+        <file>Images/Espionne.png</file>
+        <file>Images/Garde.png</file>
+        <file>Images/Prêtre.png</file>
+        <file>Images/Prince.png</file>
+        <file>Images/Roi.png</file>
+        <file>Images/Servante.png</file>
+        <file>Images/PionsFaveur.png</file>
+    </qresource>
+</RCC>
