@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <diagram program="umlet" version="15.1">
-  <zoom_level>4</zoom_level>
+  <zoom_level>3</zoom_level>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>208</x>
-      <y>612</y>
-      <w>252</w>
-      <h>84</h>
+      <x>330</x>
+      <y>546</y>
+      <w>198</w>
+      <h>66</h>
     </coordinates>
     <panel_attributes>Humain
 --
@@ -18,8 +18,8 @@
 + afficheCartes()
 + avoirCarteVue() : Carte*
 + retirerCarteVue();
-+ choisirCarte(nbCartesRestantes : short int, QVector&lt;bool&gt; joueursProteger) : Carte*
-+ choisirJoueur(carte : Carte*,joueursProteger : QVector&lt;bool&gt;) : short int
++ choisirCarte(nbCartesRestantes : short int, QVector&lt;bool&gt; joueursNonProteger) : Carte*
++ choisirJoueur(carte : Carte*,joueursNonProteger : QVector&lt;bool&gt;) : short int
 + voirCarteDUnJoueur(carte : Carte*, joueur short int)
 + choisir1DeNos3Cartes() : short int
 + demanderCarteAJoueur(joueur : Joueur*, cartesJouer : QVector&lt;short int&gt;) : short int</panel_attributes>
@@ -28,10 +28,10 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>236</x>
-      <y>348</y>
-      <w>384</w>
-      <h>228</h>
+      <x>360</x>
+      <y>342</y>
+      <w>288</w>
+      <h>177</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Class abstraite&gt;&gt;
 /Joueur/
@@ -59,12 +59,13 @@ _- idGlobal : short int_
 + ajouterDecouvert()
 + retirerDecouvert()
 + reinitialiser()
++ retirerPoints()
 + eliminer()
 + ajouterCarte(Carte*)
 + retirerCarte(indice : short int) : Carte*
 + jouerCarte(carte, carteChoix : Carte* = nullptr, autreJoueur : Joueur* = nullptr) : QString
-*/+ choisirCarte(nbCartesRestantes : short int, joueursProteger : QVector&lt;bool&gt;) : Carte*/*
-*/+ choisirJoueur(carte : Carte*, joueursProteger : QVector&lt;bool&gt;) : short int/*
+*/+ choisirCarte(nbCartesRestantes : short int, joueursNonProteger : QVector&lt;bool&gt;) : Carte*/*
+*/+ choisirJoueur(carte : Carte*, joueursNonProteger : QVector&lt;bool&gt;) : short int/*
 /+ miseAJourCartesPotentiel(cartesJouer : QVector&lt;short int&gt;, joueurActuel, autreJoueur : Joueur*, carteJouer, cartePerdent : short int)/
 */+ voirCarteDUnJoueur(carte : Carte*, joueur short int)/*
 */+ choisir1DeNos3Cartes() : : short int/*
@@ -74,10 +75,10 @@ _- idGlobal : short int_
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>532</x>
-      <y>704</y>
-      <w>252</w>
-      <h>84</h>
+      <x>582</x>
+      <y>621</y>
+      <w>189</w>
+      <h>66</h>
     </coordinates>
     <panel_attributes>IANormale
 --
@@ -86,8 +87,8 @@ _- idGlobal : short int_
 --
 + Constructeur(nom : string, nbJoueurs : short int)
 + Destructeur()
-+ choisirCarte(nbCartesRestantes : short int, joueursProteger : QVector&lt;bool&gt;) : Carte*
-+ choisirJoueur(carte : Carte*, joueursProteger : QVector&lt;bool&gt;) : short int
++ choisirCarte(nbCartesRestantes : short int, joueursNonProteger : QVector&lt;bool&gt;) : Carte*
++ choisirJoueur(carte : Carte*, joueursNonProteger : QVector&lt;bool&gt;) : short int
 + miseAJourCartesPotentiel(cartesJouer : QVector&lt;short int&gt;, joueurActuel,
                            autreJoueur : Joueur*, carteJouer, cartePerdent : short int)
 + voirCarteDUnJoueur(carte : Carte*, joueur short int)
@@ -98,10 +99,10 @@ _- idGlobal : short int_
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
-      <y>572</y>
-      <w>12</w>
-      <h>48</h>
+      <x>513</x>
+      <y>516</y>
+      <w>9</w>
+      <h>36</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-
 </panel_attributes>
@@ -110,22 +111,22 @@ _- idGlobal : short int_
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>556</x>
-      <y>572</y>
-      <w>12</w>
-      <h>140</h>
+      <x>600</x>
+      <y>516</y>
+      <w>9</w>
+      <h>111</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-
 </panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;330.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;350.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>756</x>
-      <y>272</y>
-      <w>132</w>
-      <h>88</h>
+      <x>750</x>
+      <y>285</y>
+      <w>99</w>
+      <h>66</h>
     </coordinates>
     <panel_attributes>Paquet
 --
@@ -147,15 +148,15 @@ _- idGlobal : short int_
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>552</x>
-      <y>308</y>
-      <w>96</w>
-      <h>48</h>
+      <x>597</x>
+      <y>312</y>
+      <w>84</w>
+      <h>36</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 
 - joueurs : QVector&lt;Joueur*&gt;
-- joueurActuel : Joueur*
+- joueurActuel, joueurCible : Joueur*
 m1=1..1
 m2=0..n
 </panel_attributes>
@@ -164,10 +165,10 @@ m2=0..n
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>476</x>
-      <y>72</y>
-      <w>276</w>
-      <h>240</h>
+      <x>540</x>
+      <y>129</y>
+      <w>207</w>
+      <h>186</h>
     </coordinates>
     <panel_attributes>Jeu
 --
@@ -176,6 +177,7 @@ m2=0..n
 + Constructeur(parent : QObject*, h, inul, inorm, itri : short int)
 + Destructeur()
 + JoueursRestant() : QVector&lt;Joueur*&gt;
++ JoueursChoixPossible() : QVector&lt;Joueur*&gt;
 + avoirJoueurActuel() : Joueur*
 + avoirJoueurs() : QVector&lt;Joueur*&gt;
 + avoirPaquet() : Paquet&amp;
@@ -187,6 +189,7 @@ m2=0..n
 + eliminationJoueur(joueur : Joueur*)
 + lancer()
 + tourDeJeu()
++ finDeManche(finDuPaquet : bool)
 
 + recevoirChoixCarte(idCarte : short int)
 + recevoirChoixValeurGarde(valeur : short int)
@@ -196,15 +199,13 @@ m2=0..n
 &lt;&lt;signals&gt;&gt;
 + messageLog(msg : QString)
 + reinitialiserLog()
-+ joueurElimine(nomJoueur : QString)
-+ reinitialiserJoueurARetirerChoix()
 + demanderChoixCarte()
 + demanderChoixValeurGarde()
 + initialiserListeJoueurs(nomJoueurs : QVector&lt;QString&gt;)
 + demanderChoixCibleJoueur(nomJoueurs : QVector&lt;QString&gt;, idJoueurs : QVector&lt;short int&gt;)
 + miseAJourPointsJoueurs(listePoints : QVector&lt;short int&gt;)
 + messageAlerteMainJoueurVasEtreMontre(nomJoueur : QString)
-+ afficherMain(carte1 : short int, carte2 : short int)
++ afficherMain(imageCarte1, imageCarte2 : QString)
 + afficherVictoireManche(nomJoueurs : QVector&lt;QString&gt;)
 + afficherVictoireJeu(nomJoueurs : QVector&lt;QString&gt;)
 
@@ -215,25 +216,25 @@ m2=0..n
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>668</x>
-      <y>308</y>
-      <w>96</w>
-      <h>36</h>
+      <x>690</x>
+      <y>312</y>
+      <w>66</w>
+      <h>27</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
          - pioche : Paquet
 m1=1..1
 m2=0..1
 </panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;60.0;220.0;60.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0;200.0;60.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>768</x>
-      <y>356</y>
-      <w>112</w>
-      <h>52</h>
+      <x>774</x>
+      <y>348</y>
+      <w>84</w>
+      <h>39</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 
@@ -247,10 +248,10 @@ m2=0..21 | 0..10
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>660</x>
-      <y>512</y>
-      <w>272</w>
-      <h>32</h>
+      <x>678</x>
+      <y>465</y>
+      <w>204</w>
+      <h>24</h>
     </coordinates>
     <panel_attributes>NomCarte
 --
@@ -263,10 +264,10 @@ m2=0..21 | 0..10
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>852</x>
-      <y>496</y>
-      <w>12</w>
-      <h>24</h>
+      <x>822</x>
+      <y>453</y>
+      <w>9</w>
+      <h>18</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-
 </panel_attributes>
@@ -275,10 +276,10 @@ m2=0..21 | 0..10
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>616</x>
-      <y>420</y>
-      <w>92</w>
-      <h>20</h>
+      <x>645</x>
+      <y>396</y>
+      <w>69</w>
+      <h>15</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 - main : QVector&lt;Carte*&gt;
@@ -289,10 +290,10 @@ m2=0..3</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>432</x>
-      <y>368</y>
-      <w>80</w>
-      <h>24</h>
+      <x>507</x>
+      <y>357</y>
+      <w>60</w>
+      <h>18</h>
     </coordinates>
     <panel_attributes>Il y a plusieurs manches
 donc il faut savoir qui est
@@ -303,10 +304,10 @@ bg=blue</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>420</x>
+      <x>498</x>
       <y>324</y>
-      <w>84</w>
-      <h>16</h>
+      <w>63</w>
+      <h>12</h>
     </coordinates>
     <panel_attributes>Jeu peut intéragire directement
 avec le joueur actuel.
@@ -316,10 +317,10 @@ bg=blue</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>884</x>
-      <y>372</y>
-      <w>84</w>
-      <h>24</h>
+      <x>843</x>
+      <y>375</y>
+      <w>63</w>
+      <h>18</h>
     </coordinates>
     <panel_attributes>Même s'il existe 10 cartes
 différantes, certaines existe
@@ -330,10 +331,10 @@ bg=blue</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>756</x>
-      <y>228</y>
-      <w>44</w>
-      <h>24</h>
+      <x>750</x>
+      <y>252</y>
+      <w>33</w>
+      <h>18</h>
     </coordinates>
     <panel_attributes>Paquet existe
 pour simplifier
@@ -344,10 +345,10 @@ bg=blue</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>660</x>
-      <y>544</y>
-      <w>80</w>
-      <h>28</h>
+      <x>678</x>
+      <y>489</y>
+      <w>60</w>
+      <h>21</h>
     </coordinates>
     <panel_attributes>-&gt; 10 classes concrètes
 qui sont comme NomCarte
@@ -359,10 +360,10 @@ bg=blue</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>772</x>
-      <y>248</y>
-      <w>12</w>
-      <h>32</h>
+      <x>762</x>
+      <y>267</y>
+      <w>9</w>
+      <h>24</h>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
@@ -370,21 +371,21 @@ bg=blue</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>804</x>
-      <y>388</y>
-      <w>88</w>
-      <h>12</h>
+      <x>795</x>
+      <y>375</y>
+      <w>54</w>
+      <h>9</h>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
-    <additional_attributes>200.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>160.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>500</x>
-      <y>332</y>
-      <w>64</w>
-      <h>12</h>
+      <x>558</x>
+      <y>330</y>
+      <w>48</w>
+      <h>9</h>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
     <additional_attributes>10.0;10.0;140.0;10.0</additional_attributes>
@@ -392,10 +393,10 @@ bg=blue</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>332</x>
-      <y>372</y>
-      <w>108</w>
-      <h>20</h>
+      <x>432</x>
+      <y>360</y>
+      <w>81</w>
+      <h>15</h>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;30.0;250.0;30.0</additional_attributes>
@@ -403,10 +404,10 @@ bg=blue</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>808</x>
-      <y>232</y>
-      <w>96</w>
-      <h>16</h>
+      <x>789</x>
+      <y>255</y>
+      <w>72</w>
+      <h>12</h>
     </coordinates>
     <panel_attributes>Defauser correspond à
 remettre la carte sous le paquet.
@@ -416,10 +417,10 @@ bg=blue</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>844</x>
-      <y>244</y>
-      <w>12</w>
-      <h>36</h>
+      <x>816</x>
+      <y>264</y>
+      <w>9</w>
+      <h>27</h>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
@@ -427,17 +428,16 @@ bg=blue</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>632</x>
-      <y>340</y>
-      <w>56</w>
-      <h>56</h>
+      <x>657</x>
+      <y>345</y>
+      <w>42</w>
+      <h>39</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Enum Class&gt;&gt;
 TypeCarte
 --
 Offensif
 Defensif
-DefensifBis
 OffensifOuDefensif
 Duel
 SansEffet</panel_attributes>
@@ -446,10 +446,10 @@ SansEffet</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>700</x>
-      <y>400</y>
-      <w>268</w>
-      <h>100</h>
+      <x>708</x>
+      <y>381</y>
+      <w>201</w>
+      <h>75</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Class abstraite&gt;&gt;
 /Carte/
@@ -473,10 +473,10 @@ SansEffet</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>944</x>
-      <y>108</y>
-      <w>300</w>
-      <h>204</h>
+      <x>891</x>
+      <y>162</y>
+      <w>225</w>
+      <h>150</h>
     </coordinates>
     <panel_attributes>MainWindow
 --
@@ -492,15 +492,13 @@ joueursCible : QVector&lt;QString&gt;
 + afficheChoixToutesLesCartesSauf1(joueurARenvoyer : Joueur*)
 + recevoirMessageLog(msg : QString)
 + recevoirReinitialiserLog()
-+ recevoirJoueurElimine(nomJoueur : QString)
-+ recevoirReinitialiserJoueurARetirerChoix()
 + recevoirDemanderChoixCarte()
 + recevoirDemanderChoixValeurGarde()
 + recevoirInitialiserListeJoueurs(nomJoueurs : QVector&lt;QString&gt;)
 + recevoirDemanderChoixCibleJoueur(nomJoueurs : QVector&lt;QString&gt;, idJoueurs : QVector&lt;short int&gt;)
 + recevoirMiseAJourPointsJoueurs(listePoints : QVector&lt;short int&gt;)
 + recevoirMessageAlerteMainJoueurVasEtreMontre(nomJoueur : QString)
-+ recevoirAfficherMain(carte1 : short int, carte2 : short int)
++ recevoirAfficherMain(imageCarte1, imageCarte2 : QString)
 + recevoirAfficherVictoireManche(nomJoueurs : QVector&lt;QString&gt;)
 + recevoirAfficherVictoireJeu(nomJoueurs : QVector&lt;QString&gt;)
 
@@ -517,10 +515,10 @@ joueursCible : QVector&lt;QString&gt;
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>748</x>
-      <y>172</y>
-      <w>204</w>
-      <h>20</h>
+      <x>744</x>
+      <y>210</y>
+      <w>153</w>
+      <h>15</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 - jeu : Jeu*
@@ -531,10 +529,10 @@ m2=0..1</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1012</x>
-      <y>500</y>
-      <w>136</w>
-      <h>48</h>
+      <x>942</x>
+      <y>456</y>
+      <w>102</w>
+      <h>36</h>
     </coordinates>
     <panel_attributes>&lt;&lt;ui&gt;&gt;
 NbJoueursWindow
@@ -550,10 +548,10 @@ NbJoueursWindow
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1024</x>
-      <y>308</y>
-      <w>92</w>
-      <h>200</h>
+      <x>951</x>
+      <y>309</y>
+      <w>69</w>
+      <h>153</h>
     </coordinates>
     <panel_attributes>lt=&lt;..
 
@@ -573,30 +571,30 @@ NbJoueursWindow
 - fenetre : NbJoueursWindow
 m1=1..1
 m2=0..1</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;480.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;490.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>684</x>
-      <y>364</y>
-      <w>80</w>
-      <h>44</h>
+      <x>696</x>
+      <y>360</y>
+      <w>60</w>
+      <h>27</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 
 - type : TypeCarte
 m1=0..n
 m2=     0..1</panel_attributes>
-    <additional_attributes>50.0;90.0;50.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>50.0;70.0;50.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1004</x>
-      <y>308</y>
-      <w>108</w>
-      <h>328</h>
+      <x>936</x>
+      <y>309</y>
+      <w>81</w>
+      <h>249</h>
     </coordinates>
     <panel_attributes>lt=&lt;..
 
@@ -638,15 +636,15 @@ m2=     0..1</panel_attributes>
 - fenetre : AffichageActionsCartes
 m1=1..1
 m2=0..1</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;800.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;810.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1000</x>
-      <y>628</y>
-      <w>76</w>
-      <h>20</h>
+      <x>933</x>
+      <y>552</y>
+      <w>57</w>
+      <h>15</h>
     </coordinates>
     <panel_attributes>&lt;&lt;ui&gt;&gt;
 AffichageActionsCartes
@@ -656,10 +654,10 @@ AffichageActionsCartes
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>980</x>
-      <y>708</y>
-      <w>40</w>
-      <h>20</h>
+      <x>918</x>
+      <y>612</y>
+      <w>30</w>
+      <h>15</h>
     </coordinates>
     <panel_attributes>&lt;&lt;ui&gt;&gt;
 InfoProjet
@@ -669,10 +667,10 @@ InfoProjet
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>984</x>
-      <y>308</y>
-      <w>68</w>
-      <h>408</h>
+      <x>921</x>
+      <y>309</y>
+      <w>51</w>
+      <h>309</h>
     </coordinates>
     <panel_attributes>lt=&lt;..
 
@@ -727,15 +725,15 @@ InfoProjet
 - fenetre : InfoProjet
 m1=1..1
 m2=0..1</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;1000.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;1010.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>148</x>
-      <y>492</y>
-      <w>76</w>
-      <h>24</h>
+      <x>294</x>
+      <y>456</y>
+      <w>57</w>
+      <h>18</h>
     </coordinates>
     <panel_attributes>"nbCartesRestantes"
 Permet à l'ia de prendre
@@ -746,10 +744,10 @@ bg=blue</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>200</x>
-      <y>512</y>
-      <w>44</w>
-      <h>32</h>
+      <x>333</x>
+      <y>471</y>
+      <w>33</w>
+      <h>24</h>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;60.0;90.0;60.0</additional_attributes>
@@ -757,10 +755,10 @@ bg=blue</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>244</x>
-      <y>704</y>
-      <w>260</w>
-      <h>80</h>
+      <x>354</x>
+      <y>624</y>
+      <w>207</w>
+      <h>60</h>
     </coordinates>
     <panel_attributes>IANul
 --
@@ -768,8 +766,8 @@ bg=blue</panel_attributes>
 --
 + Constructeur(nom : string, nbJoueurs : short int)
 + Destructeur()
-+ choisirCarte(nbCartesRestantes : short int,joueursProteger : QVector&lt;bool&gt;) : Carte*
-+ choisirJoueur(carte : Carte*,joueursProteger : QVector&lt;bool&gt;) : short int
++ choisirCarte(nbCartesRestantes : short int, joueursNonProteger : QVector&lt;bool&gt;) : Carte*
++ choisirJoueur(carte : Carte*, joueursNonProteger : QVector&lt;bool&gt;) : short int
 + miseAJourCartesPotentiel(cartesJouer : QVector&lt;short int&gt;, joueurActuel,
                                autreJoueur : Joueur*, carteJouer, cartePerdent : short int)
 + voirCarteDUnJoueur(carte : Carte*, joueur short int)
@@ -780,22 +778,22 @@ bg=blue</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>476</x>
-      <y>572</y>
-      <w>12</w>
-      <h>140</h>
+      <x>540</x>
+      <y>516</y>
+      <w>9</w>
+      <h>114</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-
 </panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;330.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;360.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>584</x>
-      <y>612</y>
-      <w>252</w>
-      <h>68</h>
+      <x>621</x>
+      <y>546</y>
+      <w>189</w>
+      <h>51</h>
     </coordinates>
     <panel_attributes>IATriche
 --
@@ -803,8 +801,8 @@ bg=blue</panel_attributes>
 --
 + Constructeur(nom : string, listesJoueurs : QVector&lt;Joueur*&gt;)
 + Destructeur()
-+ choisirCarte(nbCartesRestantes : short int, joueursProteger : QVector&lt;bool&gt;) : Carte*
-+ choisirJoueur(carte : Carte*, joueursProteger : QVector&lt;bool&gt;) : short int
++ choisirCarte(nbCartesRestantes : short int, joueursNonProteger : QVector&lt;bool&gt;) : Carte*
++ choisirJoueur(carte : Carte*, joueursNonProteger : QVector&lt;bool&gt;) : short int
 + voirCarteDUnJoueur(carte : Carte*, joueur short int)
 + choisir1DeNos3Cartes() : short int
 + demanderCarteAJoueur(joueur : Joueur*, cartesJouer : QVector&lt;short int&gt;) : short int</panel_attributes>
@@ -813,10 +811,10 @@ bg=blue</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>596</x>
-      <y>572</y>
-      <w>12</w>
-      <h>48</h>
+      <x>630</x>
+      <y>516</y>
+      <w>9</w>
+      <h>36</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-
 </panel_attributes>
@@ -825,10 +823,10 @@ bg=blue</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>100</x>
-      <y>536</y>
-      <w>100</w>
-      <h>28</h>
+      <x>258</x>
+      <y>483</y>
+      <w>75</w>
+      <h>21</h>
     </coordinates>
     <panel_attributes>Attention!
 Retirer la carte jouer avant de
@@ -840,10 +838,10 @@ bg=red</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>196</x>
-      <y>540</y>
-      <w>48</w>
-      <h>12</h>
+      <x>330</x>
+      <y>489</y>
+      <w>36</w>
+      <h>9</h>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
     <additional_attributes>10.0;10.0;100.0;10.0</additional_attributes>
@@ -851,10 +849,10 @@ bg=red</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>756</x>
-      <y>544</y>
-      <w>216</w>
-      <h>64</h>
+      <x>750</x>
+      <y>489</y>
+      <w>162</w>
+      <h>48</h>
     </coordinates>
     <panel_attributes>-&gt; le 5 et le 6 nécésite en plus :
 ("pioche_ : Paquet*" dans le Constructeur()
@@ -871,10 +869,10 @@ bg=blue</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1064</x>
-      <y>344</y>
-      <w>68</w>
-      <h>20</h>
+      <x>981</x>
+      <y>339</y>
+      <w>51</w>
+      <h>15</h>
     </coordinates>
     <panel_attributes>&lt;&lt;ui&gt;&gt;
 ChoixCarteATrouver
@@ -884,10 +882,10 @@ ChoixCarteATrouver
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1044</x>
-      <y>412</y>
-      <w>40</w>
-      <h>20</h>
+      <x>966</x>
+      <y>390</y>
+      <w>30</w>
+      <h>15</h>
     </coordinates>
     <panel_attributes>&lt;&lt;ui&gt;&gt;
 ChoixJoueur
@@ -897,10 +895,10 @@ ChoixJoueur
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1044</x>
-      <y>308</y>
-      <w>76</w>
-      <h>112</h>
+      <x>966</x>
+      <y>309</y>
+      <w>57</w>
+      <h>87</h>
     </coordinates>
     <panel_attributes>lt=&lt;..
 
@@ -914,29 +912,29 @@ ChoixJoueur
 - fenetre : ChoixJoueur
 m1=1..1
 m2=0..1</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;260.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;270.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1064</x>
-      <y>308</y>
-      <w>76</w>
-      <h>44</h>
+      <x>981</x>
+      <y>309</y>
+      <w>57</w>
+      <h>36</h>
     </coordinates>
     <panel_attributes>lt=&lt;..
 - fenetre : ChoixJoueur
 m1=1..1
 m2=0..1</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>868</x>
-      <y>8</y>
-      <w>48</w>
-      <h>16</h>
+      <x>834</x>
+      <y>171</y>
+      <w>36</w>
+      <h>12</h>
     </coordinates>
     <panel_attributes>QOBJECT
 --
@@ -946,34 +944,49 @@ m2=0..1</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>912</x>
-      <y>16</y>
-      <w>80</w>
-      <h>100</h>
+      <x>867</x>
+      <y>177</y>
+      <w>30</w>
+      <h>9</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;180.0;10.0;180.0;230.0</additional_attributes>
+    <additional_attributes>10.0;10.0;80.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>728</x>
-      <y>16</y>
-      <w>148</w>
-      <h>64</h>
+      <x>744</x>
+      <y>177</y>
+      <w>96</w>
+      <h>9</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>350.0;10.0;10.0;10.0;10.0;140.0</additional_attributes>
+    <additional_attributes>300.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>796</x>
-      <y>20</y>
-      <w>188</w>
-      <h>576</h>
+      <x>780</x>
+      <y>180</y>
+      <w>141</w>
+      <h>348</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>290.0;10.0;290.0;850.0;450.0;850.0;450.0;1420.0;10.0;1420.0</additional_attributes>
+    <additional_attributes>290.0;10.0;290.0;570.0;450.0;570.0;450.0;1140.0;10.0;1140.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>675</x>
+      <y>312</y>
+      <w>96</w>
+      <h>75</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+- carteEnCourDeJeux : Carte*
+    
+m1=1..1
+m2=0..1</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0;100.0;70.0;100.0;160.0;260.0;160.0;260.0;230.0</additional_attributes>
   </element>
 </diagram>
