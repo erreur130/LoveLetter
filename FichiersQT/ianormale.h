@@ -11,8 +11,8 @@ class IANormale : public Joueur{
 public:
     IANormale(QString, short int);
     ~IANormale();
-    Carte* choisirCarte(short int nbCartesRestantes, QVector<bool> joueursProteger) const;
-    short int  choisirJoueur(Carte*, QVector<bool> joueursProteger) const;
+    Carte* choisirCarte(short int nbCartesRestantes, QVector<bool> joueursNonProteger) const;
+    short int choisirJoueur(Carte*, QVector<bool> joueursNonProteger) const;
     void miseAJourCartesPotentiel(QVector<short int> cartesJouer, Joueur* joueurActuel, short int carteJouer, Joueur* autreJoueur = nullptr, short int cartePerdent = 0);
     void voirCarteDUnJoueur(Carte*, short int joueur);
     short int choisir1DeNos3Cartes() const;

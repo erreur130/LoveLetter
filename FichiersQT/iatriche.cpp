@@ -6,11 +6,11 @@ IATriche::~IATriche(){
 
 }
 
-Carte* IATriche::choisirCarte(short int nbCartesRestantes, QVector<bool> joueursProteger) const{
+Carte* IATriche::choisirCarte(short int nbCartesRestantes, QVector<bool> joueursNonProteger) const{
 
 }
 
-short int  IATriche::choisirJoueur(Carte* carte, QVector<bool> joueursProteger) const{
+short int  IATriche::choisirJoueur(Carte* carte, QVector<bool> joueursNonProteger) const{
 
 }
 

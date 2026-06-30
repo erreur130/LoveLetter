@@ -11,7 +11,6 @@ class Joueur; // forward declaration #include "joueur.h" dans .cpp
 enum class TypeCarte{
     Offensif,
     Defensif,
-    DefensifBis,
     OffensifOuDefensif,
     Duel,
     SansEffet

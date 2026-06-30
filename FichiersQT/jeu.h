@@ -14,11 +14,15 @@ class Jeu : public QObject {
     short int objectifPoints;
     QVector<Joueur*> joueurs;
     Joueur* joueurActuel;
+    Joueur* joueurCible;
+    Carte* carteEnCourDeJeux;
     Paquet pioche;
+
     public:
         Jeu(QObject*, short int, short int, short int, short int);
         ~Jeu();
         QVector<Joueur*> JoueursRestant() const;
+        QVector<Joueur*> JoueursChoixPossible() const;
         inline Joueur* avoirJoueurActuel() const {return joueurActuel;};
         inline QVector<Joueur*> avoirJoueurs() const {return joueurs;};
         inline const Paquet& avoirPaquet() const {return pioche;};
@@ -29,18 +33,17 @@ class Jeu : public QObject {
         void eliminationJoueur(Joueur*);
         void lancerManche();
         void lancerTour();
+        void finDeManche(bool finDuPaquet);
     signals: // Jeu -> MainWindow
         void messageLog(QString);
         void reinitialiserLog(); // à chaque manche
-        void joueurElimine(QString);
-        void reinitialiserJoueurARetirerChoix();
         void demanderChoixCarte();
         void demanderChoixValeurGarde();
         void initialiserListeJoueurs(QVector<QString> nomJoueurs); // liste complète pour l'affichage
         void demanderChoixCibleJoueur(QVector<QString> nomJoueurs, QVector<short int> idJoueurs); // liste réduite
         void miseAJourPointsJoueurs(QVector<short int>);
         void messageAlerteMainJoueurVasEtreMontre(QString);
-        void afficherMain(short int carte1, short int carte2);
+        void afficherMain(QString imageCarte1, QString imageCarte2);
         void afficherVictoireManche(QVector<QString> nomJoueurs);
         void afficherVictoireJeu(QVector<QString> nomJoueurs);
     public slots: // MainWindow -> Jeu

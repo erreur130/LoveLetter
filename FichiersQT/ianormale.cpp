@@ -5,7 +5,7 @@ IANormale::IANormale(QString nom, short int nbJoueurs) :
 
 IANormale::~IANormale() {}
 
-Carte* IANormale::choisirCarte(short int nbCartesRestantes, QVector<bool> joueursProteger) const{
+Carte* IANormale::choisirCarte(short int nbCartesRestantes, QVector<bool> joueursNonProteger) const{
     // On considère que le joueur viens de pioché, donc il à 2 cartes (1ère carte est l'ancienne et la deuxème est celle pioché)
 
     // cas obligatoires ---------------------------------------------------------------------------------- cas obligatoires
@@ -53,7 +53,7 @@ Carte* IANormale::choisirCarte(short int nbCartesRestantes, QVector<bool> joueur
     if (main.at(0)->avoirNum() == 1 || main.at(1)->avoirNum() == 1){
         bool onConnais = false;
         for (short int indice = 0; indice < cartesConnuesDesAutres.size(); indice++){
-            if (not(cartesConnuesDesAutres[indice].isEmpty()) && not(joueursProteger[indice])){ // Si la liste contient quelque chause et qu'on peut le viser
+            if (not(cartesConnuesDesAutres[indice].isEmpty()) && joueursNonProteger[indice]){ // Si la liste contient quelque chause et qu'on peut le viser
                 onConnais = true;
                 break; // pas besoin de continuer
             }
@@ -77,7 +77,7 @@ Carte* IANormale::choisirCarte(short int nbCartesRestantes, QVector<bool> joueur
     if (main.at(1)->avoirNum() == 5 && main.at(0)->avoirNum() >= 5){
         bool onConnaisUn9 = false;
         for (short int indice = 0; indice < cartesConnuesDesAutres.size(); indice++){
-            if (cartesConnuesDesAutres[indice].contains(9) && not(joueursProteger[indice])){ // Si la liste contient la princesse (num 9) et qu'on peut le viser
+            if (cartesConnuesDesAutres[indice].contains(9) && joueursNonProteger[indice]){ // Si la liste contient la princesse (num 9) et qu'on peut le viser
                 onConnaisUn9 = true;
                 break; // pas besoin de continuer
             }
@@ -113,7 +113,7 @@ Carte* IANormale::choisirCarte(short int nbCartesRestantes, QVector<bool> joueur
     return main.at(0); // au cas où
 }
 
-short int  IANormale::choisirJoueur(Carte* carte, QVector<bool> joueursProteger) const{
+short int  IANormale::choisirJoueur(Carte* carte, QVector<bool> joueursNonProteger) const{
     // normellement la fonction peut recevoir les cartes 1,2,3,5,7
     short int numCarte = carte->avoirNum();
     QVector<short int> listeDesjoueurChoisi;
@@ -194,7 +194,7 @@ short int  IANormale::choisirJoueur(Carte* carte, QVector<bool> joueursProteger)
 
     // On retire ceux qui sont protégé
     for (short int indice = 0; indice < cartesPotentiellesDesAutres.size(); indice++)
-        if (joueursProteger.at(indice))
+        if (not(joueursNonProteger.at(indice)))
             listeDesjoueurChoisi.removeOne(indice);
     listeDesjoueurChoisi.removeOne(avoirID()); // On se retire (au cas où)
 

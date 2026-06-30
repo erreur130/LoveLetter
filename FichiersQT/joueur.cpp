@@ -30,9 +30,7 @@ QString Joueur::jouerCarte(Carte* carte, Joueur* autreJoueur, Carte* cartechoix)
     switch (type) {
     case TypeCarte::Offensif: // sur autre personne et le choix d'une carte (num : 1)
         return avoirNom() + carte->action(autreJoueur, nullptr, cartechoix);
-    case TypeCarte::Defensif: // sur soi (num : 0,4,6,9) le 9 ne protège pas vraiment ;) mais ce joue sur soie même
-        return avoirNom() + carte->action(this);
-    case TypeCarte::DefensifBis:
+    case TypeCarte::Defensif: // sur soi (num : 0,4,9) le 9 ne protège pas vraiment ;) mais ce joue sur soie même
         return avoirNom() + carte->action(this);
     case TypeCarte::OffensifOuDefensif: // sur une autres personne et soi même (num 5)
         return avoirNom() + carte->action(autreJoueur);

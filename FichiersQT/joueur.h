@@ -37,12 +37,13 @@ public:
     inline void ajouterDecouvert() {aDecouvert=true;};
     inline void retirerDecouvert() {aDecouvert=false;};
     void reinitialiser();
+    inline void retirerPoints() {points = 0;};
     inline void eliminer() {protection=false;};
     inline void ajouterCarte(Carte* carte) {main.append(carte);};
     inline Carte* retirerCarte(short int indice) {return main.takeAt(indice);};
     QString jouerCarte(Carte*, Joueur* = nullptr, Carte* = nullptr);
-    virtual Carte* choisirCarte(short int nbCartesRestantes, QVector<bool> joueursProteger) const = 0;
-    virtual short int choisirJoueur(Carte*, QVector<bool> joueursProteger) const = 0;
+    virtual Carte* choisirCarte(short int nbCartesRestantes, QVector<bool> joueursNonProteger) const = 0;
+    virtual short int choisirJoueur(Carte*, QVector<bool> joueursNonProteger) const = 0;
     virtual void miseAJourCartesPotentiel(QVector<short int> cartesJouer, Joueur* joueurActuel, short int carteJouer, Joueur* autreJoueur = nullptr, short int cartePerdent = 0); // les deux autres paramètre sont nésésaire en cas de baron (num 3)
     virtual void voirCarteDUnJoueur(Carte*, short int joueur) = 0;
     virtual short int choisir1DeNos3Cartes() const = 0;

@@ -21,8 +21,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     // connection à tout les signals/slots Jeu -> MainWindow
     connect(jeu, &Jeu::messageLog, this, &MainWindow::recevoirMessageLog);
     connect(jeu, &Jeu::reinitialiserLog, this, &MainWindow::recevoirReinitialiserLog);
-    connect(jeu, &Jeu::joueurElimine, this, &MainWindow::recevoirJoueurElimine);
-    connect(jeu, &Jeu::reinitialiserJoueurARetirerChoix, this, &MainWindow::recevoirReinitialiserJoueurARetirerChoix);
     connect(jeu, &Jeu::demanderChoixCarte, this, &MainWindow::recevoirDemanderChoixCarte);
     connect(jeu, &Jeu::demanderChoixValeurGarde, this, &MainWindow::recevoirDemanderChoixValeurGarde);
     connect(jeu, &Jeu::initialiserListeJoueurs, this, &MainWindow::recevoirInitialiserListeJoueurs);
@@ -102,14 +100,6 @@ void MainWindow::recevoirReinitialiserLog(){
 
 }
 
-void MainWindow::recevoirJoueurElimine(QString){
-
-}
-
-void MainWindow::recevoirReinitialiserJoueurARetirerChoix(){
-
-}
-
 void MainWindow::recevoirDemanderChoixCarte(){
 
 }
@@ -134,7 +124,7 @@ void MainWindow::recevoirMessageAlerteMainJoueurVasEtreMontre(QString){
 
 }
 
-void MainWindow::recevoirAfficherMain(short int carte1, short int carte2){
+void MainWindow::recevoirAfficherMain(QString imageCarte1, QString imageCarte2){
 
 }
 

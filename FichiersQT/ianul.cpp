@@ -7,11 +7,11 @@ IANul::~IANul(){
 
 }
 
-Carte* IANul::choisirCarte(short int nbCartesRestantes, QVector<bool> joueursProteger) const{
+Carte* IANul::choisirCarte(short int nbCartesRestantes, QVector<bool> joueursNonProteger) const{
 
 }
 
-short int  IANul::choisirJoueur(Carte* carte, QVector<bool> joueursProteger) const{
+short int  IANul::choisirJoueur(Carte* carte, QVector<bool> joueursNonProteger) const{
 
 }
 
