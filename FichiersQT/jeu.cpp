@@ -1,7 +1,7 @@
 #include "jeu.h"
 
-Jeu::Jeu(short int h, short int inul, short int inorm, short int itri)
-    :objectifPoints(0), joueurs(QVector<Joueur*>()), joueurActuel(nullptr), pioche(Paquet()){
+Jeu::Jeu(QObject* parent, short int h, short int inul, short int inorm, short int itri)
+    :QObject(parent), objectifPoints(0), joueurs(QVector<Joueur*>()), joueurActuel(nullptr), pioche(Paquet()){
     // création des différent type ce joueurs
     for (short int indice = 0; indice < h; indice++)
         joueurs.push_back(new Humain(QString("Joueur ") + QString::number(indice + 1)));
@@ -45,24 +45,21 @@ QVector<Joueur*> Jeu::JoueursRestant() const{
 
 bool Jeu::tourSuivant(){
     if (pioche.avoirNbCartesRestantes() > 0){ // si plus de carte
-        short int survivant = 0;
-        for (short int indice = 0; indice < joueurs.size(); indice++)
-            if (joueurs[indice]->estEnVie() >= true)
-                survivant++;
-        if (survivant > 1){ // si plusieurs joueurs en jeu
+        QVector<Joueur*> joueurEnVie = JoueursRestant();
+        if (joueurEnVie.size() > 1){ // si plusieurs joueurs en jeu
             // ici on peut continuer, donc on cherche le joueur suivant:
             short int indiceActuel = 0;
-            for (short int indice = 0; indice < joueurs.size(); indice++){
-                if (joueurs[indice] == joueurActuel){
+
+            for (short int indice = 0; indice < joueurEnVie.size(); indice++){
+                if (joueurEnVie[indice] == joueurActuel){
                     indiceActuel = indice; // trouvé
                     break;
                 }
             }
-            if (indiceActuel == joueurs.size() - 1) // si il se trouve à la fin de la liste
-                joueurActuel = joueurs[0]; // on revient au début
+            if (indiceActuel == joueurEnVie.size() - 1) // si il se trouve à la fin de la liste
+                joueurActuel = joueurEnVie[0]; // on revient au début
             else
-                joueurActuel = joueurs[indiceActuel];
-
+                joueurActuel = joueurEnVie[indiceActuel + 1];
             return true;
         }
     } else {
@@ -112,18 +109,37 @@ void Jeu::reinitialiserManche(){
         Joueur* joueur = joueurs[indice];
         joueur->reinitialiser();
     }
-
+    pioche.remplir();
 }
 
 void Jeu::eliminationJoueur(Joueur* joueur){
     joueur->eliminer();
 }
 
-void Jeu::lancer(){
+void Jeu::lancerManche(){
+    reinitialiserManche();
+    lancerTour(); // démarre la première manche, premier tour et s'nchaine à la suite
+}
+
+void Jeu::lancerTour(){
 
 }
 
-void tourDeJeu(){
+// ---------------------------slots------------------------------------------- MainWindow -> Jeu
+
+void Jeu::recevoirChoixCarte(short int idCarte){
+
+}
+
+void Jeu::recevoirChoixValeurGarde(short int valeur){
+
+}
+
+void Jeu::recevoirChoixCibleJoueur(short int joueur){
+
+}
+
+void Jeu::rejouer(){
 
 }
 

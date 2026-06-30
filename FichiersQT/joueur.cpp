@@ -1,6 +1,5 @@
 #include "joueur.h"
 #include "carte.h"
-#include "mainwindow.h"
 
 short int Joueur::idGlobal = 0;
 
@@ -24,7 +23,7 @@ void Joueur::reinitialiser(){
     main.clear();
 }
 
-QString Joueur::jouerCarte(Carte* carte, Joueur* autreJoueur, Carte* cartechoix, MainWindow* fenetre){
+QString Joueur::jouerCarte(Carte* carte, Joueur* autreJoueur, Carte* cartechoix){
     TypeCarte type = carte->estType();
 
     // Action dif suivant le type de la carte
@@ -34,7 +33,7 @@ QString Joueur::jouerCarte(Carte* carte, Joueur* autreJoueur, Carte* cartechoix,
     case TypeCarte::Defensif: // sur soi (num : 0,4,6,9) le 9 ne protège pas vraiment ;) mais ce joue sur soie même
         return avoirNom() + carte->action(this);
     case TypeCarte::DefensifBis:
-        return avoirNom() + carte->action(this, nullptr, nullptr, fenetre);
+        return avoirNom() + carte->action(this);
     case TypeCarte::OffensifOuDefensif: // sur une autres personne et soi même (num 5)
         return avoirNom() + carte->action(autreJoueur);
     case TypeCarte::Duel: // sur une autres personne et soi même (num : 2,3,7) / num 2 car la personne qui la joue regarde l'autre

@@ -2,11 +2,11 @@
 #define CARTE_H
 
 #include <QString>
+#include <QObject>
+
 class Paquet; // forward declaration, pour ne pas faire de récursivité avec une #include "paquet.h", il est présent dans le .cpp
 
 class Joueur; // forward declaration #include "joueur.h" dans .cpp
-
-class MainWindow; // forward declaration #include "mainwindow.h" dans .cpp
 
 enum class TypeCarte{
     Offensif,
@@ -31,42 +31,42 @@ public:
     inline short int avoirNbExemplaires() const {return nbExemplaires;};
     inline QString avoirNom() const {return nom;};
     inline QString avoirImage() const {return image;};
-    virtual QString action(Joueur* = nullptr, Joueur* = nullptr, Carte* = nullptr, MainWindow* = nullptr) const = 0;
+    virtual QString action(Joueur* = nullptr, Joueur* = nullptr, Carte* = nullptr) const = 0;
 };
 
 class Carte0 : public Carte{
 public :
     Carte0(short int, short int, QString, QString, TypeCarte);
     ~Carte0();
-    QString action(Joueur* = nullptr, Joueur* = nullptr, Carte* = nullptr, MainWindow* = nullptr) const;
+    QString action(Joueur* = nullptr, Joueur* = nullptr, Carte* = nullptr) const;
 };
 
 class Carte1 : public Carte{
 public :
     Carte1(short int, short int, QString, QString, TypeCarte);
     ~Carte1();
-    QString action(Joueur* = nullptr, Joueur* = nullptr, Carte* = nullptr, MainWindow* = nullptr) const;
+    QString action(Joueur* = nullptr, Joueur* = nullptr, Carte* = nullptr) const;
 };
 
 class Carte2 : public Carte{
 public :
     Carte2(short int, short int, QString, QString, TypeCarte);
     ~Carte2();
-    QString action(Joueur* = nullptr, Joueur* = nullptr, Carte* = nullptr, MainWindow* = nullptr) const;
+    QString action(Joueur* = nullptr, Joueur* = nullptr, Carte* = nullptr) const;
 };
 
 class Carte3 : public Carte{
 public :
     Carte3(short int, short int, QString, QString, TypeCarte);
     ~Carte3();
-    QString action(Joueur* = nullptr, Joueur* = nullptr, Carte* = nullptr, MainWindow* = nullptr) const;
+    QString action(Joueur* = nullptr, Joueur* = nullptr, Carte* = nullptr) const;
 };
 
 class Carte4 : public Carte{
 public :
     Carte4(short int, short int, QString, QString, TypeCarte);
     ~Carte4();
-    QString action(Joueur* = nullptr, Joueur* = nullptr, Carte* = nullptr, MainWindow* = nullptr) const;
+    QString action(Joueur* = nullptr, Joueur* = nullptr, Carte* = nullptr) const;
 };
 
 class Carte5 : public Carte{
@@ -74,39 +74,41 @@ class Carte5 : public Carte{
 public :
     Carte5(short int, short int, QString, QString, TypeCarte, Paquet* pioche_);
     ~Carte5();
-    QString action(Joueur* = nullptr, Joueur* = nullptr, Carte* = nullptr, MainWindow* = nullptr) const;
-    inline Paquet* avoirPioche() const {return pioche;};
+    QString action(Joueur* = nullptr, Joueur* = nullptr, Carte* = nullptr) const;
 };
 
-class Carte6 : public Carte{
+class Carte6 : public QObject, public Carte{
+    Q_OBJECT
     Paquet* pioche;
 public :
-    Carte6(short int, short int, QString, QString, TypeCarte, Paquet* pioche_);
+    Carte6(QObject*, short int, short int, QString, QString, TypeCarte, Paquet* pioche_);
     ~Carte6();
-    QString action(Joueur* = nullptr, Joueur* = nullptr, Carte* = nullptr, MainWindow* = nullptr) const;
-    inline Paquet* avoirPioche() const {return pioche;};
-
+    QString action(Joueur* = nullptr, Joueur* = nullptr, Carte* = nullptr) const;
+signals:
+    void afficheChoixToutesLesCartesSauf1(Joueur*) const;
+public slots:
+    void suiteAction6(Joueur*, short int carteAGarder) const;
 };
 
 class Carte7 : public Carte{
 public :
     Carte7(short int, short int, QString, QString, TypeCarte);
     ~Carte7();
-    QString action(Joueur* = nullptr, Joueur* = nullptr, Carte* = nullptr, MainWindow* = nullptr) const;
+    QString action(Joueur* = nullptr, Joueur* = nullptr, Carte* = nullptr) const;
 };
 
 class Carte8 : public Carte{
 public :
     Carte8(short int, short int, QString, QString, TypeCarte);
     ~Carte8();
-    QString action(Joueur* = nullptr, Joueur* = nullptr, Carte* = nullptr, MainWindow* = nullptr) const;
+    QString action(Joueur* = nullptr, Joueur* = nullptr, Carte* = nullptr) const;
 };
 
 class Carte9 : public Carte{
 public :
     Carte9(short int, short int, QString, QString, TypeCarte);
     ~Carte9();
-    QString action(Joueur* = nullptr, Joueur* = nullptr, Carte* = nullptr, MainWindow* = nullptr) const;
+    QString action(Joueur* = nullptr, Joueur* = nullptr, Carte* = nullptr) const;
 };
 
 #endif // CARTE_H

@@ -6,7 +6,7 @@
 #include "ui_affichageRegles.h"
 #include "nbjoueurswindow.h"
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), jeu(nullptr), joueursCible(QVector<QString>()){
     ui->setupUi(this);
     setWindowTitle("Love Letter");
 
@@ -18,6 +18,29 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     fenetre->setWindowTitle("Choix des joueurs");
     fenetre->exec(); // bloque MainWindow
 
+    // connection à tout les signals/slots Jeu -> MainWindow
+    connect(jeu, &Jeu::messageLog, this, &MainWindow::recevoirMessageLog);
+    connect(jeu, &Jeu::reinitialiserLog, this, &MainWindow::recevoirReinitialiserLog);
+    connect(jeu, &Jeu::joueurElimine, this, &MainWindow::recevoirJoueurElimine);
+    connect(jeu, &Jeu::reinitialiserJoueurARetirerChoix, this, &MainWindow::recevoirReinitialiserJoueurARetirerChoix);
+    connect(jeu, &Jeu::demanderChoixCarte, this, &MainWindow::recevoirDemanderChoixCarte);
+    connect(jeu, &Jeu::demanderChoixValeurGarde, this, &MainWindow::recevoirDemanderChoixValeurGarde);
+    connect(jeu, &Jeu::initialiserListeJoueurs, this, &MainWindow::recevoirInitialiserListeJoueurs);
+    connect(jeu, &Jeu::demanderChoixCibleJoueur, this, &MainWindow::recevoirDemanderChoixCibleJoueur);
+    connect(jeu, &Jeu::miseAJourPointsJoueurs, this, &MainWindow::recevoirMiseAJourPointsJoueurs);
+    connect(jeu, &Jeu::messageAlerteMainJoueurVasEtreMontre, this, &MainWindow::recevoirMessageAlerteMainJoueurVasEtreMontre);
+    connect(jeu, &Jeu::afficherMain, this, &MainWindow::recevoirAfficherMain);
+    connect(jeu, &Jeu::afficherVictoireManche, this, &MainWindow::recevoirAfficherVictoireManche);
+    connect(jeu, &Jeu::afficherVictoireJeu, this, &MainWindow::recevoirAfficherVictoireJeu);
+    // connection à tout les signals/slots MainWindow -> Jeu
+    connect(this, &MainWindow::envoyerChoixCarte, jeu, &Jeu::recevoirChoixCarte);
+    connect(this, &MainWindow::envoyerChoixValeurGarde, jeu, &Jeu::recevoirChoixValeurGarde);
+    connect(this, &MainWindow::envoyerChoixCibleJoueur, jeu, &Jeu::recevoirChoixCibleJoueur);
+    connect(this, &MainWindow::rejouer, jeu, &Jeu::rejouer);
+    // connection à tout les signals/slots MainWindow -> Carte6 et Carte6 -> MainWindow
+    connect(this, &MainWindow::envoyerSuiteAction6, dynamic_cast<Carte6*>(jeu->avoirPaquet()[6]), &Carte6::suiteAction6);
+    connect(dynamic_cast<Carte6*>(jeu->avoirPaquet()[6]), &Carte6::afficheChoixToutesLesCartesSauf1, this, &MainWindow::afficheChoixToutesLesCartesSauf1);
+
     // début du jeu ----------------------------------------------------------------------------------------------------------------------
 
     // ...
@@ -26,6 +49,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
 MainWindow::~MainWindow(){
     delete ui;
+    delete jeu;
 }
 
 void MainWindow::on_actionReges_de_jeu_triggered(){
@@ -61,5 +85,64 @@ void MainWindow::on_actionProjet_triggered(){
 
 void MainWindow::recevoirJoueur(short int h, short int inul, short int inorm, short int itri){
     qDebug() << h << inul << inorm << itri;
+    jeu = new Jeu(this, h,inul ,inorm ,itri);
+}
+
+// -----------------public slots---------------------- Jeu -> MAinWindow
+
+void MainWindow::afficheChoixToutesLesCartesSauf1(Joueur* joueurARenvoyer){
+
+}
+
+void MainWindow::recevoirMessageLog(QString){
+
+}
+
+void MainWindow::recevoirReinitialiserLog(){
+
+}
+
+void MainWindow::recevoirJoueurElimine(QString){
+
+}
+
+void MainWindow::recevoirReinitialiserJoueurARetirerChoix(){
+
+}
+
+void MainWindow::recevoirDemanderChoixCarte(){
+
+}
+
+void MainWindow::recevoirDemanderChoixValeurGarde(){
+
+}
+
+void MainWindow::recevoirInitialiserListeJoueurs(QVector<QString> nomJoueurs){
+
+}
+
+void MainWindow::recevoirDemanderChoixCibleJoueur(QVector<QString> nomJoueurs, QVector<short int> idJoueurs){
+
+}
+
+void MainWindow::recevoirMiseAJourPointsJoueurs(QVector<short int>){
+
+}
+
+void MainWindow::recevoirMessageAlerteMainJoueurVasEtreMontre(QString){
+
+}
+
+void MainWindow::recevoirAfficherMain(short int carte1, short int carte2){
+
+}
+
+void MainWindow::recevoirAfficherVictoireManche(QVector<QString> nomJoueurs){
+
+}
+
+void MainWindow::recevoirAfficherVictoireJeu(QVector<QString> nomJoueurs){
+
 }
 

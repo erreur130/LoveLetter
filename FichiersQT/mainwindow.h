@@ -13,27 +13,40 @@ QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow{
         Q_OBJECT
-    Jeu* jeu;
     Ui::MainWindow *ui;
+    Jeu* jeu;
+    QVector<QString> joueursCible; // liste les joueurs en vie
     public:
         explicit MainWindow(QWidget *parent = nullptr);
         ~MainWindow() override;
-    private:
-        void miseAJourJoueursStatistiques();
-        void miseAJourPioche();
-        void miseAJourListCartesJouer();
-        void creationCartesJoueurActuel();
-        void afficherVictoireManche();
-        void afficherVictoireJeu();
     private slots:
         //void on_ListWiged_listCartes_activated(index : int);
-        //void on_ListWiged_listJoueurs_activated(index : int);
+        //void on_ListWiged_listJoueurs_activated(index : int); // à mettre autre part ------------------------------------------------------
         void on_actionReges_de_jeu_triggered();
         void on_actionListe_des_cartes_triggered();
         void on_actionProjet_triggered();
-        void recevoirJoueur(short int, short int, short int, short int);
+        void recevoirJoueur(short int h, short int inul, short int inorm, short int itri);
+    signals:
+        void envoyerSuiteAction6(Joueur*, short int carteAGarder);
+        void envoyerChoixCarte(short int idCarte);
+        void envoyerChoixValeurGarde(short int valeur);
+        void envoyerChoixCibleJoueur(short int joueur);
+        void rejouer();
     public slots:
-        //int afficheChoixToutesLesCartesSauf1();
+        void afficheChoixToutesLesCartesSauf1(Joueur* joueurARenvoyer);
+        void recevoirMessageLog(QString);
+        void recevoirReinitialiserLog(); // à chaque manche
+        void recevoirJoueurElimine(QString);
+        void recevoirReinitialiserJoueurARetirerChoix();
+        void recevoirDemanderChoixCarte();
+        void recevoirDemanderChoixValeurGarde();
+        void recevoirInitialiserListeJoueurs(QVector<QString> nomJoueurs); // liste complète pour l'affichage
+        void recevoirDemanderChoixCibleJoueur(QVector<QString> nomJoueurs, QVector<short int> idJoueurs); // liste réduite
+        void recevoirMiseAJourPointsJoueurs(QVector<short int>);
+        void recevoirMessageAlerteMainJoueurVasEtreMontre(QString);
+        void recevoirAfficherMain(short int carte1, short int carte2);
+        void recevoirAfficherVictoireManche(QVector<QString> nomJoueurs);
+        void recevoirAfficherVictoireJeu(QVector<QString> nomJoueurs);
 
 };
 #endif // MAINWINDOW_H

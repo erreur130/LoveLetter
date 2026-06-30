@@ -1,7 +1,6 @@
 #include "carte.h"
 #include "joueur.h"
 #include "paquet.h"
-#include "mainwindow.h"
 
 // ---------------------------- Carte ----------------------------
 
@@ -17,7 +16,7 @@ Carte0::Carte0(short int nbExemplaires_, short int num_, QString nom_, QString i
 
 Carte0::~Carte0() {}
 
-QString Carte0::action(Joueur* joueur1, Joueur*, Carte*, MainWindow*) const {
+QString Carte0::action(Joueur* joueur1, Joueur*, Carte*) const {
     joueur1->ajouterPtBonus();
     return " à jouer une espionne [0]";
 }
@@ -29,7 +28,7 @@ Carte1::Carte1(short int nbExemplaires_, short int num_, QString nom_, QString i
 
 Carte1::~Carte1() {}
 
-QString Carte1::action(Joueur* joueur1, Joueur*, Carte* carte, MainWindow*) const {
+QString Carte1::action(Joueur* joueur1, Joueur*, Carte* carte) const {
     QString message = " à jouer un garde [1] contre " + joueur1->avoirNom() + " et pense que sa carte est : " + carte->avoirNom();
 
     // On verifie si il à bien deviné
@@ -47,7 +46,7 @@ Carte2::Carte2(short int nbExemplaires_, short int num_, QString nom_, QString i
 
 Carte2::~Carte2() {}
 
-QString Carte2::action(Joueur* joueur1, Joueur* joueur2, Carte*, MainWindow*) const {
+QString Carte2::action(Joueur* joueur1, Joueur* joueur2, Carte*) const {
     joueur1->voirCarteDUnJoueur(joueur2->avoirMain()[0], joueur2->avoirID());
     return " à jouer un prêtre pour voir la carte de " + joueur2->avoirNom();
 }
@@ -59,7 +58,7 @@ Carte3::Carte3(short int nbExemplaires_, short int num_, QString nom_, QString i
 
 Carte3::~Carte3() {}
 
-QString Carte3::action(Joueur* joueur1, Joueur* joueur2, Carte*, MainWindow*) const {
+QString Carte3::action(Joueur* joueur1, Joueur* joueur2, Carte*) const {
     QString message = " à jouer un baron [3] et défit " + joueur2->avoirNom();
     if (joueur1->avoirMain().at(0) < joueur2->avoirMain().at(0)){
         joueur1->eliminer();
@@ -79,7 +78,7 @@ Carte4::Carte4(short int nbExemplaires_, short int num_, QString nom_, QString i
 
 Carte4::~Carte4() {}
 
-QString Carte4::action(Joueur* joueur1, Joueur*, Carte*, MainWindow*) const {
+QString Carte4::action(Joueur* joueur1, Joueur*, Carte*) const {
     joueur1->ajouterProtection();
     return " à jouer la servante [4], il est maintenant protégé jusqu'au prochain tour.";
 }
@@ -91,7 +90,7 @@ Carte5::Carte5(short int nbExemplaires_, short int num_, QString nom_, QString i
 
 Carte5::~Carte5() {}
 
-QString Carte5::action(Joueur* joueur1, Joueur*, Carte*, MainWindow*) const {
+QString Carte5::action(Joueur* joueur1, Joueur*, Carte*) const {
     pioche->defausser(joueur1->retirerCarte(0)); // la carte du joueur est mise sous la pioche
     joueur1->ajouterCarte(pioche->piocher()); // puis le joueur récupère la carte qui était sur la pioche
     return " à jouer le pince [5] sur " + joueur1->avoirNom() + ", celui-ci défausse et reprend une carte.";
@@ -99,24 +98,28 @@ QString Carte5::action(Joueur* joueur1, Joueur*, Carte*, MainWindow*) const {
 
 // ---------------------------- num 6 ----------------------------
 
-Carte6::Carte6(short int nbExemplaires_, short int num_, QString nom_, QString image_, TypeCarte type_, Paquet* pioche_)
-    : Carte(nbExemplaires_, num_, nom_, image_,  type_), pioche(pioche_) {}
+Carte6::Carte6(QObject* parent, short int nbExemplaires_, short int num_, QString nom_, QString image_, TypeCarte type_, Paquet* pioche_)
+    : QObject(parent), Carte(nbExemplaires_, num_, nom_, image_,  type_), pioche(pioche_) {}
 Carte6::~Carte6() {}
 
-QString Carte6::action(Joueur* joueur1, Joueur*, Carte*, MainWindow* fenetre) const {
+QString Carte6::action(Joueur* joueur1, Joueur*, Carte*) const {
     // il pioche 2 cartes
     joueur1->ajouterCarte(pioche->piocher());
     joueur1->ajouterCarte(pioche->piocher());
     // il choisis la quelle gardé
     short int carteAGarder = joueur1->choisir1DeNos3Cartes();
-    /* // pas encore impanté afficheChoixToutesLesCartesSauf1() ----------------------------------------------------------------------------------------------------------------------------
-    if (carteAGarder == -1)// cas du joueur = Humain
-        carteAGarder = fenetre.afficheChoixToutesLesCartesSauf1();
-    */
-    for (short int indice = 0; indice < joueur1->avoirMain().size(); indice++)
-        if (joueur1->avoirMain().at(indice)->avoirNum() != carteAGarder) // Si ce n'est pas la carte que l'on a choisit alors on la retire
-            pioche->defausser(joueur1->retirerCarte(indice));
+    if (carteAGarder == -1) // cas du joueur = Humain
+        emit afficheChoixToutesLesCartesSauf1(joueur1);
+    else {
+        suiteAction6(joueur1, carteAGarder);
+    }
     return " à jouer le chancelier [6].";
+}
+
+void Carte6::suiteAction6(Joueur* joueur1, short int carteAGarder) const{
+    for (short int indice = joueur1->avoirMain().size() - 1; indice >= 0 ; indice--)
+        if (indice != carteAGarder) // Si ce n'est pas la carte que l'on a choisit alors on la retire
+            pioche->defausser(joueur1->retirerCarte(indice));
 }
 
 // ---------------------------- num 7 ----------------------------
@@ -126,7 +129,7 @@ Carte7::Carte7(short int nbExemplaires_, short int num_, QString nom_, QString i
 
 Carte7::~Carte7() {}
 
-QString Carte7::action(Joueur* joueur1, Joueur* joueur2, Carte*, MainWindow*) const {
+QString Carte7::action(Joueur* joueur1, Joueur* joueur2, Carte*) const {
     // On échange les mains (les 1 carte des joueurs)
     Carte* carteTmp = joueur1->avoirMain()[0];
     joueur1->retirerCarte(0);
@@ -145,7 +148,7 @@ Carte8::Carte8(short int nbExemplaires_, short int num_, QString nom_, QString i
 
 Carte8::~Carte8() {}
 
-QString Carte8::action(Joueur*, Joueur*, Carte*, MainWindow*) const {
+QString Carte8::action(Joueur*, Joueur*, Carte*) const {
     // ne fait rien
     return " à jouer la comtesse [8].";
 }
@@ -157,7 +160,7 @@ Carte9::Carte9(short int nbExemplaires_, short int num_, QString nom_, QString i
 
 Carte9::~Carte9() {}
 
-QString Carte9::action(Joueur* joueur1, Joueur*, Carte*, MainWindow*) const {
+QString Carte9::action(Joueur* joueur1, Joueur*, Carte*) const {
     // tue le joueur
     joueur1->eliminer();
     return " à jouer la princesse [9] et en meurt. Note du dev : Pourquoi tu fais ça :(";

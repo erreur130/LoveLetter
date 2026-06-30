@@ -7,7 +7,6 @@
 
 class Carte; // forward declaration #include "carte.h" dans le .cpp
 enum class TypeCarte; // forward declaration #include "carte.h" dans le .cpp
-class MainWindow; // forward declaration #include "mainwindow.h" dans le .cpp
 
 class Joueur{
     QString nom;
@@ -41,7 +40,7 @@ public:
     inline void eliminer() {protection=false;};
     inline void ajouterCarte(Carte* carte) {main.append(carte);};
     inline Carte* retirerCarte(short int indice) {return main.takeAt(indice);};
-    QString jouerCarte(Carte*, Joueur* = nullptr, Carte* = nullptr, MainWindow* = nullptr);
+    QString jouerCarte(Carte*, Joueur* = nullptr, Carte* = nullptr);
     virtual Carte* choisirCarte(short int nbCartesRestantes, QVector<bool> joueursProteger) const = 0;
     virtual short int choisirJoueur(Carte*, QVector<bool> joueursProteger) const = 0;
     virtual void miseAJourCartesPotentiel(QVector<short int> cartesJouer, Joueur* joueurActuel, short int carteJouer, Joueur* autreJoueur = nullptr, short int cartePerdent = 0); // les deux autres paramètre sont nésésaire en cas de baron (num 3)
