@@ -182,8 +182,7 @@ m2=0..n
 + avoirJoueurs() : QVector&lt;Joueur*&gt;
 + avoirPaquet() : Paquet&amp;
 + tourSuivant() : bool
-+ miseAJourCartesPotentiel(carteJouer : Carte*,
-           autreJoueur : Joueur*  = nullptr, cartePerdent : Carte*  = nullptr)
++ miseAJourCartesPotentiel(cartePerdent : Carte*  = nullptr)
 + verifSiGagnants() : QVector&lt;Joueur*&gt;
 + reinitialiserManche()
 + eliminationJoueur(joueur : Joueur*)
@@ -199,7 +198,6 @@ m2=0..n
 &lt;&lt;signals&gt;&gt;
 + messageLog(msg : QString)
 + reinitialiserLog()
-+ demanderChoixCarte()
 + demanderChoixValeurGarde()
 + initialiserListeJoueurs(nomJoueurs : QVector&lt;QString&gt;)
 + demanderChoixCibleJoueur(nomJoueurs : QVector&lt;QString&gt;, idJoueurs : QVector&lt;short int&gt;)
@@ -208,6 +206,8 @@ m2=0..n
 + afficherMain(imageCarte1, imageCarte2 : QString)
 + afficherVictoireManche(nomJoueurs : QVector&lt;QString&gt;)
 + afficherVictoireJeu(nomJoueurs : QVector&lt;QString&gt;)
++ miseAJourCartesJouees(listeCartes : QVector&lt;short int&gt;)
++ miseAJourNbCartesRestantes(cartesRestantes : short int)
 
 
 </panel_attributes>
@@ -492,7 +492,6 @@ joueursCible : QVector&lt;QString&gt;
 + afficheChoixToutesLesCartesSauf1(joueurARenvoyer : Joueur*)
 + recevoirMessageLog(msg : QString)
 + recevoirReinitialiserLog()
-+ recevoirDemanderChoixCarte()
 + recevoirDemanderChoixValeurGarde()
 + recevoirInitialiserListeJoueurs(nomJoueurs : QVector&lt;QString&gt;)
 + recevoirDemanderChoixCibleJoueur(nomJoueurs : QVector&lt;QString&gt;, idJoueurs : QVector&lt;short int&gt;)
@@ -501,6 +500,8 @@ joueursCible : QVector&lt;QString&gt;
 + recevoirAfficherMain(imageCarte1, imageCarte2 : QString)
 + recevoirAfficherVictoireManche(nomJoueurs : QVector&lt;QString&gt;)
 + recevoirAfficherVictoireJeu(nomJoueurs : QVector&lt;QString&gt;)
++ recevoirMiseAJourCartesJouees(listeCartes : QVector&lt;short int&gt;)
++ recevoirMiseAJourNbCartesRestantes(cartesRestantes : short int)
 
 «signals»
 + fairesuiteAction6(carteAGarder : short int)
