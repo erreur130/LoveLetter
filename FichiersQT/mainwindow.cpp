@@ -21,7 +21,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     // connection à tout les signals/slots Jeu -> MainWindow
     connect(jeu, &Jeu::messageLog, this, &MainWindow::recevoirMessageLog);
     connect(jeu, &Jeu::reinitialiserLog, this, &MainWindow::recevoirReinitialiserLog);
-    connect(jeu, &Jeu::demanderChoixCarte, this, &MainWindow::recevoirDemanderChoixCarte);
     connect(jeu, &Jeu::demanderChoixValeurGarde, this, &MainWindow::recevoirDemanderChoixValeurGarde);
     connect(jeu, &Jeu::initialiserListeJoueurs, this, &MainWindow::recevoirInitialiserListeJoueurs);
     connect(jeu, &Jeu::demanderChoixCibleJoueur, this, &MainWindow::recevoirDemanderChoixCibleJoueur);
@@ -30,6 +29,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(jeu, &Jeu::afficherMain, this, &MainWindow::recevoirAfficherMain);
     connect(jeu, &Jeu::afficherVictoireManche, this, &MainWindow::recevoirAfficherVictoireManche);
     connect(jeu, &Jeu::afficherVictoireJeu, this, &MainWindow::recevoirAfficherVictoireJeu);
+    connect(jeu, &Jeu::miseAJourCartesJouees, this, &MainWindow::recevoirMiseAJourCartesJouees);
+    connect(jeu, &Jeu::miseAJourNbCartesRestantes, this, &MainWindow::recevoirMiseAJourNbCartesRestantes);
     // connection à tout les signals/slots MainWindow -> Jeu
     connect(this, &MainWindow::envoyerChoixCarte, jeu, &Jeu::recevoirChoixCarte);
     connect(this, &MainWindow::envoyerChoixValeurGarde, jeu, &Jeu::recevoirChoixValeurGarde);
@@ -100,10 +101,6 @@ void MainWindow::recevoirReinitialiserLog(){
 
 }
 
-void MainWindow::recevoirDemanderChoixCarte(){
-
-}
-
 void MainWindow::recevoirDemanderChoixValeurGarde(){
 
 }
@@ -133,6 +130,14 @@ void MainWindow::recevoirAfficherVictoireManche(QVector<QString> nomJoueurs){
 }
 
 void MainWindow::recevoirAfficherVictoireJeu(QVector<QString> nomJoueurs){
+
+}
+
+void MainWindow::recevoirMiseAJourCartesJouees(QVector<short int> listeCartes){
+
+}
+
+void MainWindow::recevoirMiseAJourNbCartesRestantes(short int cartesRestantes){
 
 }
 

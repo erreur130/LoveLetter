@@ -220,13 +220,19 @@ void IANormale::miseAJourCartesPotentiel(QVector<short int> cartesJouer, Joueur*
 
     switch (carteJouer){
         case 0: // On ne peut pas savoir
-        case 1: // même cas
         case 2: // même cas
         case 4: // même cas
-        case 5: // même cas
         case 9: // Il est déjà mort si il fait ça
             // listeCartePotentielDuJoueur reste vide
             break;
+        case 1: // On retire directement la suposition en question sur la personne
+            cartesConnuesDesAutres[autreJoueur->avoirID()].removeOne(cartePerdent); // Ici cartePerdent correspond à la carte suposé
+            cartesPotentiellesDesAutres[autreJoueur->avoirID()].removeOne(cartePerdent); // Ici cartePerdent correspond à la carte suposé
+            return; // pas besoin de continuer
+        case 5: // On repart de 0 pour ses supositions
+            cartesConnuesDesAutres[autreJoueur->avoirID()].clear();
+            cartesPotentiellesDesAutres[autreJoueur->avoirID()].clear();
+            return; // pas besoin de continuer
         case 3: // 5,6,7,8,9 sont les cartes sûr du gagant
             // On recherche le ou les survivants
             if (not(joueurActuel->estEnVie())){ // si le joueur actuel est mort, alors on vas changer l'autre joueur
@@ -270,7 +276,6 @@ void IANormale::miseAJourCartesPotentiel(QVector<short int> cartesJouer, Joueur*
                     listeCartePotentielDuJoueur.push_back(6);
                 }
             }
-            // rajout de listeCarteCertainesDuJoueur ----- dans la bdd -----------------------------------------------------------------------*-*-*-*-*-*-*-*-*-*-
             break;
         case 6: // le plus probable : 0,6,7,8,9
             if ((cartesJouer.at(0) + (avoirMain().at(0)->avoirNum() == 0)) < 2) // si il en manque ou que tu n'as pas la dernière

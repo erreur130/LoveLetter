@@ -36,7 +36,6 @@ class MainWindow : public QMainWindow{
         void afficheChoixToutesLesCartesSauf1(Joueur* joueurARenvoyer);
         void recevoirMessageLog(QString);
         void recevoirReinitialiserLog(); // à chaque manche
-        void recevoirDemanderChoixCarte();
         void recevoirDemanderChoixValeurGarde();
         void recevoirInitialiserListeJoueurs(QVector<QString> nomJoueurs); // liste complète pour l'affichage
         void recevoirDemanderChoixCibleJoueur(QVector<QString> nomJoueurs, QVector<short int> idJoueurs); // liste réduite
@@ -45,6 +44,8 @@ class MainWindow : public QMainWindow{
         void recevoirAfficherMain(QString imageCarte1, QString imageCarte2);
         void recevoirAfficherVictoireManche(QVector<QString> nomJoueurs);
         void recevoirAfficherVictoireJeu(QVector<QString> nomJoueurs);
+        void recevoirMiseAJourCartesJouees(QVector<short int>);
+        void recevoirMiseAJourNbCartesRestantes(short int);
 
 };
 #endif // MAINWINDOW_H
