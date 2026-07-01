@@ -139,6 +139,7 @@ void Jeu::lancerTour(){
     emit miseAJourNbCartesRestantes(pioche.avoirNbCartesRestantes());
 
     if (tourSuivant()){ // Si on peut continuer
+        joueurActuel->retirerProtection(); // On retire sa protection (servante ne protège qu'un seul tour)
         joueurActuel->ajouterCarte(pioche.piocher()); // il pioche
 
         // On fournit les infos nésésaire pour une ia
@@ -156,17 +157,28 @@ void Jeu::lancerTour(){
             carteEnCourDeJeux = choixCarte;
             pioche.carteAEtaitJouer(carteEnCourDeJeux->avoirNum()); // On signale à la pioche que cette carte à était jouer (visible)
             short int carteADemander = -1;
+            short int cible = -1;
             // les fonctions font en sorte de retirer this du choix des joueurs, donc on ne modifie pas joueursChoix
             switch (carteEnCourDeJeux->estType()){
                 case TypeCarte::Offensif: // sur autre personne et le choix d'une carte (num : 1)
-                    joueurCible = joueurs[joueurActuel->choisirJoueur(carteEnCourDeJeux, joueursChoix)];
+                    cible = joueurActuel->choisirJoueur(carteEnCourDeJeux, joueursChoix, pioche.avoirNbCartesRestantes());
+                    if (cible == -1){ // cas où on ne peut pas choisir de joueur
+                        emit messageLog(joueurActuel->avoirNom() + " joue la carte " + carteEnCourDeJeux->avoirNom() + " sur personne.");
+                        break;
+                    }
+                    joueurCible = joueurs[cible];
                     carteADemander = joueurActuel->demanderCarteAJoueur(joueurCible, pioche.avoirCartesJouer());
                     emit messageLog(joueurActuel->jouerCarte(carteEnCourDeJeux, joueurCible, pioche[carteADemander]));
                     break;
 
                 case TypeCarte::Duel: // sur une autres personne et soi même (num : 2,3,7) / num 2 car la personne qui la joue regarde l'autre
                 case TypeCarte::OffensifOuDefensif: // sur une autres personne et soi même! (num 5)
-                    joueurCible = joueurs[joueurActuel->choisirJoueur(carteEnCourDeJeux, joueursChoix)];
+                    cible = joueurActuel->choisirJoueur(carteEnCourDeJeux, joueursChoix, pioche.avoirNbCartesRestantes());
+                    if (cible == -1){ // cas où on ne peut pas choisir de joueur
+                        emit messageLog(joueurActuel->avoirNom() + " joue la carte " + carteEnCourDeJeux->avoirNom() + " sur personne.");
+                        break;
+                    }
+                    joueurCible = joueurs[cible];
                     emit messageLog(joueurActuel->jouerCarte(carteEnCourDeJeux, joueurCible));
 
                     if(not(joueurActuel->estEnVie()))// Si 1 des deux meure alors on prend ça carte dans carteADemander (pour connaisance baron)
@@ -177,7 +189,6 @@ void Jeu::lancerTour(){
 
                 case TypeCarte::Defensif: // sur soi (num : 0,4,6,9) le 9 ne protège pas vraiment ;) mais ce joue sur soie même
                 case TypeCarte::SansEffet: // ne fait rien (num 8)
-                default:
                     emit messageLog(joueurActuel->jouerCarte(carteEnCourDeJeux));
             }
             miseAJourCartesPotentiel(pioche[carteADemander]); // met à jour les connaisances des IA
@@ -196,20 +207,34 @@ void Jeu::finDeManche(bool finDuPaquet){
     if(finDuPaquet){ // Si fin de la manche par la fin du paquet, on garde les joueurs avec la plus grosse carte
         short int numMax = 0;
         for (Joueur* joueur : joueurs)
-            if (joueur->avoirMain().at(0)->avoirNum() > numMax)
+            if (joueur->avoirMain().at(0)->avoirNum() > numMax) // si plus grand on le note
                 numMax = joueur->avoirMain()[0]->avoirNum();
         for (Joueur* joueur : joueurs)
-            if(joueur->estEnVie() && joueur->avoirMain().at(0)->avoirNum() < numMax)
+            if(joueur->estEnVie() && joueur->avoirMain().at(0)->avoirNum() < numMax) // si plus petit que le max alors il meurt
                 joueur->eliminer();
     }
 
+    // recherche les pts bonnus, si deux, ils annulent
+    Joueur* joueur1 = nullptr;
+    for (Joueur* joueur : joueurs){
+        if (joueur->avoirPointBonus()){
+            if (joueur1 == nullptr)
+                joueur1 = joueur;
+            else { // cas où y a les deux
+                joueur1->retirerPtBonus();
+                joueur->retirerPtBonus();
+                break;
+            }
+        }
+    }
+
+    // On donne les points et on les affiches
     QVector<QString> nomJoueurs;
     QVector<short int> pointsJoueurs;
-    for (Joueur* joueur : joueurs)
-        if (joueur->estEnVie()){
-            nomJoueurs.push_back(joueur->avoirNom()); // On les listes
-            joueur->gainPoints(); // On donne les points aux gagants
-            pointsJoueurs.push_back(joueur->avoirPoints()); // met à jours l'affichage des points
+    for (Joueur* joueur : joueurs){
+        nomJoueurs.push_back(joueur->avoirNom()); // On les listes
+        joueur->gainPoints(); // On donne les points (gainPoints donne des pt si enVie et si ptBonnus)
+        pointsJoueurs.push_back(joueur->avoirPoints()); // met à jours l'affichage des points
     }
     emit miseAJourPointsJoueurs(pointsJoueurs);
     emit afficherVictoireManche(nomJoueurs);
@@ -238,30 +263,27 @@ void Jeu::recevoirChoixCarte(short int idCarte){
     switch (carteEnCourDeJeux->estType()){
         case TypeCarte::Offensif: // sur autre personne et le choix d'une carte (num : 1)
         case TypeCarte::Duel: // sur une autres personne et soi même (num : 2,3,7) / num 2 car la personne qui la joue regarde l'autre
+        case TypeCarte::OffensifOuDefensif: // sur une autres personne ou soi même! (num 5)
             joueursPossible = JoueursChoixPossible();
-            joueursPossible.removeOne(joueurActuel); // Pour pas ce viser soit même
-            for (short int indice = 0; indice < joueursPossible.size(); indice++){
-                nomJoueursPossible.push_back(joueursPossible[indice]->avoirNom());
-                idJoueursPossible.push_back(joueursPossible[indice]->avoirID());
+            if (carteEnCourDeJeux->estType() != TypeCarte::OffensifOuDefensif) // avec TypeCarte::OffensifOuDefensif on peut ce choisir soit même
+                joueursPossible.removeOne(joueurActuel); // Pour ne pas ce viser soit même
+            if (joueursPossible.isEmpty()){ // cas où on ne peut pas choisir de joueur
+                emit messageLog(joueurActuel->avoirNom() + " joue la carte " + carteEnCourDeJeux->avoirNom() + " sur personne.");
+                break;
             }
-            emit demanderChoixCibleJoueur(nomJoueursPossible, idJoueursPossible);
-            // la suite demandera la carte à choisir pour Offensif
-            break;
-        case TypeCarte::OffensifOuDefensif: // sur une autres personne et soi même! (num 5)
-            joueursPossible = JoueursChoixPossible();
-            //joueursPossible.removeOne(joueurActuel); // Pour ce viser soit même on le garde !
             for (short int indice = 0; indice < joueursPossible.size(); indice++){
                 nomJoueursPossible.push_back(joueursPossible[indice]->avoirNom());
                 idJoueursPossible.push_back(joueursPossible[indice]->avoirID());
             }
             emit demanderChoixCibleJoueur(nomJoueursPossible, idJoueursPossible);
             break;
+            // la suite est différante pour Offensif / Duel / OffensifOuDefensif
         case TypeCarte::Defensif: // sur soi (num : 0,4,6,9) le 9 ne protège pas vraiment ;) mais ce joue sur soie même
         case TypeCarte::SansEffet: // ne fait rien (num 8)
-        default:
             emit messageLog(joueurActuel->jouerCarte(carteEnCourDeJeux));
             miseAJourCartesPotentiel(); // met à jour les connaisances des IA
             lancerTour(); // permet de continuer la partie
+            break;
     }
 }
 

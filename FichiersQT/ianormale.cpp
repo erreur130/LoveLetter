@@ -74,7 +74,7 @@ Carte* IANormale::choisirCarte(short int nbCartesRestantes, QVector<bool> joueur
     }
 
     // si prince (num 5) et que l'on connais (sûr) que quelqu'un à la princesse (num 9) alors on le joue
-    if (main.at(1)->avoirNum() == 5 && main.at(0)->avoirNum() >= 5){
+    if (main.at(1)->avoirNum() == 5 || main.at(0)->avoirNum() == 5){
         bool onConnaisUn9 = false;
         for (short int indice = 0; indice < cartesConnuesDesAutres.size(); indice++){
             if (cartesConnuesDesAutres[indice].contains(9) && joueursNonProteger[indice]){ // Si la liste contient la princesse (num 9) et qu'on peut le viser
@@ -113,7 +113,7 @@ Carte* IANormale::choisirCarte(short int nbCartesRestantes, QVector<bool> joueur
     return main.at(0); // au cas où
 }
 
-short int  IANormale::choisirJoueur(Carte* carte, QVector<bool> joueursNonProteger) const{
+short int  IANormale::choisirJoueur(Carte* carte, QVector<bool> joueursNonProteger, short int nbCartesRestantes) const{
     // normellement la fonction peut recevoir les cartes 1,2,3,5,7
     short int numCarte = carte->avoirNum();
     QVector<short int> listeDesjoueurChoisi;
@@ -177,8 +177,8 @@ short int  IANormale::choisirJoueur(Carte* carte, QVector<bool> joueursNonProteg
                 if (cartesPotentiellesDesAutres.at(indice).contains(9))
                     listeDesjoueurChoisi.push_back(indice);
 
-            // On vérifie si on est à découvert
-            if (estDecouvert())
+            // On vérifie si on est à découvert et que c'est rentable de retirer sa main
+            if (estDecouvert() && (avoirMain().at(0)->avoirNum() <= 6 && nbCartesRestantes > cartesConnuesDesAutres.size())) // "cartesConnuesDesAutres.size()" = nb de joueur
                 return avoirID(); // On se choisis soit même (pas besoin de continuer)
             break;
         case 7: // si roi (num 7)

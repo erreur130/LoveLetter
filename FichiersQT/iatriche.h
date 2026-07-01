@@ -11,7 +11,7 @@ public:
     IATriche(QString, QVector<Joueur*>);
     ~IATriche();
     Carte* choisirCarte(short int nbCartesRestantes, QVector<bool> joueursProteger) const;
-    short int choisirJoueur(Carte*, QVector<bool> joueursProteger) const;
+    short int choisirJoueur(Carte*, QVector<bool> joueursProteger, short int nbCartesRestantes) const;
     void voirCarteDUnJoueur(Carte*, short int joueur);
     short int choisir1DeNos3Cartes() const;
     short int demanderCarteAJoueur(Joueur*, QVector<short int>) const;

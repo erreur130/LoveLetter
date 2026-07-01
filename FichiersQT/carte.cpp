@@ -60,11 +60,15 @@ Carte3::~Carte3() {}
 
 QString Carte3::action(Joueur* joueur1, Joueur* joueur2, Carte*) const {
     QString message = " à jouer un baron [3] et défit " + joueur2->avoirNom();
-    if (joueur1->avoirMain().at(0) < joueur2->avoirMain().at(0)){
+    if (joueur1->avoirMain().at(0)->avoirNum() < joueur2->avoirMain().at(0)->avoirNum()){
         joueur1->eliminer();
+        if (joueur1->avoirMain().at(0)->avoirNum() > 5) // si la carte de celui qui est éliminer est > 5 alors on considère que l'autre est à découvert
+            joueur2->ajouterDecouvert();
         return message + "\n " + joueur1->avoirNom() + " est éliminé.";
-    }else if (joueur1->avoirMain().at(0) > joueur2->avoirMain().at(0)){
+    }else if (joueur1->avoirMain().at(0)->avoirNum() > joueur2->avoirMain().at(0)->avoirNum()){
         joueur2->eliminer();
+        if (joueur2->avoirMain().at(0)->avoirNum() > 5) // si la carte de celui qui est éliminer est > 5 alors on considère que l'autre est à découvert
+            joueur1->ajouterDecouvert();
         return message + "\n " + joueur2->avoirNom() + " est éliminé.";
     }
     // Sinon rien
