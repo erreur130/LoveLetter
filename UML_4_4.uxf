@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <diagram program="umlet" version="15.1">
-  <zoom_level>3</zoom_level>
+  <zoom_level>6</zoom_level>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>258</x>
-      <y>522</y>
-      <w>243</w>
-      <h>66</h>
+      <x>54</x>
+      <y>834</y>
+      <w>486</w>
+      <h>132</h>
     </coordinates>
     <panel_attributes>Humain
 --
@@ -28,10 +28,10 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>333</x>
-      <y>318</y>
-      <w>288</w>
-      <h>177</h>
+      <x>204</x>
+      <y>426</y>
+      <w>576</w>
+      <h>354</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Class abstraite&gt;&gt;
 /Joueur/
@@ -75,10 +75,10 @@ _- idGlobal : short int_
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>555</x>
-      <y>597</y>
-      <w>246</w>
-      <h>66</h>
+      <x>648</x>
+      <y>984</y>
+      <w>492</w>
+      <h>132</h>
     </coordinates>
     <panel_attributes>IANormale
 --
@@ -99,10 +99,10 @@ _- idGlobal : short int_
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>486</x>
-      <y>492</y>
-      <w>9</w>
-      <h>36</h>
+      <x>510</x>
+      <y>774</y>
+      <w>18</w>
+      <h>72</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-
 </panel_attributes>
@@ -111,10 +111,10 @@ _- idGlobal : short int_
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>573</x>
-      <y>492</y>
-      <w>9</w>
-      <h>111</h>
+      <x>684</x>
+      <y>774</y>
+      <w>18</w>
+      <h>222</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-
 </panel_attributes>
@@ -123,10 +123,10 @@ _- idGlobal : short int_
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>723</x>
-      <y>261</y>
-      <w>99</w>
-      <h>66</h>
+      <x>984</x>
+      <y>312</y>
+      <w>198</w>
+      <h>132</h>
     </coordinates>
     <panel_attributes>Paquet
 --
@@ -148,10 +148,10 @@ _- idGlobal : short int_
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>570</x>
-      <y>288</y>
-      <w>84</w>
-      <h>36</h>
+      <x>678</x>
+      <y>366</y>
+      <w>168</w>
+      <h>72</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 
@@ -165,10 +165,10 @@ m2=0..n
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>513</x>
-      <y>105</y>
-      <w>207</w>
-      <h>186</h>
+      <x>564</x>
+      <y>0</y>
+      <w>414</w>
+      <h>372</h>
     </coordinates>
     <panel_attributes>Jeu
 --
@@ -216,10 +216,10 @@ m2=0..n
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>663</x>
-      <y>288</y>
-      <w>66</w>
-      <h>27</h>
+      <x>864</x>
+      <y>366</y>
+      <w>132</w>
+      <h>54</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
          - pioche : Paquet
@@ -231,10 +231,10 @@ m2=0..1
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>747</x>
-      <y>324</y>
-      <w>84</w>
-      <h>39</h>
+      <x>1032</x>
+      <y>438</y>
+      <w>168</w>
+      <h>78</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 
@@ -248,10 +248,10 @@ m2=0..21 | 0..10
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>651</x>
-      <y>441</y>
-      <w>204</w>
-      <h>24</h>
+      <x>840</x>
+      <y>672</y>
+      <w>408</w>
+      <h>48</h>
     </coordinates>
     <panel_attributes>NomCarte
 --
@@ -264,10 +264,10 @@ m2=0..21 | 0..10
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>795</x>
-      <y>429</y>
-      <w>9</w>
-      <h>18</h>
+      <x>1128</x>
+      <y>648</y>
+      <w>18</w>
+      <h>36</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-
 </panel_attributes>
@@ -276,10 +276,10 @@ m2=0..21 | 0..10
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>618</x>
-      <y>372</y>
-      <w>69</w>
-      <h>15</h>
+      <x>774</x>
+      <y>534</y>
+      <w>138</w>
+      <h>30</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 - main : QVector&lt;Carte*&gt;
@@ -290,10 +290,10 @@ m2=0..3</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>480</x>
-      <y>333</y>
-      <w>60</w>
-      <h>18</h>
+      <x>498</x>
+      <y>456</y>
+      <w>120</w>
+      <h>36</h>
     </coordinates>
     <panel_attributes>Il y a plusieurs manches
 donc il faut savoir qui est
@@ -304,10 +304,10 @@ bg=blue</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>471</x>
-      <y>300</y>
-      <w>63</w>
-      <h>12</h>
+      <x>480</x>
+      <y>390</y>
+      <w>126</w>
+      <h>24</h>
     </coordinates>
     <panel_attributes>Jeu peut intéragire directement
 avec le joueur actuel.
@@ -317,10 +317,10 @@ bg=blue</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>816</x>
-      <y>351</y>
-      <w>63</w>
-      <h>18</h>
+      <x>1170</x>
+      <y>492</y>
+      <w>126</w>
+      <h>36</h>
     </coordinates>
     <panel_attributes>Même s'il existe 10 cartes
 différantes, certaines existe
@@ -331,10 +331,10 @@ bg=blue</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>723</x>
-      <y>228</y>
-      <w>33</w>
-      <h>18</h>
+      <x>984</x>
+      <y>246</y>
+      <w>66</w>
+      <h>36</h>
     </coordinates>
     <panel_attributes>Paquet existe
 pour simplifier
@@ -345,10 +345,10 @@ bg=blue</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>651</x>
-      <y>465</y>
-      <w>60</w>
-      <h>21</h>
+      <x>840</x>
+      <y>720</y>
+      <w>120</w>
+      <h>42</h>
     </coordinates>
     <panel_attributes>-&gt; 10 classes concrètes
 qui sont comme NomCarte
@@ -360,10 +360,10 @@ bg=blue</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>735</x>
-      <y>243</y>
-      <w>9</w>
-      <h>24</h>
+      <x>1008</x>
+      <y>276</y>
+      <w>18</w>
+      <h>48</h>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
@@ -371,10 +371,10 @@ bg=blue</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>768</x>
-      <y>351</y>
-      <w>54</w>
-      <h>9</h>
+      <x>1074</x>
+      <y>492</y>
+      <w>108</w>
+      <h>18</h>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
     <additional_attributes>160.0;10.0;10.0;10.0</additional_attributes>
@@ -382,10 +382,10 @@ bg=blue</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>531</x>
-      <y>306</y>
-      <w>48</w>
-      <h>9</h>
+      <x>600</x>
+      <y>402</y>
+      <w>96</w>
+      <h>18</h>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
     <additional_attributes>10.0;10.0;140.0;10.0</additional_attributes>
@@ -393,10 +393,10 @@ bg=blue</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>405</x>
-      <y>336</y>
-      <w>81</w>
-      <h>15</h>
+      <x>348</x>
+      <y>462</y>
+      <w>162</w>
+      <h>30</h>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;30.0;250.0;30.0</additional_attributes>
@@ -404,10 +404,10 @@ bg=blue</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>762</x>
-      <y>231</y>
-      <w>72</w>
-      <h>12</h>
+      <x>1062</x>
+      <y>252</y>
+      <w>144</w>
+      <h>24</h>
     </coordinates>
     <panel_attributes>Defauser correspond à
 remettre la carte sous le paquet.
@@ -417,10 +417,10 @@ bg=blue</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>789</x>
-      <y>240</y>
-      <w>9</w>
-      <h>27</h>
+      <x>1116</x>
+      <y>270</y>
+      <w>18</w>
+      <h>54</h>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
@@ -428,10 +428,10 @@ bg=blue</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>630</x>
-      <y>321</y>
-      <w>42</w>
-      <h>39</h>
+      <x>798</x>
+      <y>432</y>
+      <w>84</w>
+      <h>78</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Enum Class&gt;&gt;
 TypeCarte
@@ -446,10 +446,10 @@ SansEffet</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>681</x>
-      <y>357</y>
-      <w>201</w>
-      <h>75</h>
+      <x>900</x>
+      <y>504</y>
+      <w>402</w>
+      <h>150</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Class abstraite&gt;&gt;
 /Carte/
@@ -473,10 +473,10 @@ SansEffet</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>864</x>
-      <y>138</y>
-      <w>225</w>
-      <h>150</h>
+      <x>1266</x>
+      <y>66</y>
+      <w>450</w>
+      <h>300</h>
     </coordinates>
     <panel_attributes>MainWindow
 --
@@ -484,12 +484,13 @@ joueursCible : QVector&lt;QString&gt;
 --
 + Constructeur(parent : QWidget* = nullptr)
 + Destructeur()
-- on_actionReges_de_jeu_triggered()
+- on_actionRegles_de_jeu_triggered()
 - on_actionListe_des_cartes_triggered()
 - on_actionProjet_triggered()
 - recevoirJoueur(h, inul, inorm, itri : short int)
++ lancer()
 
-+ afficheChoixToutesLesCartesSauf1(joueurARenvoyer : Joueur*)
++ recevoirChoixCarteAGarder(joueurARenvoyer : Joueur*)
 + recevoirMessageLog(msg : QString)
 + recevoirReinitialiserLog()
 + recevoirDemanderChoixValeurGarde()
@@ -516,10 +517,10 @@ joueursCible : QVector&lt;QString&gt;
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>717</x>
-      <y>186</y>
-      <w>153</w>
-      <h>15</h>
+      <x>972</x>
+      <y>162</y>
+      <w>306</w>
+      <h>30</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 - jeu : Jeu*
@@ -530,10 +531,10 @@ m2=0..1</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>915</x>
+      <x>1422</x>
       <y>432</y>
-      <w>102</w>
-      <h>36</h>
+      <w>204</w>
+      <h>72</h>
     </coordinates>
     <panel_attributes>&lt;&lt;ui&gt;&gt;
 NbJoueursWindow
@@ -549,38 +550,24 @@ NbJoueursWindow
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>924</x>
-      <y>285</y>
-      <w>69</w>
-      <h>153</h>
+      <x>1428</x>
+      <y>360</y>
+      <w>138</w>
+      <h>84</h>
     </coordinates>
     <panel_attributes>lt=&lt;..
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 - fenetre : NbJoueursWindow
 m1=1..1
 m2=0..1</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;490.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;120.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>669</x>
-      <y>336</y>
-      <w>60</w>
-      <h>27</h>
+      <x>876</x>
+      <y>462</y>
+      <w>120</w>
+      <h>54</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 
@@ -592,35 +579,12 @@ m2=     0..1</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>909</x>
-      <y>285</y>
-      <w>81</w>
-      <h>249</h>
+      <x>1398</x>
+      <y>360</y>
+      <w>162</w>
+      <h>216</h>
     </coordinates>
     <panel_attributes>lt=&lt;..
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -637,15 +601,15 @@ m2=     0..1</panel_attributes>
 - fenetre : AffichageActionsCartes
 m1=1..1
 m2=0..1</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;810.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;340.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>906</x>
-      <y>528</y>
-      <w>57</w>
-      <h>15</h>
+      <x>1392</x>
+      <y>564</y>
+      <w>114</w>
+      <h>30</h>
     </coordinates>
     <panel_attributes>&lt;&lt;ui&gt;&gt;
 AffichageActionsCartes
@@ -655,10 +619,10 @@ AffichageActionsCartes
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>891</x>
-      <y>588</y>
-      <w>30</w>
-      <h>15</h>
+      <x>1362</x>
+      <y>654</y>
+      <w>60</w>
+      <h>30</h>
     </coordinates>
     <panel_attributes>&lt;&lt;ui&gt;&gt;
 InfoProjet
@@ -668,38 +632,12 @@ InfoProjet
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>894</x>
-      <y>285</y>
-      <w>51</w>
-      <h>309</h>
+      <x>1368</x>
+      <y>360</y>
+      <w>102</w>
+      <h>306</h>
     </coordinates>
     <panel_attributes>lt=&lt;..
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -726,15 +664,15 @@ InfoProjet
 - fenetre : InfoProjet
 m1=1..1
 m2=0..1</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;1010.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;490.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>267</x>
-      <y>432</y>
-      <w>57</w>
-      <h>18</h>
+      <x>72</x>
+      <y>654</y>
+      <w>114</w>
+      <h>36</h>
     </coordinates>
     <panel_attributes>"nbCartesRestantes"
 Permet à l'ia de prendre
@@ -745,10 +683,10 @@ bg=blue</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>306</x>
-      <y>447</y>
-      <w>33</w>
-      <h>24</h>
+      <x>150</x>
+      <y>684</y>
+      <w>66</w>
+      <h>48</h>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;60.0;90.0;60.0</additional_attributes>
@@ -756,10 +694,10 @@ bg=blue</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>294</x>
-      <y>600</y>
-      <w>240</w>
-      <h>60</h>
+      <x>126</x>
+      <y>990</y>
+      <w>480</w>
+      <h>120</h>
     </coordinates>
     <panel_attributes>IANul
 --
@@ -779,10 +717,10 @@ bg=blue</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>513</x>
-      <y>492</y>
-      <w>9</w>
-      <h>114</h>
+      <x>564</x>
+      <y>774</y>
+      <w>18</w>
+      <h>228</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-
 </panel_attributes>
@@ -791,10 +729,10 @@ bg=blue</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>594</x>
-      <y>522</y>
-      <w>240</w>
-      <h>51</h>
+      <x>726</x>
+      <y>834</y>
+      <w>480</w>
+      <h>102</h>
     </coordinates>
     <panel_attributes>IATriche
 --
@@ -812,10 +750,10 @@ bg=blue</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>603</x>
-      <y>492</y>
-      <w>9</w>
-      <h>36</h>
+      <x>744</x>
+      <y>774</y>
+      <w>18</w>
+      <h>72</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-
 </panel_attributes>
@@ -824,10 +762,10 @@ bg=blue</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>231</x>
-      <y>459</y>
-      <w>75</w>
-      <h>21</h>
+      <x>0</x>
+      <y>708</y>
+      <w>150</w>
+      <h>42</h>
     </coordinates>
     <panel_attributes>Attention!
 Retirer la carte jouer avant de
@@ -839,10 +777,10 @@ bg=red</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>303</x>
-      <y>465</y>
-      <w>36</w>
-      <h>9</h>
+      <x>144</x>
+      <y>720</y>
+      <w>72</w>
+      <h>18</h>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
     <additional_attributes>10.0;10.0;100.0;10.0</additional_attributes>
@@ -850,10 +788,10 @@ bg=red</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>723</x>
-      <y>465</y>
-      <w>162</w>
-      <h>48</h>
+      <x>984</x>
+      <y>720</y>
+      <w>324</w>
+      <h>96</h>
     </coordinates>
     <panel_attributes>-&gt; le 5 et le 6 nécésite en plus :
 ("pioche_ : Paquet*" dans le Constructeur()
@@ -862,7 +800,7 @@ et "parent : QObject*"dans le Constructeur() de 6)
 - pioche : Paquet*
 
 -&gt; et pour le 6 :
-+ afficheChoixToutesLesCartesSauf1(joueurARenvoyer : Joueur*) «signal»
++ choixCarteAGarder(joueurARenvoyer : Joueur*) «signal»
 + suiteAction6(joueur1 : Joueur*, carteAGarder : short int)
 bg=blue</panel_attributes>
     <additional_attributes/>
@@ -870,72 +808,10 @@ bg=blue</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>954</x>
-      <y>315</y>
-      <w>51</w>
-      <h>15</h>
-    </coordinates>
-    <panel_attributes>&lt;&lt;ui&gt;&gt;
-ChoixCarteATrouver
---</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>939</x>
-      <y>366</y>
-      <w>30</w>
-      <h>15</h>
-    </coordinates>
-    <panel_attributes>&lt;&lt;ui&gt;&gt;
-ChoixJoueur
---</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>939</x>
-      <y>285</y>
-      <w>57</w>
-      <h>87</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;..
-
-
-
-
-
-
-
-
-- fenetre : ChoixJoueur
-m1=1..1
-m2=0..1</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;270.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>954</x>
-      <y>285</y>
-      <w>57</w>
-      <h>36</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;..
-- fenetre : ChoixJoueur
-m1=1..1
-m2=0..1</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>807</x>
-      <y>147</y>
-      <w>36</w>
-      <h>12</h>
+      <x>1152</x>
+      <y>84</y>
+      <w>72</w>
+      <h>24</h>
     </coordinates>
     <panel_attributes>QOBJECT
 --
@@ -945,10 +821,10 @@ m2=0..1</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>840</x>
-      <y>153</y>
-      <w>30</w>
-      <h>9</h>
+      <x>1218</x>
+      <y>96</y>
+      <w>60</w>
+      <h>18</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;80.0;10.0</additional_attributes>
@@ -956,10 +832,10 @@ m2=0..1</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>717</x>
-      <y>153</y>
-      <w>96</w>
-      <h>9</h>
+      <x>972</x>
+      <y>96</y>
+      <w>192</w>
+      <h>18</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
     <additional_attributes>300.0;10.0;10.0;10.0</additional_attributes>
@@ -967,10 +843,10 @@ m2=0..1</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>753</x>
-      <y>156</y>
-      <w>141</w>
-      <h>348</h>
+      <x>1044</x>
+      <y>102</y>
+      <w>282</w>
+      <h>696</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
     <additional_attributes>290.0;10.0;290.0;570.0;450.0;570.0;450.0;1140.0;10.0;1140.0</additional_attributes>
@@ -978,10 +854,10 @@ m2=0..1</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>648</x>
-      <y>288</y>
-      <w>96</w>
-      <h>75</h>
+      <x>834</x>
+      <y>366</y>
+      <w>192</w>
+      <h>150</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 - carteEnCourDeJeux : Carte*
@@ -989,5 +865,64 @@ m2=0..1</panel_attributes>
 m1=1..1
 m2=0..1</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;70.0;100.0;70.0;100.0;160.0;260.0;160.0;260.0;230.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1332</x>
+      <y>762</y>
+      <w>84</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;ui&gt;&gt;
+AffichageRegles
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1338</x>
+      <y>360</y>
+      <w>132</w>
+      <h>414</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+- fenetre : AffichageRegles
+m1=1..1
+m2=0..1</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;670.0</additional_attributes>
   </element>
 </diagram>
