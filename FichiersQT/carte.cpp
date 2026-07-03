@@ -113,7 +113,7 @@ QString Carte6::action(Joueur* joueur1, Joueur*, Carte*) const {
     // il choisis la quelle gardé
     short int carteAGarder = joueur1->choisir1DeNos3Cartes();
     if (carteAGarder == -1) // cas du joueur = Humain
-        emit afficheChoixToutesLesCartesSauf1(joueur1);
+        emit choixCarteAGarder(joueur1);
     else {
         suiteAction6(joueur1, carteAGarder);
     }

@@ -114,9 +114,12 @@ void IANul::miseAJourCartesPotentiel(QVector<short int> cartesJouer, Joueur* jou
         if (not(joueurActuel->estEnVie())){ // si le joueur actuel est mort, alors on vas changer l'autre joueur
             joueursAMettreAJour.pop_back();
             joueursAMettreAJour.push_back(autreJoueur->avoirID());
+            cartePerdent = joueurActuel->avoirMain()[0]->avoirNum(); // La carte du perdant est celle du joueur actuel
         } else if (autreJoueur->estEnVie()){ // si l'autre joueur est en vie (si l'actuel est en vie alors ils sont les deux dans le QVector)
             joueursAMettreAJour.push_back(autreJoueur->avoirID());
-        } // else : (joueurActuel est le seul survivant) par défaut c'est joueurActuel qui est dans joueursAMettreAJour
+            cartePerdent = joueurActuel->avoirMain()[0]->avoirNum(); // La carte du perdant est celle du joueur actuel
+        } else // (joueurActuel est le seul survivant) par défaut c'est joueurActuel qui est dans joueursAMettreAJour
+            cartePerdent = autreJoueur->avoirMain()[0]->avoirNum(); // La carte du perdant est celle de l'autre joueur
 
         for (short int indice = 0; indice <= cartePerdent; indice++) // liste les nb inférieurs ou égal au nb qui à perdu dans les cartes impossible
             listeCarteImpossibleDuJoueur.push_back(indice);

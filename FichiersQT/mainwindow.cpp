@@ -38,12 +38,15 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(this, &MainWindow::rejouer, jeu, &Jeu::rejouer);
     // connection à tout les signals/slots MainWindow -> Carte6 et Carte6 -> MainWindow
     connect(this, &MainWindow::envoyerSuiteAction6, dynamic_cast<Carte6*>(jeu->avoirPaquet()[6]), &Carte6::suiteAction6);
-    connect(dynamic_cast<Carte6*>(jeu->avoirPaquet()[6]), &Carte6::afficheChoixToutesLesCartesSauf1, this, &MainWindow::afficheChoixToutesLesCartesSauf1);
+    connect(dynamic_cast<Carte6*>(jeu->avoirPaquet()[6]), &Carte6::choixCarteAGarder, this, &MainWindow::recevoirChoixCarteAGarder);
 
-    // début du jeu ----------------------------------------------------------------------------------------------------------------------
 
-    // ...
-
+    // On cache les Wigets inutiles au début
+    ui->listeCarteChoixGarde->setVisible(false);
+    ui->listeCarteMain->setVisible(false);
+    ui->listeJoueursCible->setVisible(false);
+    ui->buttonRejouer->setVisible(false);
+    ui->labelInfoActionJoueur->setVisible(false);
 }
 
 MainWindow::~MainWindow(){
@@ -51,7 +54,7 @@ MainWindow::~MainWindow(){
     delete jeu;
 }
 
-void MainWindow::on_actionReges_de_jeu_triggered(){
+void MainWindow::on_actionRegles_de_jeu_triggered(){
     QDialog *fenetre = new QDialog();
     Ui::AffichageRegles ui;
     ui.setupUi(fenetre);
@@ -87,18 +90,22 @@ void MainWindow::recevoirJoueur(short int h, short int inul, short int inorm, sh
     jeu = new Jeu(this, h,inul ,inorm ,itri);
 }
 
-// -----------------public slots---------------------- Jeu -> MAinWindow
+void MainWindow::lancer(){
+    jeu->rejouer(); // démarre la première manche, premier tour et s'enchaine à la suite
+}
 
-void MainWindow::afficheChoixToutesLesCartesSauf1(Joueur* joueurARenvoyer){
+// -----------------public slots---------------------- Jeu -> MainWindow
+
+void MainWindow::recevoirChoixCarteAGarder(Joueur* joueurARenvoyer){ //-----------------------------------------------------
 
 }
 
-void MainWindow::recevoirMessageLog(QString){
-
+void MainWindow::recevoirMessageLog(QString msg){
+    ui->textLog->append(msg);
 }
 
 void MainWindow::recevoirReinitialiserLog(){
-
+    //ui->textLog->setText(""); // à remettre après la phase de débug
 }
 
 void MainWindow::recevoirDemanderChoixValeurGarde(){
@@ -106,7 +113,14 @@ void MainWindow::recevoirDemanderChoixValeurGarde(){
 }
 
 void MainWindow::recevoirInitialiserListeJoueurs(QVector<QString> nomJoueurs){
+    ui->listeJoueurs->setSelectionMode(QAbstractItemView::NoSelection);
+    ui->listeJoueurs->setColumnCount(nomJoueurs.size());
+    ui->listeJoueurs->setRowCount(2);
 
+    for (short int indice = 0; indice < nomJoueurs.size(); indice++){ // On liste les joueurs avec leur nom et points (0 au début)
+        ui->listeJoueurs->setItem(0, indice, new QTableWidgetItem(nomJoueurs[indice]));
+        ui->listeJoueurs->setItem(1, indice, new QTableWidgetItem("0"));
+    }
 }
 
 void MainWindow::recevoirDemanderChoixCibleJoueur(QVector<QString> nomJoueurs, QVector<short int> idJoueurs){

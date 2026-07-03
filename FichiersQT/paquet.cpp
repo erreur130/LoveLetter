@@ -46,4 +46,7 @@ void Paquet::remplir(){
         int j = QRandomGenerator::global()->bounded(i + 1);
         cartes.swapItemsAt(i, j); // échange les cartes entre 2 endroit aléatoire
     }
+
+    // On met à 0 les compteurs des cartes jouer
+    cartesJouer = QVector<short int>(10, 0);
 }

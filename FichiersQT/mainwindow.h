@@ -19,10 +19,11 @@ class MainWindow : public QMainWindow{
     public:
         explicit MainWindow(QWidget *parent = nullptr);
         ~MainWindow() override;
+        void lancer();
     private slots:
         //void on_ListWiged_listCartes_activated(index : int);
         //void on_ListWiged_listJoueurs_activated(index : int); // à mettre autre part ------------------------------------------------------
-        void on_actionReges_de_jeu_triggered();
+        void on_actionRegles_de_jeu_triggered();
         void on_actionListe_des_cartes_triggered();
         void on_actionProjet_triggered();
         void recevoirJoueur(short int h, short int inul, short int inorm, short int itri);
@@ -33,7 +34,7 @@ class MainWindow : public QMainWindow{
         void envoyerChoixCibleJoueur(short int joueur);
         void rejouer();
     public slots:
-        void afficheChoixToutesLesCartesSauf1(Joueur* joueurARenvoyer);
+        void recevoirChoixCarteAGarder(Joueur* joueurARenvoyer);
         void recevoirMessageLog(QString);
         void recevoirReinitialiserLog(); // à chaque manche
         void recevoirDemanderChoixValeurGarde();

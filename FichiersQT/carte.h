@@ -84,7 +84,7 @@ public :
     ~Carte6();
     QString action(Joueur* = nullptr, Joueur* = nullptr, Carte* = nullptr) const;
 signals:
-    void afficheChoixToutesLesCartesSauf1(Joueur*) const;
+    void choixCarteAGarder(Joueur*) const;
 public slots:
     void suiteAction6(Joueur*, short int carteAGarder) const;
 };

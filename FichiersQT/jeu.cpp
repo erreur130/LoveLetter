@@ -4,13 +4,13 @@ Jeu::Jeu(QObject* parent, short int h, short int inul, short int inorm, short in
     :QObject(parent), objectifPoints(0), joueurs(QVector<Joueur*>()), joueurActuel(nullptr), joueurCible(nullptr), carteEnCourDeJeux(nullptr), pioche(Paquet()){
     // création des différent type ce joueurs
     for (short int indice = 0; indice < h; indice++)
-        joueurs.push_back(new Humain(QString("Joueur ") + QString::number(indice + 1)));
+        joueurs.push_back(new Humain(QString("Joueur_") + QString::number(indice + 1)));
     for (short int indice = 0; indice < inul; indice++)
-        joueurs.push_back(new IANul(QString("Joueur ") + QString::number(indice + 1), h+inul+inorm+itri));
+        joueurs.push_back(new IANul(QString("IAnul_") + QString::number(indice + 1), h+inul+inorm+itri));
     for (short int indice = 0; indice < inorm; indice++)
-        joueurs.push_back(new IANormale(QString("Joueur ") + QString::number(indice + 1), h+inul+inorm+itri));
+        joueurs.push_back(new IANormale(QString("IAnormale_") + QString::number(indice + 1), h+inul+inorm+itri));
     for (short int indice = 0; indice < itri; indice++)
-        joueurs.push_back(new IATriche(QString("Joueur ") + QString::number(indice + 1), joueurs));
+        joueurs.push_back(new IATriche(QString("IAtriche_") + QString::number(indice + 1), joueurs));
 
     // Détermine le nb de points à faire
     if (joueurs.size() > 4) // 5,6
@@ -29,15 +29,6 @@ Jeu::Jeu(QObject* parent, short int h, short int inul, short int inorm, short in
     }
     joueurActuel = joueurs[0]; // On choisis le premier joueur
 
-    // On affiche la liste des joueurs
-    QVector<QString> nomJoueurs;
-    for (Joueur* joueur : joueurs)
-        nomJoueurs.push_back(joueur->avoirNom());
-    emit initialiserListeJoueurs(nomJoueurs);
-
-    // Affiche le nb de base de carte
-    emit miseAJourCartesJouees(pioche.avoirCartesJouer());
-    emit miseAJourNbCartesRestantes(pioche.avoirNbCartesRestantes());
 }
 
 Jeu::~Jeu(){
@@ -94,7 +85,7 @@ void Jeu::miseAJourCartesPotentiel(Carte* cartePerdent){
     short int indiceActuel = joueurActuel->avoirID();
     for (short int indice = 0; indice < joueurs.size(); indice++){
         if (indice != indiceActuel && joueurs[indice]->estEnVie() == true)
-            joueurs[indice]->miseAJourCartesPotentiel(pioche.avoirCartesJouer(), joueurActuel, numCarte, joueurCible, numCartePerdent);
+            joueurs[indice]->miseAJourCartesPotentiel(pioche.avoirCartesJouer(), joueurActuel, numCarte, joueurCible, numCartePerdent); // j'aurais pue faire en fonction du type
     }
 }
 
@@ -114,11 +105,15 @@ QVector<Joueur*> Jeu::verifSiGagnants() const{
 }
 
 void Jeu::reinitialiserManche(){
+    pioche.remplir();
+
+    // On remet à 0 l'état des joueurs et on donne 1 carte à tout le monde
     for (short int indice = 0; indice < joueurs.size(); indice++){
         Joueur* joueur = joueurs[indice];
         joueur->reinitialiser();
+        joueur->ajouterCarte(pioche.piocher());
     }
-    pioche.remplir();
+
     emit reinitialiserLog();
 }
 
@@ -134,13 +129,14 @@ void Jeu::lancerManche(){
 }
 
 void Jeu::lancerTour(){
-    // On change l'affichaque de ce qui reste en cartes
-    emit miseAJourCartesJouees(pioche.avoirCartesJouer());
-    emit miseAJourNbCartesRestantes(pioche.avoirNbCartesRestantes());
 
     if (tourSuivant()){ // Si on peut continuer
         joueurActuel->retirerProtection(); // On retire sa protection (servante ne protège qu'un seul tour)
         joueurActuel->ajouterCarte(pioche.piocher()); // il pioche
+
+        // On change l'affichaque de ce qui reste en cartes
+        emit miseAJourCartesJouees(pioche.avoirCartesJouer());
+        emit miseAJourNbCartesRestantes(pioche.avoirNbCartesRestantes());
 
         // On fournit les infos nésésaire pour une ia
         QVector<bool> joueursChoix;
@@ -185,13 +181,19 @@ void Jeu::lancerTour(){
                         carteADemander = joueurActuel->avoirMain()[0]->avoirNum();
                     else if(not(joueurCible->estEnVie()))
                         carteADemander = joueurCible->avoirMain()[0]->avoirNum();
+
+                    // ici la mise à jour des connaisances des IA nécésite une info suplémentaire
+                    if (carteEnCourDeJeux->avoirNum() == 1) // le garde (num 1)
+                        miseAJourCartesPotentiel(pioche[carteADemander]); // il faut la carte demander
+                    else
+                        miseAJourCartesPotentiel(); // met à jour les connaisances des IA, version normale
                     break;
 
                 case TypeCarte::Defensif: // sur soi (num : 0,4,6,9) le 9 ne protège pas vraiment ;) mais ce joue sur soie même
                 case TypeCarte::SansEffet: // ne fait rien (num 8)
                     emit messageLog(joueurActuel->jouerCarte(carteEnCourDeJeux));
+                    miseAJourCartesPotentiel(); // met à jour les connaisances des IA
             }
-            miseAJourCartesPotentiel(pioche[carteADemander]); // met à jour les connaisances des IA
 
             lancerTour(); // permet de continuer la partie (récurcivité)
         }
@@ -325,6 +327,17 @@ void Jeu::rejouer(){
     joueurActuel = joueurs[0]; // On choisis le premier joueur
     for (Joueur* joueur : joueurs)
         joueur->retirerPoints(); // On remet les compteurs à 0
+
+    // On affiche la liste des joueurs
+    QVector<QString> nomJoueurs;
+    for (Joueur* joueur : joueurs)
+        nomJoueurs.push_back(joueur->avoirNom());
+    emit initialiserListeJoueurs(nomJoueurs);
+
+    // Affiche le nb de base de carte
+    emit miseAJourCartesJouees(pioche.avoirCartesJouer());
+    emit miseAJourNbCartesRestantes(pioche.avoirNbCartesRestantes());
+
     lancerManche();
 }
 
