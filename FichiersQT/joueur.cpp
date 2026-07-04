@@ -1,11 +1,11 @@
 #include "joueur.h"
 #include "carte.h"
 
-short int Joueur::idGlobal = 0;
+Joueur::Joueur(QString nom) : nom(nom), points(0), id(-1), pointBonusManche(false), protection(false), enVie(true), aDecouvert(false), main(QVector<Carte*>()) {}
 
-Joueur::Joueur(QString nom) : nom(nom), points(0), id(idGlobal++), pointBonusManche(false), protection(false), enVie(true), aDecouvert(false), main(QVector<Carte*>()) {}
-
-Joueur::~Joueur(){}
+Joueur::~Joueur(){
+    main.clear();
+}
 
 void Joueur::gainPoints(){
     if (pointBonusManche){ // si il a le pt bonnus +1pt

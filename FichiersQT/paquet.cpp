@@ -18,8 +18,11 @@ Paquet::Paquet() : cartes(QQueue<Carte*>()), cartesJouer(QVector<short int>(10, 
 }
 
 Paquet::~Paquet() {
-    for(short int indice =0; indice < listeDesCartes.size(); indice++)
+    cartes.clear();
+    qDebug() << "~Paquet, nb cartes à détruire :" << listeDesCartes.size();
+    for(short int indice = 0; indice < listeDesCartes.size(); indice++)
         delete listeDesCartes[indice];
+    qDebug() << "fin boucle ~Paquet";
 }
 
 Carte* Paquet::piocher(){

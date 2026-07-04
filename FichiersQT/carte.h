@@ -16,14 +16,14 @@ enum class TypeCarte{
     SansEffet
 };
 
-class Carte{
+class Carte : public QObject{
     short int nbExemplaires;
     short int num;
     QString nom;
     QString image;
     TypeCarte type;
 public:
-    Carte(short int, short int, QString, QString, TypeCarte);
+    explicit Carte(QObject* parent, short int, short int, QString, QString, TypeCarte);
     virtual ~Carte();
     inline TypeCarte estType() const {return type;};
     inline short int avoirNum() const {return num;};
@@ -76,7 +76,7 @@ public :
     QString action(Joueur* = nullptr, Joueur* = nullptr, Carte* = nullptr) const;
 };
 
-class Carte6 : public QObject, public Carte{
+class Carte6 : public Carte{
     Q_OBJECT
     Paquet* pioche;
 public :

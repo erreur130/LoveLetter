@@ -36,6 +36,7 @@ public:
     inline void retirerProtection() {protection=false;};
     inline void ajouterDecouvert() {aDecouvert=true;};
     inline void retirerDecouvert() {aDecouvert=false;};
+    inline void changerID(short int id_) {id = id_;};
     void reinitialiser();
     inline void retirerPoints() {points = 0;};
     inline void eliminer() {protection=false;};

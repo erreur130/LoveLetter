@@ -1,4 +1,5 @@
 #include "jeu.h"
+#include <QDebug>
 
 Jeu::Jeu(QObject* parent, short int h, short int inul, short int inorm, short int itri)
     :QObject(parent), objectifPoints(0), joueurs(QVector<Joueur*>()), joueurActuel(nullptr), joueurCible(nullptr), carteEnCourDeJeux(nullptr), pioche(Paquet()){
@@ -23,17 +24,29 @@ Jeu::Jeu(QObject* parent, short int h, short int inul, short int inorm, short in
         objectifPoints = 6;
 
     // On mélange l'ordre des joueurs
-    for (int i = joueurs.size() - 1; i > 0; --i) {
-        int j = QRandomGenerator::global()->bounded(i + 1);
-        joueurs.swapItemsAt(i, j); // échange les cartes entre 2 endroit aléatoire
+    for (short int indice = joueurs.size() - 1; indice > 0; --indice){
+        int nb = QRandomGenerator::global()->bounded(indice + 1);
+        joueurs.swapItemsAt(indice, nb); // échange les cartes entre 2 endroit aléatoire
     }
+    // On leur donne la bonne id
+    for (short int indice = 0; indice < joueurs.size(); indice++){
+        joueurs[indice]->changerID(indice);
+    }
+
     joueurActuel = joueurs[0]; // On choisis le premier joueur
 
 }
 
 Jeu::~Jeu(){
-    for (short int indice = 0; indice < joueurs.size(); indice++)
+    joueurActuel = nullptr;
+    joueurCible = nullptr;
+    carteEnCourDeJeux = nullptr;
+
+    qDebug() << "~Jeu, nb joueurs à détruire :" << joueurs.size();
+    for (short int indice = 0; indice < joueurs.size(); indice++){
+        qDebug() << "delete joueur" << indice;
         delete joueurs[indice];
+    }
 }
 
 QVector<Joueur*> Jeu::JoueursRestant() const{
@@ -56,7 +69,7 @@ bool Jeu::tourSuivant(){
     joueurCible = nullptr; // On vide les actions dernier tour
     carteEnCourDeJeux = nullptr; // On vide les actions dernier tour
 
-    if (pioche.avoirNbCartesRestantes() > 0){ // si plus de carte
+    if (pioche.avoirNbCartesRestantes() > 0){ // si il y a encore des cartes
         QVector<Joueur*> joueurEnVie = JoueursRestant();
         if (joueurEnVie.size() > 1){ // si plusieurs joueurs en jeu
             // ici on peut continuer, donc on cherche le joueur suivant:
@@ -146,10 +159,11 @@ void Jeu::lancerTour(){
         Carte* choixCarte = joueurActuel->choisirCarte(pioche.avoirNbCartesRestantes(), joueursChoix);
 
         if (choixCarte == nullptr){ // Si hummain on affiche
-            emit messageAlerteMainJoueurVasEtreMontre(joueurActuel->avoirNom());
-            emit afficherMain(joueurActuel->avoirMain()[0]->avoirImage(), joueurActuel->avoirMain()[1]->avoirImage());
+            emit messageAlerteMainJoueurVasEtreMontre(joueurActuel->avoirNom(), 1);
+            emit afficherMain(joueurActuel->avoirMain()[0], joueurActuel->avoirMain()[1]);
 
         } else { // Si ia on fait la suite de calcules (tout d'un coups)
+            emit messageAlerteMainJoueurVasEtreMontre(joueurActuel->avoirNom(), 0);
             carteEnCourDeJeux = choixCarte;
             pioche.carteAEtaitJouer(carteEnCourDeJeux->avoirNum()); // On signale à la pioche que cette carte à était jouer (visible)
             short int carteADemander = -1;
@@ -302,7 +316,7 @@ void Jeu::recevoirChoixCibleJoueur(short int joueur){
     // soit Offensif / Duel / OffensifOuDefensif
     switch (carteEnCourDeJeux->estType()) {
         case TypeCarte::Offensif: // sur autre personne et le choix d'une carte (num : 1)
-            emit demanderChoixValeurGarde();
+        emit demanderChoixValeurGarde(pioche.avoirListeDesCartes(), pioche.avoirCartesJouer());
             break;
         case TypeCarte::Duel: // sur une autres personne et soi même (num : 2,3,7) / num 2 car la personne qui la joue regarde l'autre
             emit messageLog(joueurActuel->jouerCarte(carteEnCourDeJeux, joueurCible));

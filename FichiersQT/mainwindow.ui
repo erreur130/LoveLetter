@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>996</width>
-    <height>491</height>
+    <width>1245</width>
+    <height>803</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,13 +17,6 @@
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
      <layout class="QVBoxLayout" name="verticalLayout_2">
-      <item>
-       <widget class="Line" name="line_3">
-        <property name="orientation">
-         <enum>Qt::Orientation::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
       <item>
        <widget class="QTableWidget" name="listeJoueurs">
         <property name="enabled">
@@ -90,6 +83,13 @@
        </widget>
       </item>
       <item>
+       <widget class="Line" name="line_3">
+        <property name="orientation">
+         <enum>Qt::Orientation::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -121,24 +121,171 @@
            </widget>
           </item>
           <item>
-           <widget class="QColumnView" name="listeCarteMain"/>
-          </item>
-          <item>
            <layout class="QHBoxLayout" name="horizontalLayout_3">
             <item>
-             <widget class="QColumnView" name="listeCarteChoixGarde"/>
+             <widget class="QListWidget" name="listeCarteMain">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>416</width>
+                <height>285</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>416</width>
+                <height>300</height>
+               </size>
+              </property>
+              <property name="verticalScrollBarPolicy">
+               <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+              </property>
+              <property name="horizontalScrollBarPolicy">
+               <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>200</width>
+                <height>300</height>
+               </size>
+              </property>
+              <property name="movement">
+               <enum>QListView::Movement::Static</enum>
+              </property>
+              <property name="isWrapping" stdset="0">
+               <bool>false</bool>
+              </property>
+              <property name="viewMode">
+               <enum>QListView::ViewMode::IconMode</enum>
+              </property>
+              <property name="batchSize">
+               <number>100</number>
+              </property>
+              <property name="itemAlignment">
+               <set>Qt::AlignmentFlag::AlignCenter</set>
+              </property>
+             </widget>
             </item>
-            <item>
+            <item alignment="Qt::AlignmentFlag::AlignHCenter">
+             <widget class="QListWidget" name="listeCarteChoixGarde">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>200</width>
+                <height>285</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>200</width>
+                <height>285</height>
+               </size>
+              </property>
+              <property name="verticalScrollBarPolicy">
+               <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+              </property>
+              <property name="horizontalScrollBarPolicy">
+               <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
+              </property>
+              <property name="dragDropMode">
+               <enum>QAbstractItemView::DragDropMode::DropOnly</enum>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>200</width>
+                <height>300</height>
+               </size>
+              </property>
+              <property name="movement">
+               <enum>QListView::Movement::Static</enum>
+              </property>
+              <property name="isWrapping" stdset="0">
+               <bool>false</bool>
+              </property>
+              <property name="viewMode">
+               <enum>QListView::ViewMode::IconMode</enum>
+              </property>
+              <property name="itemAlignment">
+               <set>Qt::AlignmentFlag::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item alignment="Qt::AlignmentFlag::AlignHCenter">
              <widget class="QListWidget" name="listeJoueursCible"/>
             </item>
            </layout>
           </item>
-          <item>
-           <widget class="QPushButton" name="buttonRejouer">
-            <property name="text">
-             <string>Rejouer</string>
+          <item alignment="Qt::AlignmentFlag::AlignHCenter">
+           <widget class="QListWidget" name="listeCarteAGarder">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>632</width>
+              <height>285</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>632</width>
+              <height>285</height>
+             </size>
+            </property>
+            <property name="verticalScrollBarPolicy">
+             <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+            </property>
+            <property name="horizontalScrollBarPolicy">
+             <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+            </property>
+            <property name="dragDropMode">
+             <enum>QAbstractItemView::DragDropMode::DragDrop</enum>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>200</width>
+              <height>300</height>
+             </size>
+            </property>
+            <property name="flow">
+             <enum>QListView::Flow::LeftToRight</enum>
+            </property>
+            <property name="viewMode">
+             <enum>QListView::ViewMode::IconMode</enum>
+            </property>
+            <property name="itemAlignment">
+             <set>Qt::AlignmentFlag::AlignCenter</set>
             </property>
            </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Orientation::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Policy::Expanding</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </item>
@@ -384,7 +531,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>996</width>
+     <width>1245</width>
      <height>23</height>
     </rect>
    </property>

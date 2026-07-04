@@ -4,15 +4,15 @@
 
 // ---------------------------- Carte ----------------------------
 
-Carte::Carte(short int nbExemplaires_, short int num_, QString nom_, QString image_, TypeCarte type_)
-    : nbExemplaires(nbExemplaires_), num(num_), nom(nom_), image(image_), type(type_) {}
+Carte::Carte(QObject* parent, short int nbExemplaires_, short int num_, QString nom_, QString image_, TypeCarte type_)
+    :QObject(parent), nbExemplaires(nbExemplaires_), num(num_), nom(nom_), image(image_), type(type_) {}
 
 Carte::~Carte(){}
 
 // ---------------------------- num 0 ----------------------------
 
 Carte0::Carte0(short int nbExemplaires_, short int num_, QString nom_, QString image_, TypeCarte type_)
-    : Carte(nbExemplaires_, num_, nom_, image_,  type_) {}
+    : Carte(nullptr, nbExemplaires_, num_, nom_, image_,  type_) {}
 
 Carte0::~Carte0() {}
 
@@ -24,7 +24,7 @@ QString Carte0::action(Joueur* joueur1, Joueur*, Carte*) const {
 // ---------------------------- num 1 ----------------------------
 
 Carte1::Carte1(short int nbExemplaires_, short int num_, QString nom_, QString image_, TypeCarte type_)
-    : Carte(nbExemplaires_, num_, nom_, image_,  type_) {}
+    : Carte(nullptr, nbExemplaires_, num_, nom_, image_,  type_) {}
 
 Carte1::~Carte1() {}
 
@@ -42,7 +42,7 @@ QString Carte1::action(Joueur* joueur1, Joueur*, Carte* carte) const {
 // ---------------------------- num 2 ----------------------------
 
 Carte2::Carte2(short int nbExemplaires_, short int num_, QString nom_, QString image_, TypeCarte type_)
-    : Carte(nbExemplaires_, num_, nom_, image_,  type_) {}
+    : Carte(nullptr, nbExemplaires_, num_, nom_, image_,  type_) {}
 
 Carte2::~Carte2() {}
 
@@ -54,7 +54,7 @@ QString Carte2::action(Joueur* joueur1, Joueur* joueur2, Carte*) const {
 // ---------------------------- num 3 ----------------------------
 
 Carte3::Carte3(short int nbExemplaires_, short int num_, QString nom_, QString image_, TypeCarte type_)
-    : Carte(nbExemplaires_, num_, nom_, image_,  type_) {}
+    : Carte(nullptr, nbExemplaires_, num_, nom_, image_,  type_) {}
 
 Carte3::~Carte3() {}
 
@@ -78,7 +78,7 @@ QString Carte3::action(Joueur* joueur1, Joueur* joueur2, Carte*) const {
 // ---------------------------- num 4 ----------------------------
 
 Carte4::Carte4(short int nbExemplaires_, short int num_, QString nom_, QString image_, TypeCarte type_)
-    : Carte(nbExemplaires_, num_, nom_, image_,  type_) {}
+    : Carte(nullptr, nbExemplaires_, num_, nom_, image_,  type_) {}
 
 Carte4::~Carte4() {}
 
@@ -90,7 +90,7 @@ QString Carte4::action(Joueur* joueur1, Joueur*, Carte*) const {
 // ---------------------------- num 5 ----------------------------
 
 Carte5::Carte5(short int nbExemplaires_, short int num_, QString nom_, QString image_, TypeCarte type_, Paquet* pioche_)
-    : Carte(nbExemplaires_, num_, nom_, image_,  type_), pioche(pioche_) {}
+    : Carte(nullptr, nbExemplaires_, num_, nom_, image_,  type_), pioche(pioche_) {}
 
 Carte5::~Carte5() {}
 
@@ -103,7 +103,7 @@ QString Carte5::action(Joueur* joueur1, Joueur*, Carte*) const {
 // ---------------------------- num 6 ----------------------------
 
 Carte6::Carte6(QObject* parent, short int nbExemplaires_, short int num_, QString nom_, QString image_, TypeCarte type_, Paquet* pioche_)
-    : QObject(parent), Carte(nbExemplaires_, num_, nom_, image_,  type_), pioche(pioche_) {}
+    : Carte(parent, nbExemplaires_, num_, nom_, image_,  type_), pioche(pioche_) {}
 Carte6::~Carte6() {}
 
 QString Carte6::action(Joueur* joueur1, Joueur*, Carte*) const {
@@ -129,7 +129,7 @@ void Carte6::suiteAction6(Joueur* joueur1, short int carteAGarder) const{
 // ---------------------------- num 7 ----------------------------
 
 Carte7::Carte7(short int nbExemplaires_, short int num_, QString nom_, QString image_, TypeCarte type_)
-    : Carte(nbExemplaires_, num_, nom_, image_,  type_) {}
+    : Carte(nullptr, nbExemplaires_, num_, nom_, image_,  type_) {}
 
 Carte7::~Carte7() {}
 
@@ -148,7 +148,7 @@ QString Carte7::action(Joueur* joueur1, Joueur* joueur2, Carte*) const {
 // ---------------------------- num 8 ----------------------------
 
 Carte8::Carte8(short int nbExemplaires_, short int num_, QString nom_, QString image_, TypeCarte type_)
-    : Carte(nbExemplaires_, num_, nom_, image_,  type_) {}
+    : Carte(nullptr, nbExemplaires_, num_, nom_, image_,  type_) {}
 
 Carte8::~Carte8() {}
 
@@ -160,7 +160,7 @@ QString Carte8::action(Joueur*, Joueur*, Carte*) const {
 // ---------------------------- num 9 ----------------------------
 
 Carte9::Carte9(short int nbExemplaires_, short int num_, QString nom_, QString image_, TypeCarte type_)
-    : Carte(nbExemplaires_, num_, nom_, image_,  type_) {}
+    : Carte(nullptr, nbExemplaires_, num_, nom_, image_,  type_) {}
 
 Carte9::~Carte9() {}
 

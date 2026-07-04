@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include "jeu.h"
 #include <QDebug>
+#include <QListWidgetItem>
+#include <QMessageBox>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -27,6 +29,12 @@ class MainWindow : public QMainWindow{
         void on_actionListe_des_cartes_triggered();
         void on_actionProjet_triggered();
         void recevoirJoueur(short int h, short int inul, short int inorm, short int itri);
+        void on_listeCarteChoixGarde_itemClicked(QListWidgetItem *item);
+        void on_listeJoueursCible_itemClicked(QListWidgetItem *item);
+        void on_listeCarteMain_itemClicked(QListWidgetItem *item);
+
+        void on_listeCarteAGarder_itemClicked(QListWidgetItem *item);
+
     signals:
         void envoyerSuiteAction6(Joueur*, short int carteAGarder);
         void envoyerChoixCarte(short int idCarte);
@@ -37,12 +45,12 @@ class MainWindow : public QMainWindow{
         void recevoirChoixCarteAGarder(Joueur* joueurARenvoyer);
         void recevoirMessageLog(QString);
         void recevoirReinitialiserLog(); // à chaque manche
-        void recevoirDemanderChoixValeurGarde();
+        void recevoirDemanderChoixValeurGarde(QVector<Carte*>, QVector<short int>);
         void recevoirInitialiserListeJoueurs(QVector<QString> nomJoueurs); // liste complète pour l'affichage
         void recevoirDemanderChoixCibleJoueur(QVector<QString> nomJoueurs, QVector<short int> idJoueurs); // liste réduite
         void recevoirMiseAJourPointsJoueurs(QVector<short int>);
-        void recevoirMessageAlerteMainJoueurVasEtreMontre(QString);
-        void recevoirAfficherMain(QString imageCarte1, QString imageCarte2);
+        void recevoirMessageAlerteMainJoueurVasEtreMontre(QString, bool);
+        void recevoirAfficherMain(Carte* carte1, Carte* carte2);
         void recevoirAfficherVictoireManche(QVector<QString> nomJoueurs);
         void recevoirAfficherVictoireJeu(QVector<QString> nomJoueurs);
         void recevoirMiseAJourCartesJouees(QVector<short int>);

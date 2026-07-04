@@ -37,12 +37,12 @@ class Jeu : public QObject {
     signals: // Jeu -> MainWindow
         void messageLog(QString);
         void reinitialiserLog(); // à chaque manche
-        void demanderChoixValeurGarde();
+        void demanderChoixValeurGarde(QVector<Carte*>, QVector<short int>);
         void initialiserListeJoueurs(QVector<QString> nomJoueurs); // liste complète pour l'affichage
         void demanderChoixCibleJoueur(QVector<QString> nomJoueurs, QVector<short int> idJoueurs); // liste réduite
         void miseAJourPointsJoueurs(QVector<short int>);
-        void messageAlerteMainJoueurVasEtreMontre(QString);
-        void afficherMain(QString imageCarte1, QString imageCarte2);
+        void messageAlerteMainJoueurVasEtreMontre(QString, bool popup);
+        void afficherMain(Carte* carte1, Carte* carte2);
         void afficherVictoireManche(QVector<QString> nomJoueurs);
         void afficherVictoireJeu(QVector<QString> nomJoueurs);
         void miseAJourCartesJouees(QVector<short int>);
