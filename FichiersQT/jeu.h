@@ -19,6 +19,7 @@ class Jeu : public QObject {
     Paquet pioche;
 
     public:
+        Jeu();
         Jeu(QObject*, short int, short int, short int, short int);
         ~Jeu();
         QVector<Joueur*> JoueursRestant() const;
@@ -47,11 +48,14 @@ class Jeu : public QObject {
         void afficherVictoireJeu(QVector<QString> nomJoueurs);
         void miseAJourCartesJouees(QVector<short int>);
         void miseAJourNbCartesRestantes(short int);
+        void afficherCarte(Carte*);
     public slots: // MainWindow -> Jeu
         void recevoirChoixCarte(short int idCarte);
         void recevoirChoixValeurGarde(short int valeur);
         void recevoirChoixCibleJoueur(short int joueur);
         void rejouer();
+        // Carte6 -> Jeu
+        void recevoirContinuer();
 
 };
 

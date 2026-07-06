@@ -1,6 +1,10 @@
 #include "jeu.h"
 #include <QDebug>
 
+Jeu::Jeu()
+    :QObject(nullptr), objectifPoints(0), joueurs(QVector<Joueur*>()), joueurActuel(nullptr), joueurCible(nullptr), carteEnCourDeJeux(nullptr), pioche(Paquet())
+{}
+
 Jeu::Jeu(QObject* parent, short int h, short int inul, short int inorm, short int itri)
     :QObject(parent), objectifPoints(0), joueurs(QVector<Joueur*>()), joueurActuel(nullptr), joueurCible(nullptr), carteEnCourDeJeux(nullptr), pioche(Paquet()){
     // création des différent type ce joueurs
@@ -73,12 +77,15 @@ bool Jeu::tourSuivant(){
         QVector<Joueur*> joueurEnVie = JoueursRestant();
         if (joueurEnVie.size() > 1){ // si plusieurs joueurs en jeu
             // ici on peut continuer, donc on cherche le joueur suivant:
-            short int indiceActuel = joueurActuel->avoirID();
+            short int indiceActuelEnVie = -1;
+            for (short int indice = 0; indice < joueurEnVie.size(); indice++)
+                if (joueurActuel->avoirID() == joueurEnVie.at(indice)->avoirID())
+                    indiceActuelEnVie = indice;
 
-            if (indiceActuel == joueurEnVie.size() - 1) // si il se trouve à la fin de la liste
+            if (indiceActuelEnVie == joueurEnVie.size() - 1) // si il se trouve à la fin de la liste
                 joueurActuel = joueurEnVie[0]; // on revient au début
             else
-                joueurActuel = joueurEnVie[indiceActuel + 1];
+                joueurActuel = joueurEnVie[indiceActuelEnVie + 1];
             return true;
         }
     } else {
@@ -104,7 +111,7 @@ void Jeu::miseAJourCartesPotentiel(Carte* cartePerdent){
 
 QVector<Joueur*> Jeu::verifSiGagnants() const{
     // recherche du max au dessus de objectifPoints
-    short int maxi = 0;
+    short int maxi = objectifPoints;
     for (short int indice = 0; indice < joueurs.size(); indice++)
         if (joueurs[indice]->avoirPoints() >= objectifPoints)
             if (joueurs[indice]->avoirPoints() > maxi)
@@ -142,7 +149,6 @@ void Jeu::lancerManche(){
 }
 
 void Jeu::lancerTour(){
-
     if (tourSuivant()){ // Si on peut continuer
         joueurActuel->retirerProtection(); // On retire sa protection (servante ne protège qu'un seul tour)
         joueurActuel->ajouterCarte(pioche.piocher()); // il pioche
@@ -174,11 +180,13 @@ void Jeu::lancerTour(){
                     cible = joueurActuel->choisirJoueur(carteEnCourDeJeux, joueursChoix, pioche.avoirNbCartesRestantes());
                     if (cible == -1){ // cas où on ne peut pas choisir de joueur
                         emit messageLog(joueurActuel->avoirNom() + " joue la carte " + carteEnCourDeJeux->avoirNom() + " sur personne.");
+                        miseAJourCartesPotentiel(); // met à jour les connaisances des IA, version normale
                         break;
                     }
                     joueurCible = joueurs[cible];
                     carteADemander = joueurActuel->demanderCarteAJoueur(joueurCible, pioche.avoirCartesJouer());
                     emit messageLog(joueurActuel->jouerCarte(carteEnCourDeJeux, joueurCible, pioche[carteADemander]));
+                    miseAJourCartesPotentiel(pioche[carteADemander]); // il faut la carte demander pour la mise à jour
                     break;
 
                 case TypeCarte::Duel: // sur une autres personne et soi même (num : 2,3,7) / num 2 car la personne qui la joue regarde l'autre
@@ -186,21 +194,16 @@ void Jeu::lancerTour(){
                     cible = joueurActuel->choisirJoueur(carteEnCourDeJeux, joueursChoix, pioche.avoirNbCartesRestantes());
                     if (cible == -1){ // cas où on ne peut pas choisir de joueur
                         emit messageLog(joueurActuel->avoirNom() + " joue la carte " + carteEnCourDeJeux->avoirNom() + " sur personne.");
-                        break;
+                    } else {
+                        joueurCible = joueurs[cible];
+                        emit messageLog(joueurActuel->jouerCarte(carteEnCourDeJeux, joueurCible));
+
+                        if(not(joueurActuel->estEnVie()))// Si 1 des deux meure alors on prend ça carte dans carteADemander (pour connaisance baron)
+                            carteADemander = joueurActuel->avoirMain()[0]->avoirNum();
+                        else if(not(joueurCible->estEnVie()))
+                            carteADemander = joueurCible->avoirMain()[0]->avoirNum();
                     }
-                    joueurCible = joueurs[cible];
-                    emit messageLog(joueurActuel->jouerCarte(carteEnCourDeJeux, joueurCible));
-
-                    if(not(joueurActuel->estEnVie()))// Si 1 des deux meure alors on prend ça carte dans carteADemander (pour connaisance baron)
-                        carteADemander = joueurActuel->avoirMain()[0]->avoirNum();
-                    else if(not(joueurCible->estEnVie()))
-                        carteADemander = joueurCible->avoirMain()[0]->avoirNum();
-
-                    // ici la mise à jour des connaisances des IA nécésite une info suplémentaire
-                    if (carteEnCourDeJeux->avoirNum() == 1) // le garde (num 1)
-                        miseAJourCartesPotentiel(pioche[carteADemander]); // il faut la carte demander
-                    else
-                        miseAJourCartesPotentiel(); // met à jour les connaisances des IA, version normale
+                    miseAJourCartesPotentiel(); // met à jour les connaisances des IA, version normale
                     break;
 
                 case TypeCarte::Defensif: // sur soi (num : 0,4,6,9) le 9 ne protège pas vraiment ;) mais ce joue sur soie même
@@ -208,7 +211,6 @@ void Jeu::lancerTour(){
                     emit messageLog(joueurActuel->jouerCarte(carteEnCourDeJeux));
                     miseAJourCartesPotentiel(); // met à jour les connaisances des IA
             }
-
             lancerTour(); // permet de continuer la partie (récurcivité)
         }
     } else {
@@ -248,7 +250,8 @@ void Jeu::finDeManche(bool finDuPaquet){
     QVector<QString> nomJoueurs;
     QVector<short int> pointsJoueurs;
     for (Joueur* joueur : joueurs){
-        nomJoueurs.push_back(joueur->avoirNom()); // On les listes
+        if (joueur->estEnVie())
+            nomJoueurs.push_back(joueur->avoirNom()); // On le listes
         joueur->gainPoints(); // On donne les points (gainPoints donne des pt si enVie et si ptBonnus)
         pointsJoueurs.push_back(joueur->avoirPoints()); // met à jours l'affichage des points
     }
@@ -261,7 +264,8 @@ void Jeu::finDeManche(bool finDuPaquet){
     else { // Sinon on arrête
         QVector<QString> nomGagnants;
         for (Joueur* joueur : joueurs)
-            nomGagnants.push_back(joueur->avoirNom());
+            if (joueur->avoirPoints() >= objectifPoints)
+                nomGagnants.push_back(joueur->avoirNom());
         emit afficherVictoireJeu(nomGagnants);
     }
 }
@@ -285,6 +289,7 @@ void Jeu::recevoirChoixCarte(short int idCarte){
                 joueursPossible.removeOne(joueurActuel); // Pour ne pas ce viser soit même
             if (joueursPossible.isEmpty()){ // cas où on ne peut pas choisir de joueur
                 emit messageLog(joueurActuel->avoirNom() + " joue la carte " + carteEnCourDeJeux->avoirNom() + " sur personne.");
+                lancerTour(); // permet de continuer la partie
                 break;
             }
             for (short int indice = 0; indice < joueursPossible.size(); indice++){
@@ -298,7 +303,8 @@ void Jeu::recevoirChoixCarte(short int idCarte){
         case TypeCarte::SansEffet: // ne fait rien (num 8)
             emit messageLog(joueurActuel->jouerCarte(carteEnCourDeJeux));
             miseAJourCartesPotentiel(); // met à jour les connaisances des IA
-            lancerTour(); // permet de continuer la partie
+            if (carteEnCourDeJeux->avoirNum() != 6) // pour le chancelier on vas demander la carte à garder, lancerTour() est autre part
+                lancerTour(); // permet de continuer la partie
             break;
     }
 }
@@ -311,26 +317,21 @@ void Jeu::recevoirChoixValeurGarde(short int valeur){
 
 void Jeu::recevoirChoixCibleJoueur(short int joueur){
     joueurCible = joueurs[joueur]; // On note la cible choisit
-    short int carteADemander = -1;
 
     // soit Offensif / Duel / OffensifOuDefensif
     switch (carteEnCourDeJeux->estType()) {
         case TypeCarte::Offensif: // sur autre personne et le choix d'une carte (num : 1)
-        emit demanderChoixValeurGarde(pioche.avoirListeDesCartes(), pioche.avoirCartesJouer());
+            emit demanderChoixValeurGarde(pioche.avoirListeDesCartes(), pioche.avoirCartesJouer());
             break;
         case TypeCarte::Duel: // sur une autres personne et soi même (num : 2,3,7) / num 2 car la personne qui la joue regarde l'autre
-            emit messageLog(joueurActuel->jouerCarte(carteEnCourDeJeux, joueurCible));
-
-            if(not(joueurActuel->estEnVie()))// Si 1 des deux meure alors on prend ça carte dans carteADemander (pour connaisance baron)
-                carteADemander = joueurActuel->avoirMain()[0]->avoirNum();
-            else if(not(joueurCible->estEnVie()))
-                carteADemander = joueurCible->avoirMain()[0]->avoirNum();
-            miseAJourCartesPotentiel(pioche[carteADemander]); // met à jour les connaisances des IA
-
-            lancerTour(); // permet de continuer la partie
         case TypeCarte::OffensifOuDefensif: // sur une autres personne et soi même! (num 5)
             emit messageLog(joueurActuel->jouerCarte(carteEnCourDeJeux, joueurCible));
             miseAJourCartesPotentiel(); // met à jour les connaisances des IA
+
+            if(carteEnCourDeJeux->avoirNum() == 2){ // si prêtre (num 2) on affiche la carte de l'autre
+                emit afficherCarte(joueurCible->avoirMain()[0]);
+            }
+
             lancerTour(); // permet de continuer la partie
         default:
             break;
@@ -355,3 +356,6 @@ void Jeu::rejouer(){
     lancerManche();
 }
 
+void Jeu::recevoirContinuer(){
+    lancerTour();
+}

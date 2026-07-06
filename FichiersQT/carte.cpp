@@ -106,10 +106,12 @@ Carte6::Carte6(QObject* parent, short int nbExemplaires_, short int num_, QStrin
     : Carte(parent, nbExemplaires_, num_, nom_, image_,  type_), pioche(pioche_) {}
 Carte6::~Carte6() {}
 
-QString Carte6::action(Joueur* joueur1, Joueur*, Carte*) const {
+QString Carte6::action(Joueur* joueur1, Joueur*, Carte*) const{
     // il pioche 2 cartes
-    joueur1->ajouterCarte(pioche->piocher());
-    joueur1->ajouterCarte(pioche->piocher());
+    for (short int indice = 0; indice < 2; indice++)
+        if (pioche->avoirNbCartesRestantes() != 0)
+            joueur1->ajouterCarte(pioche->piocher());
+
     // il choisis la quelle gardé
     short int carteAGarder = joueur1->choisir1DeNos3Cartes();
     if (carteAGarder == -1) // cas du joueur = Humain
@@ -121,9 +123,21 @@ QString Carte6::action(Joueur* joueur1, Joueur*, Carte*) const {
 }
 
 void Carte6::suiteAction6(Joueur* joueur1, short int carteAGarder) const{
+    // On regarde si on à choisis la princesse si elle est dispo
+    bool princesseIci = false;
+    for (Carte* carte : joueur1->avoirMain())
+        if (carte->avoirNum() == 9)
+            princesseIci = true;
+    if (princesseIci && carteAGarder != 9){
+        joueur1->eliminer();
+        emit messageLog("La princesse à était défausser, " + joueur1->avoirNom() + " est éliminé");
+    }
+
     for (short int indice = joueur1->avoirMain().size() - 1; indice >= 0 ; indice--)
         if (indice != carteAGarder) // Si ce n'est pas la carte que l'on a choisit alors on la retire
             pioche->defausser(joueur1->retirerCarte(indice));
+
+    emit continuer();
 }
 
 // ---------------------------- num 7 ----------------------------

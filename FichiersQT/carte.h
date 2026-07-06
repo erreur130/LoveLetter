@@ -85,6 +85,8 @@ public :
     QString action(Joueur* = nullptr, Joueur* = nullptr, Carte* = nullptr) const;
 signals:
     void choixCarteAGarder(Joueur*) const;
+    void continuer() const;
+    void messageLog(QString) const;
 public slots:
     void suiteAction6(Joueur*, short int carteAGarder) const;
 };

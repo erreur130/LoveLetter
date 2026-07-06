@@ -3,7 +3,7 @@
 
 #include <QVector>
 #include <QRandomGenerator>
-#include <iostream>
+#include <QMetaType>
 
 class Carte; // forward declaration #include "carte.h" dans le .cpp
 enum class TypeCarte; // forward declaration #include "carte.h" dans le .cpp
@@ -17,7 +17,6 @@ class Joueur{
     bool enVie;
     bool aDecouvert;
     QVector<Carte*> main;
-    static short int idGlobal;
 public:
     Joueur(QString);
     virtual ~Joueur();
@@ -39,7 +38,7 @@ public:
     inline void changerID(short int id_) {id = id_;};
     void reinitialiser();
     inline void retirerPoints() {points = 0;};
-    inline void eliminer() {protection=false;};
+    inline void eliminer() {enVie=false;};
     inline void ajouterCarte(Carte* carte) {main.append(carte);};
     inline Carte* retirerCarte(short int indice) {return main.takeAt(indice);};
     QString jouerCarte(Carte*, Joueur* = nullptr, Carte* = nullptr);
@@ -50,5 +49,7 @@ public:
     virtual short int choisir1DeNos3Cartes() const = 0;
     virtual short int demanderCarteAJoueur(Joueur*, QVector<short int>) const = 0;
 };
+
+Q_DECLARE_METATYPE(Joueur*)
 
 #endif // JOUEUR_H

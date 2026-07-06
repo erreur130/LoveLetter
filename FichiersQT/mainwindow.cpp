@@ -9,15 +9,17 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), jeu(nullptr), joueursCible(QVector<QString>()){
     ui->setupUi(this);
     setWindowTitle("Love Letter");
-    setAttribute(Qt::WA_DeleteOnClose); // permet une libération de toutes les données avec close()
 
     // demande la répartition des joueurs
     NbJoueursWindow *fenetre = new NbJoueursWindow(this);
     connect(fenetre, SIGNAL(envoyerJoueur(short int, short int, short int, short int)), this, SLOT(recevoirJoueur(short int, short int, short int, short int)));
-    fenetre->setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::WindowMinimizeButtonHint); // retire la croix et pein écrant
     fenetre->setFixedSize(fenetre->size());  // taille fixe basée sur la taille
     fenetre->setWindowTitle("Choix des joueurs");
-    fenetre->exec(); // bloque MainWindow
+    if (not(fenetre->exec() == QDialog::Accepted)){ // si la croix
+        qDebug() << "close";
+        jeu = new Jeu(); // car non définit avant (sinon free nullptr)
+        delete this;
+    }
 
     // connection à tout les signals/slots Jeu -> MainWindow
     connect(jeu, &Jeu::messageLog, this, &MainWindow::recevoirMessageLog);
@@ -32,6 +34,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(jeu, &Jeu::afficherVictoireJeu, this, &MainWindow::recevoirAfficherVictoireJeu);
     connect(jeu, &Jeu::miseAJourCartesJouees, this, &MainWindow::recevoirMiseAJourCartesJouees);
     connect(jeu, &Jeu::miseAJourNbCartesRestantes, this, &MainWindow::recevoirMiseAJourNbCartesRestantes);
+    connect(jeu, &Jeu::afficherCarte, this, &MainWindow::recevoirAfficherCarte);
     // connection à tout les signals/slots MainWindow -> Jeu
     connect(this, &MainWindow::envoyerChoixCarte, jeu, &Jeu::recevoirChoixCarte);
     connect(this, &MainWindow::envoyerChoixValeurGarde, jeu, &Jeu::recevoirChoixValeurGarde);
@@ -40,6 +43,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     // connection à tout les signals/slots MainWindow -> Carte6 et Carte6 -> MainWindow
     connect(this, &MainWindow::envoyerSuiteAction6, dynamic_cast<Carte6*>(jeu->avoirPaquet()[6]), &Carte6::suiteAction6);
     connect(dynamic_cast<Carte6*>(jeu->avoirPaquet()[6]), &Carte6::choixCarteAGarder, this, &MainWindow::recevoirChoixCarteAGarder);
+    connect(dynamic_cast<Carte6*>(jeu->avoirPaquet()[6]), &Carte6::messageLog, this, &MainWindow::recevoirMessageLog);
+    // connection  à tout les signals/slots Carte6 -> Jeu
+    connect(dynamic_cast<Carte6*>(jeu->avoirPaquet()[6]),  &Carte6::continuer, jeu, &Jeu::recevoirContinuer);
 
 
     // On cache les Wigets inutiles au début
@@ -98,7 +104,7 @@ void MainWindow::lancer(){
 
 // -----------------public slots---------------------- Jeu -> MainWindow
 
-void MainWindow::recevoirChoixCarteAGarder(Joueur* joueurARenvoyer){ //-----------------------------------------------------
+void MainWindow::recevoirChoixCarteAGarder(Joueur* joueurARenvoyer){
     ui->listeCarteAGarder->setVisible(true);
     ui->labelInfoActionJoueur->setVisible(true);
     ui->labelInfoActionJoueur->setText("Choisissez un joueur à cibler :");
@@ -114,6 +120,7 @@ void MainWindow::recevoirChoixCarteAGarder(Joueur* joueurARenvoyer){ //---------
 
 void MainWindow::recevoirMessageLog(QString msg){
     ui->textLog->append(msg);
+    qDebug() << msg; // log dans le terminale ------------------------
 }
 
 void MainWindow::recevoirReinitialiserLog(){
@@ -166,7 +173,6 @@ void MainWindow::recevoirMiseAJourPointsJoueurs(QVector<short int> ptJoueurs){
 
 void MainWindow::recevoirMessageAlerteMainJoueurVasEtreMontre(QString nom, bool popup){
     ui->labelTourDe->setText("Tour de " + nom);
-    ui->textLog->append("Tour de " + nom);
     if (popup){
         QMessageBox alerteMessage(this);
         alerteMessage.setWindowTitle("Tour suivant");
@@ -189,6 +195,12 @@ void MainWindow::recevoirAfficherMain(Carte* carte1, Carte* carte2){
     QListWidgetItem* itemCarte2 = new QListWidgetItem(ui->listeCarteMain);
     itemCarte2->setIcon(QIcon(carte2->avoirImage()));
     itemCarte2->setData(Qt::UserRole, carte2->avoirNum());
+
+    // si on as la comptesse avec le prince ou le roi on retire le fait de pouviir sélectionner la comptesse
+    if (carte1->avoirNum() == 8 && (carte2->avoirNum() == 5 || carte2->avoirNum() == 7)) // comptesse = carte1
+        itemCarte1->setFlags(Qt::ItemIsEnabled);
+    else if (carte2->avoirNum() == 8 && (carte1->avoirNum() == 5 || carte1->avoirNum() == 7)) // comptesse = carte2
+        itemCarte2->setFlags(Qt::ItemIsEnabled);
 }
 
 void MainWindow::recevoirAfficherVictoireManche(QVector<QString> nomJoueurs){
@@ -230,15 +242,15 @@ void MainWindow::recevoirAfficherVictoireJeu(QVector<QString> nomJoueurs){
         message += " a gagné !";
 
     alerteMessage.setText(message);
-    QPushButton *btnQuitter = alerteMessage.addButton("Quitter", QMessageBox::RejectRole);
-    QPushButton *btnRejouer = alerteMessage.addButton("Rejouer", QMessageBox::AcceptRole);
+    alerteMessage.addButton("Quitter", QMessageBox::RejectRole);
+    alerteMessage.addButton("Rejouer", QMessageBox::AcceptRole);
     alerteMessage.setStyleSheet("margin: auto;"); // tente de centrer
     alerteMessage.exec(); // bloquant, attend le clic
 
     if (alerteMessage.buttonRole(alerteMessage.clickedButton()) == QMessageBox::AcceptRole) // on rejoue si demander
         lancer();
     else{ // si boutton quitter ou croix on ferme
-        QApplication::quit();
+        this->close();
     }
 }
 
@@ -257,6 +269,27 @@ void MainWindow::recevoirMiseAJourCartesJouees(QVector<short int> listeCartes){
 
 void MainWindow::recevoirMiseAJourNbCartesRestantes(short int cartesRestantes){
     ui->labelNbCartesRestantes->setText("Cartes restantes : " + QString::number(cartesRestantes));
+}
+
+void MainWindow::recevoirAfficherCarte(Carte* carte){
+    // affiche une popup avec un boutton et la carte
+    QDialog* popup = new QDialog();
+    popup->setWindowTitle("Voici la carte du joueur");
+
+    QVBoxLayout* layout = new QVBoxLayout(popup);
+
+    QLabel* image = new QLabel();
+    image->setPixmap(QPixmap(carte->avoirImage()).scaled(200, 300, Qt::KeepAspectRatio));
+    image->setAlignment(Qt::AlignCenter);
+    layout->addWidget(image);
+    // Le bouton
+    QPushButton* bouton = new QPushButton("OK, j'ai vue la carte");
+    connect(bouton, &QPushButton::clicked, popup, &QDialog::accept);
+    layout->addWidget(bouton);
+
+    popup->setLayout(layout);
+    popup->exec(); // bloquant
+    delete popup;
 }
 
 // ---------------------------- ui -------------------------------------

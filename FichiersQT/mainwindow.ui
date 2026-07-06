@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1245</width>
-    <height>803</height>
+    <width>1429</width>
+    <height>805</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -198,7 +198,7 @@
                <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
               </property>
               <property name="dragDropMode">
-               <enum>QAbstractItemView::DragDropMode::DropOnly</enum>
+               <enum>QAbstractItemView::DragDropMode::NoDragDrop</enum>
               </property>
               <property name="iconSize">
                <size>
@@ -225,51 +225,55 @@
             </item>
            </layout>
           </item>
-          <item alignment="Qt::AlignmentFlag::AlignHCenter">
-           <widget class="QListWidget" name="listeCarteAGarder">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>632</width>
-              <height>285</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>632</width>
-              <height>285</height>
-             </size>
-            </property>
-            <property name="verticalScrollBarPolicy">
-             <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
-            </property>
-            <property name="horizontalScrollBarPolicy">
-             <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
-            </property>
-            <property name="dragDropMode">
-             <enum>QAbstractItemView::DragDropMode::DragDrop</enum>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>200</width>
-              <height>300</height>
-             </size>
-            </property>
-            <property name="flow">
-             <enum>QListView::Flow::LeftToRight</enum>
-            </property>
-            <property name="viewMode">
-             <enum>QListView::ViewMode::IconMode</enum>
-            </property>
-            <property name="itemAlignment">
-             <set>Qt::AlignmentFlag::AlignCenter</set>
-            </property>
-           </widget>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <item>
+             <widget class="QListWidget" name="listeCarteAGarder">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>632</width>
+                <height>285</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>632</width>
+                <height>285</height>
+               </size>
+              </property>
+              <property name="verticalScrollBarPolicy">
+               <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+              </property>
+              <property name="horizontalScrollBarPolicy">
+               <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+              </property>
+              <property name="dragDropMode">
+               <enum>QAbstractItemView::DragDropMode::DragDrop</enum>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>200</width>
+                <height>300</height>
+               </size>
+              </property>
+              <property name="flow">
+               <enum>QListView::Flow::LeftToRight</enum>
+              </property>
+              <property name="viewMode">
+               <enum>QListView::ViewMode::IconMode</enum>
+              </property>
+              <property name="itemAlignment">
+               <set>Qt::AlignmentFlag::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
           <item>
            <spacer name="verticalSpacer_2">
@@ -502,7 +506,7 @@
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>300</width>
+          <width>400</width>
           <height>20</height>
          </size>
         </property>
@@ -531,7 +535,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1245</width>
+     <width>1429</width>
      <height>23</height>
     </rect>
    </property>

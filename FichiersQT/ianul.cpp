@@ -103,53 +103,59 @@ void IANul::miseAJourCartesPotentiel(QVector<short int> cartesJouer, Joueur* jou
         cartesConnuesDesAutres[joueurActuel->avoirID()].clear(); // Si il joue une des cartes dont on était sûr, c'est très probable que nos certitudes ne le sont plus
 
     switch (carteJouer){
-    case 1: // On retire directement la suposition en question sur la personne
-        cartesConnuesDesAutres[autreJoueur->avoirID()].removeOne(cartePerdent); // Ici cartePerdent correspond à la carte suposé
+    case 1: // On retire directement la suposition en question sur la personne, si -1 ça ne fera rien
+        if (autreJoueur != nullptr) // si on à pue choisir le joueur
+            cartesConnuesDesAutres[autreJoueur->avoirID()].removeOne(cartePerdent); // Ici cartePerdent correspond à la carte suposé
         return; // pas besoin de continuer
     case 5: // On repart de 0 pour ses supositions
-        cartesConnuesDesAutres[autreJoueur->avoirID()].clear();
+        if (autreJoueur != nullptr) // si on à pue choisir le joueur
+            cartesConnuesDesAutres[autreJoueur->avoirID()].clear();
         return; // pas besoin de continuer
     case 3: // 5,6,7,8,9 sont les cartes sûr du gagant
-        // On recherche le ou les survivants
-        if (not(joueurActuel->estEnVie())){ // si le joueur actuel est mort, alors on vas changer l'autre joueur
-            joueursAMettreAJour.pop_back();
-            joueursAMettreAJour.push_back(autreJoueur->avoirID());
-            cartePerdent = joueurActuel->avoirMain()[0]->avoirNum(); // La carte du perdant est celle du joueur actuel
-        } else if (autreJoueur->estEnVie()){ // si l'autre joueur est en vie (si l'actuel est en vie alors ils sont les deux dans le QVector)
-            joueursAMettreAJour.push_back(autreJoueur->avoirID());
-            cartePerdent = joueurActuel->avoirMain()[0]->avoirNum(); // La carte du perdant est celle du joueur actuel
-        } else // (joueurActuel est le seul survivant) par défaut c'est joueurActuel qui est dans joueursAMettreAJour
-            cartePerdent = autreJoueur->avoirMain()[0]->avoirNum(); // La carte du perdant est celle de l'autre joueur
+        if (autreJoueur != nullptr){ // si on à pue choisir le joueur
+            // On recherche le ou les survivants
+            if (not(joueurActuel->estEnVie())){ // si le joueur actuel est mort, alors on vas changer l'autre joueur
+                joueursAMettreAJour.pop_back();
+                joueursAMettreAJour.push_back(autreJoueur->avoirID());
+                cartePerdent = joueurActuel->avoirMain()[0]->avoirNum(); // La carte du perdant est celle du joueur actuel
+            } else if (autreJoueur->estEnVie()){ // si l'autre joueur est en vie (si l'actuel est en vie alors ils sont les deux dans le QVector)
+                joueursAMettreAJour.push_back(autreJoueur->avoirID());
+                cartePerdent = joueurActuel->avoirMain()[0]->avoirNum(); // La carte du perdant est celle du joueur actuel
+            } else // (joueurActuel est le seul survivant) par défaut c'est joueurActuel qui est dans joueursAMettreAJour
+                cartePerdent = autreJoueur->avoirMain()[0]->avoirNum(); // La carte du perdant est celle de l'autre joueur
 
-        for (short int indice = 0; indice <= cartePerdent; indice++) // liste les nb inférieurs ou égal au nb qui à perdu dans les cartes impossible
-            listeCarteImpossibleDuJoueur.push_back(indice);
+            for (short int indice = 0; indice <= cartePerdent; indice++) // liste les nb inférieurs ou égal au nb qui à perdu dans les cartes impossible
+                listeCarteImpossibleDuJoueur.push_back(indice);
 
-        if ( joueursAMettreAJour.size() == 1 ){ // si un des deux à gagner alors 5,6,7,8,9
-            if (cartePerdent < 8 && ( (cartesJouer.at(5) + (avoirMain().at(0)->avoirNum() == 5)) < 2) ) // si il en manque ou que tu n'as pas la dernière et sup à la carte du perdent
-                listeCarteCertainesDuJoueur.push_back(5);
-            if (cartePerdent < 8 && ( (cartesJouer.at(6) + (avoirMain().at(0)->avoirNum() == 6)) < 2) ) // si il en manque ou que tu n'as pas la dernière et sup à la carte du perdent
-                listeCarteCertainesDuJoueur.push_back(6);
-            if (cartePerdent < 8 && ( (cartesJouer.at(7) + (avoirMain().at(0)->avoirNum() == 7)) < 1) ) // si tu n'as pas la dernière et sup à la carte du perdent
-                listeCarteCertainesDuJoueur.push_back(7);
-            if (cartePerdent < 8 && ( (cartesJouer.at(8) + (avoirMain().at(0)->avoirNum() == 8)) < 1) ) // si tu n'as pas la dernière et sup à la carte du perdent
-                listeCarteCertainesDuJoueur.push_back(8);
-            if ((cartesJouer.at(9) + (avoirMain().at(0)->avoirNum() == 9)) < 1) // si tu n'as pas la dernière
-                listeCarteCertainesDuJoueur.push_back(9);
-        } else { // cas d'égalitée alors 5 ou 6
-            if ((cartesJouer.at(5) + (avoirMain().at(0)->avoirNum() == 5)) == 0) // si il en manque ou que tu n'as pas la dernière
-                listeCarteCertainesDuJoueur.push_back(5);
-            if ((cartesJouer.at(6) + (avoirMain().at(0)->avoirNum() == 6)) == 0) // si il en manque ou que tu n'as pas la dernière
-                listeCarteCertainesDuJoueur.push_back(6);
+            if ( joueursAMettreAJour.size() == 1 ){ // si un des deux à gagner alors 5,6,7,8,9
+                if (cartePerdent < 8 && ( (cartesJouer.at(5) + (avoirMain().at(0)->avoirNum() == 5)) < 2) ) // si il en manque ou que tu n'as pas la dernière et sup à la carte du perdent
+                    listeCarteCertainesDuJoueur.push_back(5);
+                if (cartePerdent < 8 && ( (cartesJouer.at(6) + (avoirMain().at(0)->avoirNum() == 6)) < 2) ) // si il en manque ou que tu n'as pas la dernière et sup à la carte du perdent
+                    listeCarteCertainesDuJoueur.push_back(6);
+                if (cartePerdent < 8 && ( (cartesJouer.at(7) + (avoirMain().at(0)->avoirNum() == 7)) < 1) ) // si tu n'as pas la dernière et sup à la carte du perdent
+                    listeCarteCertainesDuJoueur.push_back(7);
+                if (cartePerdent < 8 && ( (cartesJouer.at(8) + (avoirMain().at(0)->avoirNum() == 8)) < 1) ) // si tu n'as pas la dernière et sup à la carte du perdent
+                    listeCarteCertainesDuJoueur.push_back(8);
+                if ((cartesJouer.at(9) + (avoirMain().at(0)->avoirNum() == 9)) < 1) // si tu n'as pas la dernière
+                    listeCarteCertainesDuJoueur.push_back(9);
+            } else { // cas d'égalitée alors 5 ou 6
+                if ((cartesJouer.at(5) + (avoirMain().at(0)->avoirNum() == 5)) == 0) // si il en manque ou que tu n'as pas la dernière
+                    listeCarteCertainesDuJoueur.push_back(5);
+                if ((cartesJouer.at(6) + (avoirMain().at(0)->avoirNum() == 6)) == 0) // si il en manque ou que tu n'as pas la dernière
+                    listeCarteCertainesDuJoueur.push_back(6);
+            }
         }
         break;
     case 7: // On joue comme si c'était sûr que c'est un 9
-        // On échange les supositions (suposition autreJoueur écrasé car on vas mettre le 9 après)
-        cartesConnuesDesAutres[joueurActuel->avoirID()] = cartesConnuesDesAutres[autreJoueur->avoirID()];
-        // On met la suposition du 9 dans la cible
-        cartesConnuesDesAutres[autreJoueur->avoirID()].clear();
-        cartesConnuesDesAutres[autreJoueur->avoirID()].push_back(9); // C'est la cible qui à probablement récupérer le 9
+        if (autreJoueur != nullptr){ // si on à pue choisir le joueur
+            // On échange les supositions (suposition autreJoueur écrasé car on vas mettre le 9 après)
+            cartesConnuesDesAutres[joueurActuel->avoirID()] = cartesConnuesDesAutres[autreJoueur->avoirID()];
+            // On met la suposition du 9 dans la cible
+            cartesConnuesDesAutres[autreJoueur->avoirID()].clear();
+            cartesConnuesDesAutres[autreJoueur->avoirID()].push_back(9); // C'est la cible qui à probablement récupérer le 9
 
-        joueursAMettreAJour.pop_back(); // pas nécésaire de mettre à jour car déjà fait
+            joueursAMettreAJour.pop_back(); // pas nécésaire de mettre à jour car déjà fait
+        }
         return; // On peut même sortir de la fonction pour évité lire des trucs inutiles
     case 0: // On ne peut pas savoir
     case 2: // même cas

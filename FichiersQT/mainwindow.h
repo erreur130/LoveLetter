@@ -6,6 +6,10 @@
 #include <QDebug>
 #include <QListWidgetItem>
 #include <QMessageBox>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QPushButton>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -23,8 +27,6 @@ class MainWindow : public QMainWindow{
         ~MainWindow() override;
         void lancer();
     private slots:
-        //void on_ListWiged_listCartes_activated(index : int);
-        //void on_ListWiged_listJoueurs_activated(index : int); // à mettre autre part ------------------------------------------------------
         void on_actionRegles_de_jeu_triggered();
         void on_actionListe_des_cartes_triggered();
         void on_actionProjet_triggered();
@@ -32,7 +34,6 @@ class MainWindow : public QMainWindow{
         void on_listeCarteChoixGarde_itemClicked(QListWidgetItem *item);
         void on_listeJoueursCible_itemClicked(QListWidgetItem *item);
         void on_listeCarteMain_itemClicked(QListWidgetItem *item);
-
         void on_listeCarteAGarder_itemClicked(QListWidgetItem *item);
 
     signals:
@@ -55,6 +56,7 @@ class MainWindow : public QMainWindow{
         void recevoirAfficherVictoireJeu(QVector<QString> nomJoueurs);
         void recevoirMiseAJourCartesJouees(QVector<short int>);
         void recevoirMiseAJourNbCartesRestantes(short int);
+        void recevoirAfficherCarte(Carte*);
 
 };
 #endif // MAINWINDOW_H

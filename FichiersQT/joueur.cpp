@@ -30,7 +30,6 @@ QString Joueur::jouerCarte(Carte* carte, Joueur* autreJoueur, Carte* cartechoix)
         retirerCarte(0);
     else
         retirerCarte(1);
-    return "";
 
     TypeCarte type = carte->estType();
 
