@@ -209,7 +209,7 @@ m2=0..n
 + afficherVictoireJeu(nomJoueurs : QVector&lt;QString&gt;)
 + miseAJourCartesJouees(listeCartes : QVector&lt;short int&gt;)
 + miseAJourNbCartesRestantes(cartesRestantes : short int)
-
++ recevoirAfficherCarte(carte : Carte*)
 
 </panel_attributes>
     <additional_attributes/>
@@ -475,9 +475,9 @@ SansEffet</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>968</x>
-      <y>44</y>
+      <y>32</y>
       <w>300</w>
-      <h>228</h>
+      <h>240</h>
     </coordinates>
     <panel_attributes>MainWindow
 --
@@ -508,6 +508,7 @@ joueursCible : QVector&lt;QString&gt;
 + recevoirAfficherVictoireJeu(nomJoueurs : QVector&lt;QString&gt;)
 + recevoirMiseAJourCartesJouees(listeCartes : QVector&lt;short int&gt;)
 + recevoirMiseAJourNbCartesRestantes(cartesRestantes : short int)
++ recevoirAfficherCarte(carte : Carte*)
 
 «signals»
 + fairesuiteAction6(carteAGarder : short int)
@@ -735,7 +736,7 @@ bg=blue</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>608</x>
-      <y>584</y>
+      <y>592</y>
       <w>320</w>
       <h>68</h>
     </coordinates>
@@ -758,11 +759,11 @@ bg=blue</panel_attributes>
       <x>620</x>
       <y>544</y>
       <w>12</w>
-      <h>48</h>
+      <h>56</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-
 </panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;120.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
@@ -796,7 +797,7 @@ bg=red</panel_attributes>
       <x>780</x>
       <y>508</y>
       <w>216</w>
-      <h>64</h>
+      <h>76</h>
     </coordinates>
     <panel_attributes>-&gt; le 5 et le 6 nécésite en plus :
 ("pioche_ : Paquet*" dans le Constructeur()
@@ -805,8 +806,10 @@ et Q_Object dans Carte6 )
 - pioche : Paquet*
 
 -&gt; et pour le 6 :
-+ choixCarteAGarder(joueurARenvoyer : Joueur*) «signal»
 + suiteAction6(joueur1 : Joueur*, carteAGarder : short int)
+&lt;&lt;signals&gt;&gt;
++ choixCarteAGarder(joueurARenvoyer : Joueur*) «signal»
++ continuer()
 bg=blue</panel_attributes>
     <additional_attributes/>
   </element>
