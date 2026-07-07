@@ -5,19 +5,16 @@
     <id>UMLClass</id>
     <coordinates>
       <x>160</x>
-      <y>584</y>
+      <y>592</y>
       <w>324</w>
-      <h>88</h>
+      <h>68</h>
     </coordinates>
     <panel_attributes>Humain
 --
-+ carteVue : Carte*
 --
 + Constructeur(nom : QString)
 + Destructeur()
 + afficheCartes()
-+ avoirCarteVue() : Carte*
-+ retirerCarteVue();
 + choisirCarte(nbCartesRestantes : short int, QVector&lt;bool&gt; joueursNonProteger) : Carte*
 + choisirJoueur(carte : Carte*, joueursNonProteger : QVector&lt;bool&gt;, nbCartesRestantes : short int) : short int
 + voirCarteDUnJoueur(carte : Carte*, joueur short int)
@@ -31,7 +28,7 @@
       <x>260</x>
       <y>312</y>
       <w>384</w>
-      <h>236</h>
+      <h>240</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Class abstraite&gt;&gt;
 /Joueur/
@@ -100,25 +97,25 @@
     <id>Relation</id>
     <coordinates>
       <x>464</x>
-      <y>544</y>
+      <y>548</y>
       <w>12</w>
-      <h>48</h>
+      <h>52</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-
 </panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>580</x>
-      <y>544</y>
+      <y>548</y>
       <w>12</w>
-      <h>148</h>
+      <h>144</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-
 </panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;350.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;340.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -167,14 +164,15 @@ m2=0..n
     <id>UMLClass</id>
     <coordinates>
       <x>500</x>
-      <y>28</y>
+      <y>20</y>
       <w>276</w>
-      <h>248</h>
+      <h>256</h>
     </coordinates>
     <panel_attributes>Jeu
 --
 - objectifPoints : short int
 --
++ Constructeur (parent : QObject*)
 + Constructeur(parent : QObject*, h, inul, inorm, itri : short int)
 + Destructeur()
 + JoueursRestant() : QVector&lt;Joueur*&gt;
@@ -724,13 +722,13 @@ bg=blue</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>500</x>
-      <y>544</y>
+      <y>548</y>
       <w>12</w>
-      <h>152</h>
+      <h>148</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-
 </panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;360.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;350.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -757,13 +755,13 @@ bg=blue</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>620</x>
-      <y>544</y>
+      <y>548</y>
       <w>12</w>
-      <h>56</h>
+      <h>52</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-
 </panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;120.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
