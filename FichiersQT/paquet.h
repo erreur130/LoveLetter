@@ -15,7 +15,7 @@ public:
     ~Paquet();
     inline short int avoirNbCartesRestantes() const {return cartes.length();};
     inline short int nbCartesJouer(short int indice) const {return cartesJouer[indice];};
-    inline void carteAEtaitJouer(short int indice){cartesJouer[indice]++;};
+    inline void carteAEtaitJouer(short int indice){cartesJouer[indice]++; qDebug() << "VUE " + QString::number(indice);};
     inline QVector<short int> avoirCartesJouer() {return cartesJouer;};
     inline QVector<Carte*> avoirListeDesCartes() const {return listeDesCartes;};
     inline Carte* operator[](short int indice) const {return listeDesCartes[indice];};

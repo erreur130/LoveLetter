@@ -4,6 +4,7 @@
 #include <QVector>
 #include <QRandomGenerator>
 #include <QMetaType>
+#include <QDebug>
 
 class Carte; // forward declaration #include "carte.h" dans le .cpp
 enum class TypeCarte; // forward declaration #include "carte.h" dans le .cpp

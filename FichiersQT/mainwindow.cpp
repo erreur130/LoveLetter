@@ -17,8 +17,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     fenetre->setWindowTitle("Choix des joueurs");
     if (not(fenetre->exec() == QDialog::Accepted)){ // si la croix
         qDebug() << "close";
-        jeu = new Jeu(); // car non définit avant (sinon free nullptr)
+        jeu = new Jeu(this); // car non définit avant (sinon free nullptr)
         delete this;
+        //this->close(); // ne ferme pas MainWindow car show() pas encore fait
     }
 
     // connection à tout les signals/slots Jeu -> MainWindow
@@ -107,7 +108,7 @@ void MainWindow::lancer(){
 void MainWindow::recevoirChoixCarteAGarder(Joueur* joueurARenvoyer){
     ui->listeCarteAGarder->setVisible(true);
     ui->labelInfoActionJoueur->setVisible(true);
-    ui->labelInfoActionJoueur->setText("Choisissez un joueur à cibler :");
+    ui->labelInfoActionJoueur->setText("Choisissez une carte à garder :");
 
     ui->listeCarteAGarder->clear();
     for (short int indice =0; indice < joueurARenvoyer->avoirMain().size(); indice++){
@@ -119,8 +120,8 @@ void MainWindow::recevoirChoixCarteAGarder(Joueur* joueurARenvoyer){
 }
 
 void MainWindow::recevoirMessageLog(QString msg){
-    ui->textLog->append(msg);
-    qDebug() << msg; // log dans le terminale ------------------------
+    ui->textLog->append(msg + "\n");
+    qDebug() << msg + "\n"; // log dans le terminale ------------------------
 }
 
 void MainWindow::recevoirReinitialiserLog(){
@@ -196,18 +197,18 @@ void MainWindow::recevoirAfficherMain(Carte* carte1, Carte* carte2){
     itemCarte2->setIcon(QIcon(carte2->avoirImage()));
     itemCarte2->setData(Qt::UserRole, carte2->avoirNum());
 
-    // si on as la comptesse avec le prince ou le roi on retire le fait de pouviir sélectionner la comptesse
+    // si on as la comptesse avec le prince ou le roi on doit sélectionner seullement la comptesse
     if (carte1->avoirNum() == 8 && (carte2->avoirNum() == 5 || carte2->avoirNum() == 7)) // comptesse = carte1
-        itemCarte1->setFlags(Qt::ItemIsEnabled);
+        itemCarte2->setFlags(Qt::NoItemFlags);
     else if (carte2->avoirNum() == 8 && (carte1->avoirNum() == 5 || carte1->avoirNum() == 7)) // comptesse = carte2
-        itemCarte2->setFlags(Qt::ItemIsEnabled);
+        itemCarte1->setFlags(Qt::NoItemFlags);
 }
 
 void MainWindow::recevoirAfficherVictoireManche(QVector<QString> nomJoueurs){
     if (nomJoueurs.isEmpty()) return; // Sécurité
 
     QMessageBox alerteMessage(this);
-    alerteMessage.setWindowTitle("Victoire de la manche !");
+    alerteMessage.setWindowTitle("Victoire manche !");
 
     QString message;
     for (short int indice = 0; indice < nomJoueurs.size() -1; indice++) // sauf le dernier
@@ -215,9 +216,9 @@ void MainWindow::recevoirAfficherVictoireManche(QVector<QString> nomJoueurs){
     message += nomJoueurs[nomJoueurs.size() - 1]; // On rajoute le dernier
 
     if (nomJoueurs.size() > 1)
-        message += " ont gagné";
+        message += " ont gagné la manche !";
     else
-        message += " a gagné";
+        message += " a gagné la manche !";
 
     alerteMessage.setText(message);
     alerteMessage.addButton("Continuer", QMessageBox::AcceptRole);
@@ -237,9 +238,9 @@ void MainWindow::recevoirAfficherVictoireJeu(QVector<QString> nomJoueurs){
     message += nomJoueurs[nomJoueurs.size() - 1]; // On rajoute le dernier
 
     if (nomJoueurs.size() > 1)
-        message += " ont gagné !";
+        message += " ont gagné la partie !";
     else
-        message += " a gagné !";
+        message += " a gagné la partie !";
 
     alerteMessage.setText(message);
     alerteMessage.addButton("Quitter", QMessageBox::RejectRole);
@@ -311,10 +312,12 @@ void MainWindow::on_listeJoueursCible_itemClicked(QListWidgetItem *item){
 
 
 void MainWindow::on_listeCarteMain_itemClicked(QListWidgetItem *item){
-    ui->listeCarteMain->setVisible(false);
-    ui->labelInfoActionJoueur->setVisible(false);
+    if (!(item->flags() == Qt::NoItemFlags)){ // Si on ne doit pas sélectionner la carte, alors on ne fait rien
+        ui->listeCarteMain->setVisible(false);
+        ui->labelInfoActionJoueur->setVisible(false);
 
-    emit envoyerChoixCarte(item->data(Qt::UserRole).toInt());
+        emit envoyerChoixCarte(item->data(Qt::UserRole).toInt());
+    }
 }
 
 

@@ -177,7 +177,7 @@ short int IATriche::choisir1DeNos3Cartes() const{
     short int idmaxi = -1;
 
     for (short int indice = 0; indice < avoirMain().size(); indice++)
-        if (avoirMain().at(indice) > maxi){
+        if (avoirMain().at(indice)->avoirNum() > idmaxi){
             maxi = avoirMain()[indice];
             idmaxi = indice;
         }

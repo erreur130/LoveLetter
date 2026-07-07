@@ -8,6 +8,7 @@
 #include "iatriche.h"
 #include "paquet.h"
 #include <iostream>
+#include <QTimer>
 
 class Jeu : public QObject {
     Q_OBJECT
@@ -19,7 +20,7 @@ class Jeu : public QObject {
     Paquet pioche;
 
     public:
-        Jeu();
+        Jeu(QObject*);
         Jeu(QObject*, short int, short int, short int, short int);
         ~Jeu();
         QVector<Joueur*> JoueursRestant() const;

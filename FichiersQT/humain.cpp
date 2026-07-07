@@ -1,6 +1,6 @@
 #include "humain.h"
 
-Humain::Humain(QString nom) : Joueur(nom), carteVue(nullptr) {}
+Humain::Humain(QString nom) : Joueur(nom) {}
 
 Humain::~Humain() {}
 
@@ -16,12 +16,11 @@ Carte* Humain::choisirCarte(short int, QVector<bool>) const{
     return nullptr; // permet à MainWindow de faire choisir une carte à un utilisateur avec l'ui
 }
 
-short int Humain::choisirJoueur(Carte*, QVector<bool>, short int nbCartesRestantes) const{
+short int Humain::choisirJoueur(Carte*, QVector<bool>, short int) const{
     return -1; // permet à MainWindow de faire choisir une carte à un utilisateur avec l'ui
 }
 
-void Humain::voirCarteDUnJoueur(Carte* carte, short int){
-    carteVue = carte;
+void Humain::voirCarteDUnJoueur(Carte*, short int){
 }
 
 short int Humain::choisir1DeNos3Cartes() const{

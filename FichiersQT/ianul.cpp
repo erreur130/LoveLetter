@@ -146,6 +146,9 @@ void IANul::miseAJourCartesPotentiel(QVector<short int> cartesJouer, Joueur* jou
             }
         }
         break;
+    case 6: // que de la suposition donc on ne regarde pas, mais on retire les certitudes
+        cartesConnuesDesAutres[joueurActuel->avoirID()].clear();
+        break;
     case 7: // On joue comme si c'était sûr que c'est un 9
         if (autreJoueur != nullptr){ // si on à pue choisir le joueur
             // On échange les supositions (suposition autreJoueur écrasé car on vas mettre le 9 après)
@@ -160,7 +163,6 @@ void IANul::miseAJourCartesPotentiel(QVector<short int> cartesJouer, Joueur* jou
     case 0: // On ne peut pas savoir
     case 2: // même cas
     case 4: // même cas
-    case 6: // que de la suposition donc on ne regarde pas
     case 8: // peut être 5,7,9 mais pas sûr
     case 9: // Il est déjà mort si il fait ça
     default:
@@ -199,21 +201,20 @@ void IANul::miseAJourCartesPotentiel(QVector<short int> cartesJouer, Joueur* jou
 
 void IANul::voirCarteDUnJoueur(Carte* carte, short int joueur){
     // On retire ce qu'on croyait
-    cartesConnuesDesAutres[joueur].clear();;
+    cartesConnuesDesAutres[joueur].clear();
     // On rajoute la carte vue dans les certitudes
     cartesConnuesDesAutres[joueur].push_back(carte->avoirNum());
 }
 
 short int IANul::choisir1DeNos3Cartes() const{
     // Ici, le joueur est censé avoir 3 cartes dans la main, mais si le paquet à moins de cartes alors il y aura moins de choix
-    // si c'est la princesse, on la garde obligatoirement (règle du maxi le fait pas défaut :)
 
     // On prend la plus grosse carte si c'est un 7 ou 8 ou 9
     Carte* maxi = nullptr;
     short int idmaxi = -1;
 
     for (short int indice = 0; indice < avoirMain().size(); indice++)
-        if (avoirMain().at(indice) > maxi){
+        if (avoirMain().at(indice)->avoirNum() > idmaxi){
             maxi = avoirMain()[indice];
             idmaxi = indice;
         }
@@ -221,7 +222,7 @@ short int IANul::choisir1DeNos3Cartes() const{
         return idmaxi;
 
     // Sinon on fait au pif
-    return QRandomGenerator::global()->bounded(3); // on prend 0 ou 1 ou 2;
+    return QRandomGenerator::global()->bounded(avoirMain().size()); // on prend 0 ou 1 ou 2;
 }
 
 short int IANul::demanderCarteAJoueur(Joueur* joueur, QVector<short int> cartesJouer) const{

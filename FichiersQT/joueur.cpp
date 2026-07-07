@@ -11,9 +11,12 @@ void Joueur::gainPoints(){
     if (pointBonusManche){ // si il a le pt bonnus +1pt
         points++;
         pointBonusManche = false;
+        qDebug() << "PT Bonnus pour : " << avoirNom();
     }
-    if (estEnVie()) // et si il est en vie +1pt
+    if (estEnVie()){ // et si il est en vie +1pt
         points++;
+        qDebug() << "PT norm pour : " << avoirNom();
+    }
 }
 
 void Joueur::reinitialiser(){
@@ -25,12 +28,6 @@ void Joueur::reinitialiser(){
 }
 
 QString Joueur::jouerCarte(Carte* carte, Joueur* autreJoueur, Carte* cartechoix){   
-    // On retire la carte jouée de la main du joueur avant de faire l'action (considère que la carte est focément dans sa main)
-    if (avoirMain().at(0)->avoirNum() == carte->avoirNum())
-        retirerCarte(0);
-    else
-        retirerCarte(1);
-
     TypeCarte type = carte->estType();
 
     // Action dif suivant le type de la carte

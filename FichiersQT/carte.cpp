@@ -34,9 +34,9 @@ QString Carte1::action(Joueur* joueur1, Joueur*, Carte* carte) const {
     // On verifie si il à bien deviné
     if (carte->avoirNum() == joueur1->avoirMain().at(0)->avoirNum()){
         joueur1->eliminer();
-        return message + "\n Ce qui est vrais ! " + joueur1->avoirNom() + " Eliminé !";
+        return message + "\n↳ Ce qui est vrais ! " + joueur1->avoirNom() + " Eliminé !";
     }
-    return message + "\n Ce qui est faux ...";
+    return message + "\n↳ Ce qui est faux ...";
 }
 
 // ---------------------------- num 2 ----------------------------
@@ -64,15 +64,15 @@ QString Carte3::action(Joueur* joueur1, Joueur* joueur2, Carte*) const {
         joueur1->eliminer();
         if (joueur1->avoirMain().at(0)->avoirNum() > 5) // si la carte de celui qui est éliminer est > 5 alors on considère que l'autre est à découvert
             joueur2->ajouterDecouvert();
-        return message + "\n " + joueur1->avoirNom() + " est éliminé.";
+        return message + "\n↳ " + joueur1->avoirNom() + " est éliminé en ayant " + joueur1->avoirMain()[0]->avoirNom() + " [" + QString::number(joueur1->avoirMain()[0]->avoirNum()) + "].";
     }else if (joueur1->avoirMain().at(0)->avoirNum() > joueur2->avoirMain().at(0)->avoirNum()){
         joueur2->eliminer();
         if (joueur2->avoirMain().at(0)->avoirNum() > 5) // si la carte de celui qui est éliminer est > 5 alors on considère que l'autre est à découvert
             joueur1->ajouterDecouvert();
-        return message + "\n " + joueur2->avoirNom() + " est éliminé.";
+        return message + "\n↳ " + joueur2->avoirNom() + " est éliminé en ayant " + joueur2->avoirMain()[0]->avoirNom() + " [" + QString::number(joueur2->avoirMain()[0]->avoirNum()) + "].";
     }
     // Sinon rien
-    return  + "\n Personne n'a été éliminé.";
+    return  message + "\n↳ Personne n'a été éliminé.";
 }
 
 // ---------------------------- num 4 ----------------------------
@@ -95,9 +95,15 @@ Carte5::Carte5(short int nbExemplaires_, short int num_, QString nom_, QString i
 Carte5::~Carte5() {}
 
 QString Carte5::action(Joueur* joueur1, Joueur*, Carte*) const {
-    pioche->defausser(joueur1->retirerCarte(0)); // la carte du joueur est mise sous la pioche
-    joueur1->ajouterCarte(pioche->piocher()); // puis le joueur récupère la carte qui était sur la pioche
-    return " à jouer le pince [5] sur " + joueur1->avoirNom() + ", celui-ci défausse et reprend une carte.";
+    QString messageSup;
+    if (joueur1->avoirMain().at(0)->avoirNum() != 9){ // si la carte défausé n'est pas la princesse
+        pioche->defausser(joueur1->retirerCarte(0)); // la carte du joueur est mise sous la pioche
+        joueur1->ajouterCarte(pioche->piocher()); // puis le joueur récupère la carte qui était sur la pioche
+    } else { // si princesse
+        joueur1->eliminer();
+        messageSup = "\n↳ Mais " + joueur1->avoirNom() + " défause la princesse, il est donc éliminé!";
+    }
+    return " à jouer le pince [5] sur " + joueur1->avoirNom() + ", celui-ci défausse et reprend une carte." + messageSup;
 }
 
 // ---------------------------- num 6 ----------------------------
@@ -107,32 +113,25 @@ Carte6::Carte6(QObject* parent, short int nbExemplaires_, short int num_, QStrin
 Carte6::~Carte6() {}
 
 QString Carte6::action(Joueur* joueur1, Joueur*, Carte*) const{
-    // il pioche 2 cartes
-    for (short int indice = 0; indice < 2; indice++)
-        if (pioche->avoirNbCartesRestantes() != 0)
-            joueur1->ajouterCarte(pioche->piocher());
+    if (pioche->avoirNbCartesRestantes() != 0){ // Si vide il n'y a pas d'effects
+        // on essaie pioche 2 cartes
+        for (short int indice = 0; indice < 2; indice++)
+            if (pioche->avoirNbCartesRestantes() != 0)
+                joueur1->ajouterCarte(pioche->piocher());
 
-    // il choisis la quelle gardé
-    short int carteAGarder = joueur1->choisir1DeNos3Cartes();
-    if (carteAGarder == -1) // cas du joueur = Humain
-        emit choixCarteAGarder(joueur1);
-    else {
-        suiteAction6(joueur1, carteAGarder);
+        // il choisis la quelle gardé
+        short int carteAGarder = joueur1->choisir1DeNos3Cartes();
+        if (carteAGarder == -1) // cas du joueur = Humain
+            emit choixCarteAGarder(joueur1);
+        else {
+            suiteAction6(joueur1, carteAGarder);
+        }
     }
     return " à jouer le chancelier [6].";
 }
 
 void Carte6::suiteAction6(Joueur* joueur1, short int carteAGarder) const{
-    // On regarde si on à choisis la princesse si elle est dispo
-    bool princesseIci = false;
-    for (Carte* carte : joueur1->avoirMain())
-        if (carte->avoirNum() == 9)
-            princesseIci = true;
-    if (princesseIci && carteAGarder != 9){
-        joueur1->eliminer();
-        emit messageLog("La princesse à était défausser, " + joueur1->avoirNom() + " est éliminé");
-    }
-
+    // On retire les cartes que l'on n'a pas choisit (dans les règles, ont peut mettre la princesse sous le paquet)
     for (short int indice = joueur1->avoirMain().size() - 1; indice >= 0 ; indice--)
         if (indice != carteAGarder) // Si ce n'est pas la carte que l'on a choisit alors on la retire
             pioche->defausser(joueur1->retirerCarte(indice));
@@ -148,15 +147,13 @@ Carte7::Carte7(short int nbExemplaires_, short int num_, QString nom_, QString i
 Carte7::~Carte7() {}
 
 QString Carte7::action(Joueur* joueur1, Joueur* joueur2, Carte*) const {
-    // On échange les mains (les 1 carte des joueurs)
-    Carte* carteTmp = joueur1->avoirMain()[0];
-    joueur1->retirerCarte(0);
-    joueur1->ajouterCarte(joueur2->avoirMain()[0]);
-    joueur2->ajouterCarte(carteTmp);
+    // On échange les mains (les 1 carte des joueurs) // j1 -> carte1 / j2 -> carte2
+    joueur1->ajouterCarte(joueur2->retirerCarte(0)); // j1 -> carte1 carte2 / j2 -> rien
+    joueur2->ajouterCarte(joueur1->retirerCarte(0)); // j1 -> carte2 / j2 -> carte1
     // Donc chaqu'un connais la carte de l'autre
     joueur1->voirCarteDUnJoueur(joueur2->avoirMain()[0], joueur2->avoirID());
-    joueur2->voirCarteDUnJoueur(carteTmp, joueur1->avoirID());
-    return " à jouer le roi [7] et choisit " + joueur2->avoirNom() + "pour échanger leurs mains.";
+    joueur2->voirCarteDUnJoueur(joueur1->avoirMain()[0], joueur1->avoirID());
+    return " à jouer le roi [7] et choisit " + joueur2->avoirNom() + " pour échanger leurs mains.";
 }
 
 // ---------------------------- num 8 ----------------------------

@@ -287,17 +287,20 @@ void IANormale::miseAJourCartesPotentiel(QVector<short int> cartesJouer, Joueur*
             }
             break;
         case 6: // le plus probable : 0,6,7,8,9
+            // les suposition revienne à 0
+            cartesPotentiellesDesAutres[joueurActuel->avoirID()].clear();
+            cartesConnuesDesAutres[joueurActuel->avoirID()].clear();
             if ((cartesJouer.at(0) + (avoirMain().at(0)->avoirNum() == 0)) < 2) // si il en manque ou que tu n'as pas la dernière
-                listeCartePotentielDuJoueur.push_back(0);
+                cartesPotentiellesDesAutres[joueurActuel->avoirID()].push_back(0);
             if ((cartesJouer.at(6) + (avoirMain().at(0)->avoirNum() == 6)) < 2) // si il en manque ou que tu n'as pas la dernière
-                listeCartePotentielDuJoueur.push_back(6);
+                cartesPotentiellesDesAutres[joueurActuel->avoirID()].push_back(6);
             if ((cartesJouer.at(7) + (avoirMain().at(0)->avoirNum() == 7)) < 1) // si tu n'as pas la dernière
-                listeCartePotentielDuJoueur.push_back(7);
+                cartesPotentiellesDesAutres[joueurActuel->avoirID()].push_back(7);
             if ((cartesJouer.at(8) + (avoirMain().at(0)->avoirNum() == 8)) < 1) // si tu n'as pas la dernière
-                listeCartePotentielDuJoueur.push_back(8);
+                cartesPotentiellesDesAutres[joueurActuel->avoirID()].push_back(8);
             if ((cartesJouer.at(9) + (avoirMain().at(0)->avoirNum() == 9)) < 1) // si tu n'as pas la dernière
-                listeCartePotentielDuJoueur.push_back(9);
-            break;
+                cartesPotentiellesDesAutres[joueurActuel->avoirID()].push_back(9);
+            return; // On peut même sortir de la fonction pour évité lire des trucs inutiles
         case 7: // On joue comme si c'était sûr que c'est un 9
             if (autreJoueur != nullptr){ // si on à pue choisir le joueur
                 // On échange les supositions (suposition autreJoueur écrasé car on vas mettre le 9 après)
@@ -390,7 +393,7 @@ short int IANormale::choisir1DeNos3Cartes() const{
     short int idmaxi = -1;
 
     for (short int indice = 0; indice < avoirMain().size(); indice++)
-        if (avoirMain().at(indice) > maxi){
+        if (avoirMain().at(indice)->avoirNum() > idmaxi){
             maxi = avoirMain()[indice];
             idmaxi = indice;
         }
