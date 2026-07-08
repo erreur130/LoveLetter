@@ -473,13 +473,14 @@ SansEffet</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>968</x>
-      <y>32</y>
+      <y>20</y>
       <w>300</w>
-      <h>240</h>
+      <h>252</h>
     </coordinates>
     <panel_attributes>MainWindow
 --
 joueursCible : QVector&lt;QString&gt;
+AFermer : bool
 --
 + Constructeur(parent : QWidget* = nullptr)
 + Destructeur()
@@ -492,6 +493,7 @@ joueursCible : QVector&lt;QString&gt;
 - on_listeJoueursCible_itemClicked(item : QListWidgetItem*)
 - on_listeCarteAGarder_itemClicked(item : QListWidgetItem*)
 + lancer()
++ doitEtreFerme() : bool
 
 + recevoirChoixCarteAGarder(joueurARenvoyer : Joueur*)
 + recevoirMessageLog(msg : QString)
@@ -509,7 +511,7 @@ joueursCible : QVector&lt;QString&gt;
 + recevoirAfficherCarte(carte : Carte*)
 
 «signals»
-+ fairesuiteAction6(carteAGarder : short int)
++ fairesuiteAction6(carteAGarder : short int, faireContinuer : bool)
 + envoyerChoixCarte(idCarte : short int)
 + envoyerChoixValeurGarde(valeur : short int)
 + envoyerChoixCibleJoueur(joueur : short int)
@@ -794,7 +796,7 @@ bg=red</panel_attributes>
     <coordinates>
       <x>780</x>
       <y>508</y>
-      <w>216</w>
+      <w>236</w>
       <h>76</h>
     </coordinates>
     <panel_attributes>-&gt; le 5 et le 6 nécésite en plus :
@@ -804,7 +806,7 @@ et Q_Object dans Carte6 )
 - pioche : Paquet*
 
 -&gt; et pour le 6 :
-+ suiteAction6(joueur1 : Joueur*, carteAGarder : short int)
++ suiteAction6(joueur1 : Joueur*, carteAGarder : short int, faireContinuer : bool)
 &lt;&lt;signals&gt;&gt;
 + choixCarteAGarder(joueurARenvoyer : Joueur*) «signal»
 + continuer()
