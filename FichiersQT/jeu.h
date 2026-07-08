@@ -8,7 +8,6 @@
 #include "iatriche.h"
 #include "paquet.h"
 #include <iostream>
-#include <QTimer>
 
 class Jeu : public QObject {
     Q_OBJECT

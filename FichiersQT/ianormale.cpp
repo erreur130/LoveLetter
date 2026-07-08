@@ -412,13 +412,24 @@ short int IANormale::choisir1DeNos3Cartes() const{
 }
 
 short int IANormale::demanderCarteAJoueur(Joueur* joueur, QVector<short int> cartesJouer) const{
+    short int val = 1;
     // On regadre dans les cartes connus
-    if (not(cartesConnuesDesAutres.at(joueur->avoirID()).isEmpty()))
-        return cartesConnuesDesAutres[joueur->avoirID()][QRandomGenerator::global()->bounded(cartesConnuesDesAutres[joueur->avoirID()].size())];
+    if (not(cartesConnuesDesAutres.at(joueur->avoirID()).isEmpty())){
+        while (val != 1){
+            val = cartesConnuesDesAutres[joueur->avoirID()][QRandomGenerator::global()->bounded(cartesConnuesDesAutres[joueur->avoirID()].size())];
+            if (val != 1) // Si il choisit le garde, c'est impossible
+                return val;
+        }
+    }
 
     // On regarde les supositions
-    if (not(cartesPotentiellesDesAutres.at(joueur->avoirID()).isEmpty()))
-        return cartesPotentiellesDesAutres[joueur->avoirID()][QRandomGenerator::global()->bounded(cartesPotentiellesDesAutres[joueur->avoirID()].size())];
+    if (not(cartesPotentiellesDesAutres.at(joueur->avoirID()).isEmpty())){
+        while (val != 1){
+            val = cartesPotentiellesDesAutres[joueur->avoirID()][QRandomGenerator::global()->bounded(cartesPotentiellesDesAutres[joueur->avoirID()].size())];
+            if (val != 1) // Si il choisit le garde, c'est impossible
+                return val;
+        }
+    }
 
     // On fait au "pif", on regarde pour toutes les cartes de 0 à 9 sauf le 1 car on peut pas le demander
     QVector<short int> listeCartePotentielDuJoueur;
@@ -442,5 +453,10 @@ short int IANormale::demanderCarteAJoueur(Joueur* joueur, QVector<short int> car
         listeCartePotentielDuJoueur.push_back(9);
 
     // On prend aléatoirement dans la liste des cartes plausibles
-    return listeCartePotentielDuJoueur[QRandomGenerator::global()->bounded(listeCartePotentielDuJoueur.size())];
+    while (val != 1){
+        val = listeCartePotentielDuJoueur[QRandomGenerator::global()->bounded(listeCartePotentielDuJoueur.size())];
+        if (val != 1) // Si il choisit le garde, c'est impossible
+            return val;
+    }
+    return 9; // par défaut mais cas impossible
 }

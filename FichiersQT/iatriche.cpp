@@ -196,5 +196,14 @@ short int IATriche::choisir1DeNos3Cartes() const{
 }
 
 short int IATriche::demanderCarteAJoueur(Joueur* joueur, QVector<short int>) const{
-    return joueur->avoirMain()[0]->avoirNum(); // c'est une victime à ce point
+    short int numCarte = joueur->avoirMain()[0]->avoirNum();
+    if (numCarte != 1) // Si ce n'est pas un garde
+        return joueur->avoirMain()[0]->avoirNum(); // c'est une victime à ce point
+    // Sinon on prend une carte aléatoirement
+    while (numCarte != 1){
+        numCarte = QRandomGenerator::global()->bounded(10); // 0 à 9
+        if (numCarte != 1) // Si il choisit le garde, c'est impossible
+            return numCarte;
+    }
+    return 9; // par défaut mais cas impossible
 }

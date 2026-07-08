@@ -133,6 +133,8 @@ void Jeu::reinitialiserManche(){
         joueur->ajouterCarte(pioche.piocher());
     }
 
+    joueurActuel = joueurs[joueurs.size()-1]; // on remet le premier joueur (toursuivant vas faire revenir à 0)
+
     emit reinitialiserLog();
 }
 
@@ -148,7 +150,6 @@ void Jeu::lancerManche(){
 }
 
 void Jeu::lancerTour(){
-    qDebug() << "Début tour";
     if (tourSuivant()){ // Si on peut continuer
 
         joueurActuel->retirerProtection(); // On retire sa protection (servante ne protège qu'un seul tour)
@@ -166,10 +167,13 @@ void Jeu::lancerTour(){
         Carte* choixCarte = joueurActuel->choisirCarte(pioche.avoirNbCartesRestantes(), joueursChoix);
 
         if (choixCarte == nullptr){ // Si hummain on affiche
+            qDebug() << "Début tour Joueur";
             emit messageAlerteMainJoueurVasEtreMontre(joueurActuel->avoirNom(), 1);
             emit afficherMain(joueurActuel->avoirMain()[0], joueurActuel->avoirMain()[1]);
+            return;
 
         } else { // Si ia on fait la suite de calcules (tout d'un coups)
+            qDebug() << "Début tour IA";
             emit messageAlerteMainJoueurVasEtreMontre(joueurActuel->avoirNom(), 0);
             carteEnCourDeJeux = choixCarte;
 
@@ -237,7 +241,7 @@ void Jeu::lancerTour(){
                 }
             }
 
-            QTimer::singleShot(0, this, &Jeu::lancerTour); // asynchrone, relance après retour complet // permet de continuer pour le tour d'une IA
+            QTimer::singleShot(0, this, &Jeu::lancerTour); // de façon asynchrone // permet de continuer la partie // permet de continuer pour le tour d'une IA
         }
     } else {
         if (pioche.avoirNbCartesRestantes() <= 0)
@@ -249,14 +253,22 @@ void Jeu::lancerTour(){
 
 void Jeu::finDeManche(bool finDuPaquet){
     if(finDuPaquet){ // Si fin de la manche par la fin du paquet, on garde les joueurs avec la plus grosse carte
+        emit messageLog("La pioche est vide, on confronte les derniers survivants :");
         short int numMax = 0;
         // pour ceux qui sont en vie :
         for (Joueur* joueur : joueurs)
-            if (joueur->estEnVie() && joueur->avoirMain().at(0)->avoirNum() > numMax) // si plus grand on le note
+            if (joueur->estEnVie() && joueur->avoirMain().at(0)->avoirNum() > numMax){ // si plus grand on le note + affichage de la personne
                 numMax = joueur->avoirMain()[0]->avoirNum();
+                emit messageLog(joueur->avoirNom() + " à la carte " + joueur->avoirMain()[0]->avoirNom());
+            }
         for (Joueur* joueur : joueurs)
             if(joueur->estEnVie() && joueur->avoirMain().at(0)->avoirNum() < numMax) // si plus petit que le max alors il meurt
                 joueur->eliminer();
+    } else { // sinon on affiche la carte du gagnant
+        emit messageLog("Il ne reste plus qu'un seul joueur en liste :");
+        for (Joueur* joueur : joueurs)
+            if (joueur->estEnVie())
+                emit messageLog(joueur->avoirNom() + " à la carte " + joueur->avoirMain()[0]->avoirNom());
     }
 
     // recherche les pts bonnus, si deux, ils annulent
@@ -303,6 +315,11 @@ void Jeu::recevoirChoixCarte(short int idCarte){
     carteEnCourDeJeux = pioche[idCarte]; // On note la carte choisit
     pioche.carteAEtaitJouer(idCarte); // On signale à la pioche que cette carte à était jouer (visible)
 
+    if (joueurActuel->avoirMain().at(0)->avoirNum() == idCarte)
+        joueurActuel->retirerCarte(0);
+    else
+        joueurActuel->retirerCarte(1);
+
     QVector<Joueur*> joueursPossible;
     QVector<QString> nomJoueursPossible;
     QVector<short int> idJoueursPossible;
@@ -316,7 +333,16 @@ void Jeu::recevoirChoixCarte(short int idCarte){
                 joueursPossible.removeOne(joueurActuel); // Pour ne pas ce viser soit même
             if (joueursPossible.isEmpty()){ // cas où on ne peut pas choisir de joueur
                 emit messageLog(joueurActuel->avoirNom() + " joue la carte " + carteEnCourDeJeux->avoirNom() + " sur personne.");
-                lancerTour(); // permet de continuer la partie
+                // Vérification de l'invariant : tout joueur vivant doit avoir exactement 1 carte -----------------------------------------------------------------------------
+                for (Joueur* joueur : joueurs){
+                    if (joueur->estEnVie()){
+                        if (joueur->avoirMain().isEmpty())
+                            qDebug() << "BUG : " << joueur->avoirNom() << " est vivant mais n'a pas de carte !";
+                        else if (joueur->avoirMain().size() > 1)
+                            qDebug() << "BUG : " << joueur->avoirNom() << " a trop de cartes :" << joueur->avoirMain().size();
+                    }
+                }
+                QTimer::singleShot(0, this, &Jeu::lancerTour); // de façon asynchrone // permet de continuer la partie // permet de continuer la partie
                 break;
             }
             for (short int indice = 0; indice < joueursPossible.size(); indice++){
@@ -330,8 +356,18 @@ void Jeu::recevoirChoixCarte(short int idCarte){
         case TypeCarte::SansEffet: // ne fait rien (num 8)
             emit messageLog(joueurActuel->jouerCarte(carteEnCourDeJeux));
             miseAJourCartesPotentiel(); // met à jour les connaisances des IA
-            if (carteEnCourDeJeux->avoirNum() != 6) // pour le chancelier on vas demander la carte à garder, lancerTour() est autre part
-                lancerTour(); // permet de continuer la partie
+            if (carteEnCourDeJeux->avoirNum() != 6){ // pour le chancelier on vas demander la carte à garder, lancerTour() est autre part
+                // Vérification de l'invariant : tout joueur vivant doit avoir exactement 1 carte -----------------------------------------------------------------------------
+                for (Joueur* joueur : joueurs){
+                    if (joueur->estEnVie()){
+                        if (joueur->avoirMain().isEmpty())
+                            qDebug() << "BUG : " << joueur->avoirNom() << " est vivant mais n'a pas de carte !";
+                        else if (joueur->avoirMain().size() > 1)
+                            qDebug() << "BUG : " << joueur->avoirNom() << " a trop de cartes :" << joueur->avoirMain().size();
+                    }
+                }
+                QTimer::singleShot(0, this, &Jeu::lancerTour); // de façon asynchrone // permet de continuer la partie
+            }
             break;
     }
 }
@@ -344,7 +380,16 @@ void Jeu::recevoirChoixValeurGarde(short int valeur){
     if (not(joueurCible->estEnVie())) // joueurCible est mort
         pioche.carteAEtaitJouer(joueurCible->avoirMain()[0]->avoirNum());
 
-    lancerTour(); // permet de continuer la partie
+    // Vérification de l'invariant : tout joueur vivant doit avoir exactement 1 carte -----------------------------------------------------------------------------
+    for (Joueur* joueur : joueurs){
+        if (joueur->estEnVie()){
+            if (joueur->avoirMain().isEmpty())
+                qDebug() << "BUG : " << joueur->avoirNom() << " est vivant mais n'a pas de carte !";
+            else if (joueur->avoirMain().size() > 1)
+                qDebug() << "BUG : " << joueur->avoirNom() << " a trop de cartes :" << joueur->avoirMain().size();
+        }
+    }
+    QTimer::singleShot(0, this, &Jeu::lancerTour); // de façon asynchrone // permet de continuer la partie // de façon asynchrone // permet de continuer la partie(); // permet de continuer la partie
 }
 
 void Jeu::recevoirChoixCibleJoueur(short int joueur){
@@ -371,8 +416,16 @@ void Jeu::recevoirChoixCibleJoueur(short int joueur){
             else if (not(joueurCible->estEnVie())) // joueurCible est mort
                 pioche.carteAEtaitJouer(joueurCible->avoirMain()[0]->avoirNum());
 
-            lancerTour(); // permet de continuer la partie
-        default:
+            // Vérification de l'invariant : tout joueur vivant doit avoir exactement 1 carte -----------------------------------------------------------------------------
+            for (Joueur* joueur : joueurs){
+                if (joueur->estEnVie()){
+                    if (joueur->avoirMain().isEmpty())
+                        qDebug() << "BUG : " << joueur->avoirNom() << " est vivant mais n'a pas de carte !";
+                    else if (joueur->avoirMain().size() > 1)
+                        qDebug() << "BUG : " << joueur->avoirNom() << " a trop de cartes :" << joueur->avoirMain().size();
+                }
+            }
+            QTimer::singleShot(0, this, &Jeu::lancerTour); // de façon asynchrone // permet de continuer la partie // permet de continuer la partie
             break;
     }
 }
@@ -398,5 +451,14 @@ void Jeu::rejouer(){
 }
 
 void Jeu::recevoirContinuer(){
-    lancerTour();
+    // Vérification de l'invariant : tout joueur vivant doit avoir exactement 1 carte -----------------------------------------------------------------------------
+    for (Joueur* joueur : joueurs){
+        if (joueur->estEnVie()){
+            if (joueur->avoirMain().isEmpty())
+                qDebug() << "BUG : " << joueur->avoirNom() << " est vivant mais n'a pas de carte !";
+            else if (joueur->avoirMain().size() > 1)
+                qDebug() << "BUG : " << joueur->avoirNom() << " a trop de cartes :" << joueur->avoirMain().size();
+        }
+    }
+    QTimer::singleShot(0, this, &Jeu::lancerTour); // de façon asynchrone // permet de continuer la partie
 }

@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QObject>
+#include <QTimer>
 
 class Paquet; // forward declaration, pour ne pas faire de récursivité avec une #include "paquet.h", il est présent dans le .cpp
 
@@ -88,7 +89,7 @@ signals:
     void continuer() const;
     void messageLog(QString) const;
 public slots:
-    void suiteAction6(Joueur*, short int carteAGarder) const;
+    void suiteAction6(Joueur*, short int carteAGarder, bool faireContinuer) const;
 };
 
 class Carte7 : public Carte{

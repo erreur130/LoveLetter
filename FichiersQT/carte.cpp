@@ -124,19 +124,20 @@ QString Carte6::action(Joueur* joueur1, Joueur*, Carte*) const{
         if (carteAGarder == -1) // cas du joueur = Humain
             emit choixCarteAGarder(joueur1);
         else {
-            suiteAction6(joueur1, carteAGarder);
+            suiteAction6(joueur1, carteAGarder, false);
         }
     }
     return " à jouer le chancelier [6].";
 }
 
-void Carte6::suiteAction6(Joueur* joueur1, short int carteAGarder) const{
+void Carte6::suiteAction6(Joueur* joueur1, short int carteAGarder, bool faireContinuer) const{
     // On retire les cartes que l'on n'a pas choisit (dans les règles, ont peut mettre la princesse sous le paquet)
     for (short int indice = joueur1->avoirMain().size() - 1; indice >= 0 ; indice--)
         if (indice != carteAGarder) // Si ce n'est pas la carte que l'on a choisit alors on la retire
             pioche->defausser(joueur1->retirerCarte(indice));
 
-    emit continuer();
+    if (faireContinuer)
+        emit continuer();
 }
 
 // ---------------------------- num 7 ----------------------------

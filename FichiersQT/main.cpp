@@ -2,13 +2,16 @@
 
 #include <QApplication>
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]){
     QApplication a(argc, argv);
     MainWindow w;
-    w.show();
+    w.show(); // affiche d'abord normalement
+    w.showMaximized(); // force l'agrandissement
 
-    w.lancer(); // tout le jeu
+    if (not(w.doitEtreFerme())){ // Vérifie si on doit avorté le jeu
+        QTimer::singleShot(0, &w, &MainWindow::lancer); // de façon asynchrone pour attendre l'agrandicement de MainWindow // tout le jeu
+        return QApplication::exec();
+    }
 
-    return QApplication::exec();
+    return 0;
 }

@@ -6,7 +6,7 @@
 #include "ui_affichageRegles.h"
 #include "nbjoueurswindow.h"
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), jeu(nullptr), joueursCible(QVector<QString>()){
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), jeu(nullptr), joueursCible(QVector<QString>()), AFermer(false){
     ui->setupUi(this);
     setWindowTitle("Love Letter");
 
@@ -18,8 +18,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     if (not(fenetre->exec() == QDialog::Accepted)){ // si la croix
         qDebug() << "close";
         jeu = new Jeu(this); // car non définit avant (sinon free nullptr)
-        delete this;
-        //this->close(); // ne ferme pas MainWindow car show() pas encore fait
+        AFermer = true; // dit à main de fermer MainWindow
     }
 
     // connection à tout les signals/slots Jeu -> MainWindow
@@ -207,8 +206,8 @@ void MainWindow::recevoirAfficherMain(Carte* carte1, Carte* carte2){
 void MainWindow::recevoirAfficherVictoireManche(QVector<QString> nomJoueurs){
     if (nomJoueurs.isEmpty()) return; // Sécurité
 
-    QMessageBox alerteMessage(this);
-    alerteMessage.setWindowTitle("Victoire manche !");
+    QMessageBox* alerteMessage = new QMessageBox(this);
+    alerteMessage->setWindowTitle("Victoire manche !");
 
     QString message;
     for (short int indice = 0; indice < nomJoueurs.size() -1; indice++) // sauf le dernier
@@ -220,10 +219,10 @@ void MainWindow::recevoirAfficherVictoireManche(QVector<QString> nomJoueurs){
     else
         message += " a gagné la manche !";
 
-    alerteMessage.setText(message);
-    alerteMessage.addButton("Continuer", QMessageBox::AcceptRole);
-    alerteMessage.setStyleSheet("margin: auto;"); // tente de centrer
-    alerteMessage.exec(); // bloquant, attend le clic
+    alerteMessage->setText(message);
+    alerteMessage->addButton("Continuer", QMessageBox::AcceptRole);
+    alerteMessage->setStyleSheet("margin: auto;"); // tente de centrer
+    alerteMessage->exec(); // bloquant, attend le clic
 }
 
 void MainWindow::recevoirAfficherVictoireJeu(QVector<QString> nomJoueurs){
@@ -251,7 +250,8 @@ void MainWindow::recevoirAfficherVictoireJeu(QVector<QString> nomJoueurs){
     if (alerteMessage.buttonRole(alerteMessage.clickedButton()) == QMessageBox::AcceptRole) // on rejoue si demander
         lancer();
     else{ // si boutton quitter ou croix on ferme
-        this->close();
+        QCoreApplication::sendEvent(qApp, new QEvent(QEvent::Quit));
+        //close(); ne suprime pas se procésus de Jeu
     }
 }
 
@@ -280,11 +280,11 @@ void MainWindow::recevoirAfficherCarte(Carte* carte){
     QVBoxLayout* layout = new QVBoxLayout(popup);
 
     QLabel* image = new QLabel();
-    image->setPixmap(QPixmap(carte->avoirImage()).scaled(200, 300, Qt::KeepAspectRatio));
+    image->setPixmap(QPixmap(carte->avoirImage()).scaled(240, 335, Qt::KeepAspectRatio));
     image->setAlignment(Qt::AlignCenter);
     layout->addWidget(image);
     // Le bouton
-    QPushButton* bouton = new QPushButton("OK, j'ai vue la carte");
+    QPushButton* bouton = new QPushButton("OK, j'ai vu la carte");
     connect(bouton, &QPushButton::clicked, popup, &QDialog::accept);
     layout->addWidget(bouton);
 
@@ -325,6 +325,6 @@ void MainWindow::on_listeCarteAGarder_itemClicked(QListWidgetItem *item){
     ui->listeCarteAGarder->setVisible(false);
     ui->labelInfoActionJoueur->setVisible(false);
 
-    emit envoyerSuiteAction6(item->data(Qt::UserRole + 1).value<Joueur*>(), item->data(Qt::UserRole).toInt());
+    emit envoyerSuiteAction6(item->data(Qt::UserRole + 1).value<Joueur*>(), item->data(Qt::UserRole).toInt(), true);
 }
 

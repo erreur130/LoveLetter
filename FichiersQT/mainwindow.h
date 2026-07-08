@@ -22,10 +22,12 @@ class MainWindow : public QMainWindow{
     Ui::MainWindow *ui;
     Jeu* jeu;
     QVector<QString> joueursCible; // liste les joueurs en vie
+    bool AFermer;
     public:
         explicit MainWindow(QWidget *parent = nullptr);
         ~MainWindow() override;
         void lancer();
+        inline bool doitEtreFerme() {return AFermer;};
     private slots:
         void on_actionRegles_de_jeu_triggered();
         void on_actionListe_des_cartes_triggered();
@@ -37,7 +39,7 @@ class MainWindow : public QMainWindow{
         void on_listeCarteAGarder_itemClicked(QListWidgetItem *item);
 
     signals:
-        void envoyerSuiteAction6(Joueur*, short int carteAGarder);
+        void envoyerSuiteAction6(Joueur*, short int carteAGarder, bool faireContinuer);
         void envoyerChoixCarte(short int idCarte);
         void envoyerChoixValeurGarde(short int valeur);
         void envoyerChoixCibleJoueur(short int joueur);
