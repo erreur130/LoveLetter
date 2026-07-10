@@ -28,7 +28,7 @@
       <x>260</x>
       <y>312</y>
       <w>384</w>
-      <h>240</h>
+      <h>244</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Class abstraite&gt;&gt;
 /Joueur/
@@ -60,6 +60,7 @@
 + eliminer()
 + ajouterCarte(Carte*)
 + retirerCarte(indice : short int) : Carte*
++ carteEstPossible(numcarte, nbExemplaires, carteJouer : short int)  : bool
 + jouerCarte(carte, carteChoix : Carte* = nullptr, autreJoueur : Joueur* = nullptr) : QString
 */+ choisirCarte(nbCartesRestantes : short int, joueursNonProteger : QVector&lt;bool&gt;) : Carte*/*
 */+ choisirJoueur(carte : Carte*, joueursNonProteger : QVector&lt;bool&gt;, nbCartesRestantes : short int) : short int/*
@@ -97,25 +98,25 @@
     <id>Relation</id>
     <coordinates>
       <x>464</x>
-      <y>548</y>
+      <y>552</y>
       <w>12</w>
-      <h>52</h>
+      <h>48</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-
 </panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>580</x>
-      <y>548</y>
+      <y>552</y>
       <w>12</w>
-      <h>144</h>
+      <h>140</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-
 </panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;340.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;330.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -724,13 +725,13 @@ bg=blue</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>500</x>
-      <y>548</y>
+      <y>552</y>
       <w>12</w>
-      <h>148</h>
+      <h>144</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-
 </panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;350.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;340.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -757,13 +758,13 @@ bg=blue</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>620</x>
-      <y>548</y>
+      <y>552</y>
       <w>12</w>
-      <h>52</h>
+      <h>48</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-
 </panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
