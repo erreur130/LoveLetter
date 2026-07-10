@@ -49,3 +49,7 @@ QString Joueur::jouerCarte(Carte* carte, Joueur* autreJoueur, Carte* cartechoix)
 void Joueur::miseAJourCartesPotentiel(QVector<short int>, Joueur*, short int, Joueur*, short int){
     // par défaut ne fait rien
 }
+
+bool Joueur::carteEstPossible(short int numcarte, short int nbExemplaires, short int carteJouer) const {
+    return ((carteJouer + (avoirMain().at(0)->avoirNum() == numcarte)) < nbExemplaires); // on aditionne les cartes jouer avec le bool de si on à la carte
+}

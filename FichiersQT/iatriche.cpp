@@ -22,9 +22,9 @@ Carte* IATriche::choisirCarte(short int nbCartesRestantes, QVector<bool>) const{
 
     // si contesse (num 8) et soit 5 soit 7 alors on joue la contesse
     if (main.at(0)->avoirNum() == 8 && (main.at(1)->avoirNum() == 7 || main.at(1)->avoirNum() == 5) )
-        return main.at(1);
-    else if (main.at(1)->avoirNum() == 8 && (main.at(0)->avoirNum() == 7 || main.at(0)->avoirNum() == 5))
         return main.at(0);
+    else if (main.at(1)->avoirNum() == 8 && (main.at(0)->avoirNum() == 7 || main.at(0)->avoirNum() == 5))
+        return main.at(1);
 
     // cas d'algo ---------------------------------------------------------------------------------- cas d'algo
 
@@ -40,9 +40,9 @@ Carte* IATriche::choisirCarte(short int nbCartesRestantes, QVector<bool>) const{
             }
         }
         if (possible && main.at(0)->avoirNum() == 1)
-            return main.at(1);
-        else if (possible && main.at(1)->avoirNum() == 1)
             return main.at(0);
+        else if (possible && main.at(1)->avoirNum() == 1)
+            return main.at(1);
     }
 
     // si baron (num 3) et que tu as une plus grosse carte qu'un joueur non protégé
@@ -65,23 +65,23 @@ Carte* IATriche::choisirCarte(short int nbCartesRestantes, QVector<bool>) const{
             }
         }
         if (onConnaisUn9 && main.at(0)->avoirNum() == 5)
-            return main.at(1);
-        else if (onConnaisUn9 && main.at(1)->avoirNum() == 5)
             return main.at(0);
+        else if (onConnaisUn9 && main.at(1)->avoirNum() == 5)
+            return main.at(1);
     }
 
     // si prince (num 5) et que on as une carte connue alors on joue le prince (si c'est une grosse carte et que l'ont est à la fin, on la garde)
     if ( (estDecouvert() && main.at(1)->avoirNum() == 5) && (main.at(0)->avoirNum() <= 6 && nbCartesRestantes > joueurs.size()) ){
-        return main.at(5);
+        return main.at(1);
     }
 
     // cas semi prioritaire : -----------
 
     // si espionne (num 0) alors on la joue
     if (main.at(0)->avoirNum() == 0)
-        return main.at(1);
-    else if (main.at(1)->avoirNum() == 0)
         return main.at(0);
+    else if (main.at(1)->avoirNum() == 0)
+        return main.at(1);
 
     // si servante (num 4) et que tu as une grosse carte connue alors on joue la servante
     if (main.at(1)->avoirNum() == 4 && (estDecouvert() && main.at(0)->avoirNum() >= 7) ){
@@ -97,15 +97,15 @@ Carte* IATriche::choisirCarte(short int nbCartesRestantes, QVector<bool>) const{
 
     // si chancelier (num 6)
     if (main.at(0)->avoirNum() == 6)
-        return main.at(1);
-    else if (main.at(1)->avoirNum() == 6)
         return main.at(0);
+    else if (main.at(1)->avoirNum() == 6)
+        return main.at(1);
 
     // si prêtre (num 2)
     if (main.at(0)->avoirNum() == 2)
-        return main.at(1);
-    else if (main.at(1)->avoirNum() == 2)
         return main.at(0);
+    else if (main.at(1)->avoirNum() == 2)
+        return main.at(1);
 
     return main.at(0); // au cas où
 }
@@ -120,7 +120,7 @@ short int IATriche::choisirJoueur(Carte* carte, QVector<bool> joueursNonProteger
     case 1: // si garde (num 1)
         // Regarde personne non protéger
         for (short int indice = 0; indice < joueurs.size(); indice++) // si il ne contient pas de garde
-            if (not(joueurs.at(indice)->avoirMain().at(0)->avoirNum() != 1))
+            if (joueurs.at(indice)->avoirMain().at(0)->avoirNum() != 1)
                 listeDesjoueurChoisi.push_back(indice);
         break;
     case 3: // si baron (num 3)
@@ -153,10 +153,11 @@ short int IATriche::choisirJoueur(Carte* carte, QVector<bool> joueursNonProteger
     }
 
     // On retire ceux qui sont protégé
-    for (short int indice = 0; indice < joueurs.size(); indice++)
+    for (short int indice = 0; indice < joueursNonProteger.size(); indice++)
         if (not(joueursNonProteger.at(indice)))
             listeDesjoueurChoisi.removeOne(indice);
-    listeDesjoueurChoisi.removeOne(avoirID()); // On se retire (au cas où)
+    if (numCarte != 5) // On peut se choisir avec le prince
+        listeDesjoueurChoisi.removeOne(avoirID()); // On se retire (au cas où)
 
     if (listeDesjoueurChoisi.isEmpty())
         return -1;

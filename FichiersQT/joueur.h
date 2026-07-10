@@ -43,6 +43,7 @@ public:
     inline void ajouterCarte(Carte* carte) {main.append(carte);};
     inline Carte* retirerCarte(short int indice) {return main.takeAt(indice);};
     QString jouerCarte(Carte*, Joueur* = nullptr, Carte* = nullptr);
+    bool carteEstPossible(short int numcarte, short int nbExemplaires, short int carteJouer)  const;
     virtual Carte* choisirCarte(short int nbCartesRestantes, QVector<bool> joueursNonProteger) const = 0;
     virtual short int choisirJoueur(Carte*, QVector<bool> joueursNonProteger, short int nbCartesRestantes) const = 0;
     virtual void miseAJourCartesPotentiel(QVector<short int> cartesJouer, Joueur* joueurActuel, short int carteJouer, Joueur* autreJoueur = nullptr, short int cartePerdent = 0); // les deux autres paramètre sont nésésaire en cas de baron (num 3)

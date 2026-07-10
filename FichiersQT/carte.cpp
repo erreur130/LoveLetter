@@ -29,7 +29,7 @@ Carte1::Carte1(short int nbExemplaires_, short int num_, QString nom_, QString i
 Carte1::~Carte1() {}
 
 QString Carte1::action(Joueur* joueur1, Joueur*, Carte* carte) const {
-    QString message = " à jouer un garde [1] contre " + joueur1->avoirNom() + " et pense que sa carte est : " + carte->avoirNom();
+    QString message = " à jouer un garde [1] contre " + joueur1->avoirNom() + " et pense que sa carte est : " + carte->avoirNom() + " [" + QString::number(carte->avoirNum()) + "]";
 
     // On verifie si il à bien deviné
     if (carte->avoirNum() == joueur1->avoirMain().at(0)->avoirNum()){

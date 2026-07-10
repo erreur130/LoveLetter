@@ -21,9 +21,9 @@ Carte* IANormale::choisirCarte(short int nbCartesRestantes, QVector<bool> joueur
 
     // si contesse (num 8) et soit 5 soit 7 alors on joue la contesse
     if (main.at(0)->avoirNum() == 8 && (main.at(1)->avoirNum() == 7 || main.at(1)->avoirNum() == 5) )
-        return main.at(1);
-    else if (main.at(1)->avoirNum() == 8 && (main.at(0)->avoirNum() == 7 || main.at(0)->avoirNum() == 5))
         return main.at(0);
+    else if (main.at(1)->avoirNum() == 8 && (main.at(0)->avoirNum() == 7 || main.at(0)->avoirNum() == 5))
+        return main.at(1);
 
     // cas d'algo ---------------------------------------------------------------------------------- cas d'algo
     // cas prioritaires : -----------
@@ -40,13 +40,13 @@ Carte* IANormale::choisirCarte(short int nbCartesRestantes, QVector<bool> joueur
 
     // si espionne (num 0) alors on la joue
     if (main.at(0)->avoirNum() == 0)
-        return main.at(1);
-    else if (main.at(1)->avoirNum() == 0)
         return main.at(0);
+    else if (main.at(1)->avoirNum() == 0)
+        return main.at(1);
 
     // si prince (num 5) et que on as une carte connue alors on joue le prince (si c'est une grosse carte et que l'ont est à la fin, on la garde)
     if ( (estDecouvert() && main.at(1)->avoirNum() == 5) && (main.at(0)->avoirNum() <= 6 && nbCartesRestantes > cartesConnuesDesAutres.size()) ){ // "cartesConnuesDesAutres.size()" = nb de joueur
-        return main.at(5);
+        return main.at(1);
     }
 
     // si garde (num 1) et que l'on connais (sûr) une carte d'un autre alors on le joue
@@ -59,9 +59,9 @@ Carte* IANormale::choisirCarte(short int nbCartesRestantes, QVector<bool> joueur
             }
         }
         if (onConnais && main.at(0)->avoirNum() == 1)
-            return main.at(1);
-        else if (onConnais && main.at(1)->avoirNum() == 1)
             return main.at(0);
+        else if (onConnais && main.at(1)->avoirNum() == 1)
+            return main.at(1);
     }
 
     // si baron (num 3) et que tu as une grosse carte (num 6 que au début) alors on joue le barron
@@ -83,32 +83,32 @@ Carte* IANormale::choisirCarte(short int nbCartesRestantes, QVector<bool> joueur
             }
         }
         if (onConnaisUn9 && main.at(0)->avoirNum() == 5)
-            return main.at(1);
-        else if (onConnaisUn9 && main.at(1)->avoirNum() == 5)
             return main.at(0);
+        else if (onConnaisUn9 && main.at(1)->avoirNum() == 5)
+            return main.at(1);
     }
 
     // cas semi prioritaires : -----------
 
     // si chancelier (num 6)
     if (main.at(0)->avoirNum() == 6)
-        return main.at(1);
-    else if (main.at(1)->avoirNum() == 6)
         return main.at(0);
+    else if (main.at(1)->avoirNum() == 6)
+        return main.at(1);
 
     // si prêtre (num 2)
     if (main.at(0)->avoirNum() == 2)
-        return main.at(1);
-    else if (main.at(1)->avoirNum() == 2)
         return main.at(0);
+    else if (main.at(1)->avoirNum() == 2)
+        return main.at(1);
 
     // cas non prioritaires : -----------
 
     // si garde (num 1) ici, c'est un tir au pif (avec les supositions)
     if (main.at(0)->avoirNum() == 1)
-        return main.at(1);
-    else if (main.at(1)->avoirNum() == 1)
         return main.at(0);
+    else if (main.at(1)->avoirNum() == 1)
+        return main.at(1);
 
     return main.at(0); // au cas où
 }
@@ -117,7 +117,6 @@ short int  IANormale::choisirJoueur(Carte* carte, QVector<bool> joueursNonProteg
     // normellement la fonction peut recevoir les cartes 1,2,3,5,7
     short int numCarte = carte->avoirNum();
     QVector<short int> listeDesjoueurChoisi;
-
 
     switch (numCarte) {
         case 1: // si garde (num 1)
@@ -193,10 +192,11 @@ short int  IANormale::choisirJoueur(Carte* carte, QVector<bool> joueursNonProteg
     }
 
     // On retire ceux qui sont protégé
-    for (short int indice = 0; indice < cartesPotentiellesDesAutres.size(); indice++)
+    for (short int indice = 0; indice < joueursNonProteger.size(); indice++)
         if (not(joueursNonProteger.at(indice)))
             listeDesjoueurChoisi.removeOne(indice);
-    listeDesjoueurChoisi.removeOne(avoirID()); // On se retire (au cas où)
+    if (numCarte != 5) // On peut se choisir avec le prince
+        listeDesjoueurChoisi.removeOne(avoirID()); // On se retire (au cas où)
 
     if (listeDesjoueurChoisi.isEmpty())
         return -1;
@@ -218,6 +218,14 @@ void IANormale::miseAJourCartesPotentiel(QVector<short int> cartesJouer, Joueur*
     if (cartesPotentiellesDesAutres[joueurActuel->avoirID()].removeOne(carteJouer)) // On retire la carte jouer de la "BDD de l'ia"
         cartesPotentiellesDesAutres[joueurActuel->avoirID()].clear(); // Presque même suposition que au dessus
 
+    // On retire toutes les cartes qui ne sont plus possible d'obtenir pour tout les joueurs
+    for (short int indiceJoueur = 0; indiceJoueur < cartesConnuesDesAutres.size(); indiceJoueur++){ // pour chaque joueur
+        for (short int indiceCarte = 0; indiceCarte < cartesJouer.size(); indiceCarte++){ // pour chaque cartes
+            if (not(carteEstPossible(indiceCarte, ((indiceCarte == 1) ? 6 : (indiceCarte > 6) ? 1 : 2) , cartesJouer[indiceCarte])))
+                cartesConnuesDesAutres[indiceJoueur].removeOne(indiceCarte);
+        }
+    }
+
     switch (carteJouer){
         case 0: // On ne peut pas savoir
         case 2: // même cas
@@ -238,7 +246,8 @@ void IANormale::miseAJourCartesPotentiel(QVector<short int> cartesJouer, Joueur*
             }
             return; // pas besoin de continuer
         case 3: // 5,6,7,8,9 sont les cartes sûr du gagant
-            if (autreJoueur != nullptr){ // si on à pue choisir le joueur
+            // si on à pue choisir le joueur et que nous ne somme pas concerné par l'action du baron (car les deux concerné connaise déjà la carte de l'autre)
+            if (autreJoueur != nullptr && not(avoirID() == joueurActuel->avoirID() || avoirID() == autreJoueur->avoirID())){
                 // On recherche le ou les survivants
                 if (not(joueurActuel->estEnVie())){ // si le joueur actuel est mort, alors on vas changer l'autre joueur
                     joueursAMettreAJour.pop_back();
@@ -254,32 +263,32 @@ void IANormale::miseAJourCartesPotentiel(QVector<short int> cartesJouer, Joueur*
                     listeCarteImpossibleDuJoueur.push_back(indice);
 
                 if ( joueursAMettreAJour.size() == 1 ){ // si un des deux à gagner alors 5,6,7,8,9
-                    if (cartePerdent < 8 && ( (cartesJouer.at(5) + (avoirMain().at(0)->avoirNum() == 5)) < 2) ){ // si il en manque ou que tu n'as pas la dernière et sup à la carte du perdent
+                    if (cartePerdent < 5 && carteEstPossible(5, 2, cartesJouer[5])){ // si il en manque ou que tu n'as pas la dernière et sup à la carte du perdent
                         listeCarteCertainesDuJoueur.push_back(5);
                         listeCartePotentielDuJoueur.push_back(5);
                     }
-                    if (cartePerdent < 8 && ( (cartesJouer.at(6) + (avoirMain().at(0)->avoirNum() == 6)) < 2) ){ // si il en manque ou que tu n'as pas la dernière et sup à la carte du perdent
+                    if (cartePerdent < 6 && carteEstPossible(6, 2, cartesJouer[6]) ){ // si il en manque ou que tu n'as pas la dernière et sup à la carte du perdent
                         listeCarteCertainesDuJoueur.push_back(6);
                         listeCartePotentielDuJoueur.push_back(6);
                     }
-                    if (cartePerdent < 8 && ( (cartesJouer.at(7) + (avoirMain().at(0)->avoirNum() == 7)) < 1) ){ // si tu n'as pas la dernière et sup à la carte du perdent
+                    if (cartePerdent < 7 && carteEstPossible(7, 2, cartesJouer[7]) ){ // si tu n'as pas la dernière et sup à la carte du perdent
                         listeCarteCertainesDuJoueur.push_back(7);
                         listeCartePotentielDuJoueur.push_back(7);
                     }
-                    if (cartePerdent < 8 && ( (cartesJouer.at(8) + (avoirMain().at(0)->avoirNum() == 8)) < 1) ){ // si tu n'as pas la dernière et sup à la carte du perdent
+                    if (cartePerdent < 8 && carteEstPossible(8, 1, cartesJouer[8]) ){ // si tu n'as pas la dernière et sup à la carte du perdent
                         listeCarteCertainesDuJoueur.push_back(8);
                         listeCartePotentielDuJoueur.push_back(8);
                     }
-                    if ((cartesJouer.at(9) + (avoirMain().at(0)->avoirNum() == 9)) < 1){ // si tu n'as pas la dernière
+                    if (carteEstPossible(9, 1, cartesJouer[9])){ // si tu n'as pas la dernière
                         listeCarteCertainesDuJoueur.push_back(9);
                         listeCartePotentielDuJoueur.push_back(9);
                     }
                 } else { // cas d'égalitée alors 5 ou 6
-                    if ((cartesJouer.at(5) + (avoirMain().at(0)->avoirNum() == 5)) == 0){ // si il en manque ou que tu n'as pas la dernière
+                    if (cartesJouer.at(5) == 0 && not(avoirMain().at(0)->avoirNum() == 5) ){ // si il n'en manque pas ou que tu n'as pas la dernière (si tu n'est pas visé)
                         listeCarteCertainesDuJoueur.push_back(5);
                         listeCartePotentielDuJoueur.push_back(5);
                     }
-                    if ((cartesJouer.at(6) + (avoirMain().at(0)->avoirNum() == 6)) == 0){ // si il en manque ou que tu n'as pas la dernière
+                    if (cartesJouer.at(6) == 0 && not(avoirMain().at(0)->avoirNum() == 6) ){ // si il n'en manque pas ou que tu n'as pas la dernière (si tu n'est pas visé)
                         listeCarteCertainesDuJoueur.push_back(6);
                         listeCartePotentielDuJoueur.push_back(6);
                     }
@@ -290,15 +299,15 @@ void IANormale::miseAJourCartesPotentiel(QVector<short int> cartesJouer, Joueur*
             // les suposition revienne à 0
             cartesPotentiellesDesAutres[joueurActuel->avoirID()].clear();
             cartesConnuesDesAutres[joueurActuel->avoirID()].clear();
-            if ((cartesJouer.at(0) + (avoirMain().at(0)->avoirNum() == 0)) < 2) // si il en manque ou que tu n'as pas la dernière
+            if (carteEstPossible(0, 2, cartesJouer[0])) // si il en manque ou que tu n'as pas la dernière
                 cartesPotentiellesDesAutres[joueurActuel->avoirID()].push_back(0);
-            if ((cartesJouer.at(6) + (avoirMain().at(0)->avoirNum() == 6)) < 2) // si il en manque ou que tu n'as pas la dernière
+            if (carteEstPossible(6, 2, cartesJouer[6])) // si il en manque ou que tu n'as pas la dernière
                 cartesPotentiellesDesAutres[joueurActuel->avoirID()].push_back(6);
-            if ((cartesJouer.at(7) + (avoirMain().at(0)->avoirNum() == 7)) < 1) // si tu n'as pas la dernière
+            if (carteEstPossible(7, 1, cartesJouer[7])) // si tu n'as pas la dernière
                 cartesPotentiellesDesAutres[joueurActuel->avoirID()].push_back(7);
-            if ((cartesJouer.at(8) + (avoirMain().at(0)->avoirNum() == 8)) < 1) // si tu n'as pas la dernière
+            if (carteEstPossible(8, 1, cartesJouer[8])) // si tu n'as pas la dernière
                 cartesPotentiellesDesAutres[joueurActuel->avoirID()].push_back(8);
-            if ((cartesJouer.at(9) + (avoirMain().at(0)->avoirNum() == 9)) < 1) // si tu n'as pas la dernière
+            if (carteEstPossible(9, 1, cartesJouer[9])) // si tu n'as pas la dernière
                 cartesPotentiellesDesAutres[joueurActuel->avoirID()].push_back(9);
             return; // On peut même sortir de la fonction pour évité lire des trucs inutiles
         case 7: // On joue comme si c'était sûr que c'est un 9
@@ -316,11 +325,11 @@ void IANormale::miseAJourCartesPotentiel(QVector<short int> cartesJouer, Joueur*
             }
             return; // On peut même sortir de la fonction pour évité lire des trucs inutiles
         case 8: // peut être 5,7,9 mais pas sûr
-            if ((cartesJouer.at(5) + (avoirMain().at(0)->avoirNum() == 5)) < 2) // si il en manque ou que tu n'as pas la dernière
+            if (carteEstPossible(5, 2, cartesJouer[5])) // si il en manque ou que tu n'as pas la dernière
                 listeCartePotentielDuJoueur.push_back(5);
-            if ((cartesJouer.at(7) + (avoirMain().at(0)->avoirNum() == 7)) < 1) // si tu n'as pas la dernière
+            if (carteEstPossible(7, 1, cartesJouer[7])) // si tu n'as pas la dernière
                 listeCartePotentielDuJoueur.push_back(7);
-            if ((cartesJouer.at(9) + (avoirMain().at(0)->avoirNum() == 9)) < 1) // si tu n'as pas la dernière
+            if (carteEstPossible(9, 1, cartesJouer[9])) // si tu n'as pas la dernière
                 listeCartePotentielDuJoueur.push_back(9);
             break;
         default:
@@ -415,7 +424,7 @@ short int IANormale::demanderCarteAJoueur(Joueur* joueur, QVector<short int> car
     short int val = 1;
     // On regadre dans les cartes connus
     if (not(cartesConnuesDesAutres.at(joueur->avoirID()).isEmpty())){
-        while (val != 1){
+        while (val == 1){
             val = cartesConnuesDesAutres[joueur->avoirID()][QRandomGenerator::global()->bounded(cartesConnuesDesAutres[joueur->avoirID()].size())];
             if (val != 1) // Si il choisit le garde, c'est impossible
                 return val;
@@ -433,30 +442,16 @@ short int IANormale::demanderCarteAJoueur(Joueur* joueur, QVector<short int> car
 
     // On fait au "pif", on regarde pour toutes les cartes de 0 à 9 sauf le 1 car on peut pas le demander
     QVector<short int> listeCartePotentielDuJoueur;
-    if ( (cartesJouer.at(0) + (avoirMain().at(0)->avoirNum() == 0)) < 2) // si il en manque ou que tu n'as pas la dernière
-        listeCartePotentielDuJoueur.push_back(0);
-    if ( (cartesJouer.at(2) + (avoirMain().at(0)->avoirNum() == 2)) < 2) // si il en manque ou que tu n'as pas la dernière
-        listeCartePotentielDuJoueur.push_back(2);
-    if ( (cartesJouer.at(3) + (avoirMain().at(0)->avoirNum() == 3)) < 2) // si il en manque ou que tu n'as pas la dernière
-        listeCartePotentielDuJoueur.push_back(3);
-    if ( (cartesJouer.at(4) + (avoirMain().at(0)->avoirNum() == 4)) < 2) // si il en manque ou que tu n'as pas la dernière
-        listeCartePotentielDuJoueur.push_back(4);
-    if ( (cartesJouer.at(5) + (avoirMain().at(0)->avoirNum() == 5)) < 2) // si il en manque ou que tu n'as pas la dernière
-        listeCartePotentielDuJoueur.push_back(5);
-    if ( (cartesJouer.at(6) + (avoirMain().at(0)->avoirNum() == 6)) < 2) // si il en manque ou que tu n'as pas la dernière
-        listeCartePotentielDuJoueur.push_back(6);
-    if ( (cartesJouer.at(7) + (avoirMain().at(0)->avoirNum() == 7)) < 1) // si tu n'as pas la dernière
-        listeCartePotentielDuJoueur.push_back(7);
-    if ( (cartesJouer.at(8) + (avoirMain().at(0)->avoirNum() == 8)) < 1) // si tu n'as pas la dernière
-        listeCartePotentielDuJoueur.push_back(8);
-    if ( (cartesJouer.at(9) + (avoirMain().at(0)->avoirNum() == 9)) < 1) // si tu n'as pas la dernière
-        listeCartePotentielDuJoueur.push_back(9);
+    for (short int indiceCarte = 0; indiceCarte < cartesJouer.size(); indiceCarte++){ // pour chaque cartes
+        if (indiceCarte != 1 && carteEstPossible(indiceCarte, ((indiceCarte == 1) ? 6 : (indiceCarte > 6) ? 1 : 2) , cartesJouer[indiceCarte]))
+            listeCartePotentielDuJoueur.push_back(indiceCarte);
+    }
 
     // On prend aléatoirement dans la liste des cartes plausibles
-    while (val != 1){
+    while (val == 1){
         val = listeCartePotentielDuJoueur[QRandomGenerator::global()->bounded(listeCartePotentielDuJoueur.size())];
         if (val != 1) // Si il choisit le garde, c'est impossible
             return val;
     }
-    return 9; // par défaut mais cas impossible
+    return val; // par défaut mais cas impossible
 }

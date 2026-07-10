@@ -164,6 +164,8 @@ void Jeu::lancerTour(){
         for (Joueur* joueur : joueurs)
             joueursChoix.push_back(not(joueur->estPorteger()) && joueur->estEnVie()); // si il est en vie et pas proteger
 
+        qDebug() << "joueurNonProteger à la construction : " << joueursChoix;
+
         Carte* choixCarte = joueurActuel->choisirCarte(pioche.avoirNbCartesRestantes(), joueursChoix);
 
         if (choixCarte == nullptr){ // Si hummain on affiche
@@ -191,7 +193,7 @@ void Jeu::lancerTour(){
                 case TypeCarte::Offensif: // sur autre personne et le choix d'une carte (num : 1)
                     cible = joueurActuel->choisirJoueur(carteEnCourDeJeux, joueursChoix, pioche.avoirNbCartesRestantes());
                     if (cible == -1){ // cas où on ne peut pas choisir de joueur
-                        emit messageLog(joueurActuel->avoirNom() + " joue la carte " + carteEnCourDeJeux->avoirNom() + " sur personne.");
+                        emit messageLog(joueurActuel->avoirNom() + " joue la carte " + carteEnCourDeJeux->avoirNom() + " [1] sur personne.");
                         miseAJourCartesPotentiel(); // met à jour les connaisances des IA, version normale
                         break;
                     }
@@ -199,30 +201,18 @@ void Jeu::lancerTour(){
                     carteADemander = joueurActuel->demanderCarteAJoueur(joueurCible, pioche.avoirCartesJouer());
                     emit messageLog(joueurActuel->jouerCarte(carteEnCourDeJeux, joueurCible, pioche[carteADemander]));
                     miseAJourCartesPotentiel(pioche[carteADemander]); // il faut la carte demander pour la mise à jour
-
-                    // vérifie si quelqu'un est mort il faut dire au paquet que sa carte est vue (visible)
-                    if (joueurCible != nullptr && not(joueurCible->estEnVie())) // joueurCible est mort
-                        pioche.carteAEtaitJouer(joueurCible->avoirMain()[0]->avoirNum());
-
                     break;
 
                 case TypeCarte::Duel: // sur une autres personne et soi même (num : 2,3,7) / num 2 car la personne qui la joue regarde l'autre
                 case TypeCarte::OffensifOuDefensif: // sur une autres personne et soi même! (num 5)
                     cible = joueurActuel->choisirJoueur(carteEnCourDeJeux, joueursChoix, pioche.avoirNbCartesRestantes());
                     if (cible == -1){ // cas où on ne peut pas choisir de joueur
-                        emit messageLog(joueurActuel->avoirNom() + " joue la carte " + carteEnCourDeJeux->avoirNom() + " sur personne.");
+                        emit messageLog(joueurActuel->avoirNom() + " joue la carte " + carteEnCourDeJeux->avoirNom() + " [" + QString::number(carteEnCourDeJeux->avoirNum()) + "] sur personne.");
                     } else {
                         joueurCible = joueurs[cible];
                         emit messageLog(joueurActuel->jouerCarte(carteEnCourDeJeux, joueurCible));
                     }
                     miseAJourCartesPotentiel(); // met à jour les connaisances des IA, version normale
-
-                    // vérifie si quelqu'un est mort il faut dire au paquet que sa carte est vue (visible)
-                    if (not(joueurActuel->estEnVie())) // joueurActuel est mort
-                        pioche.carteAEtaitJouer(joueurActuel->avoirMain()[0]->avoirNum());
-                    else if (joueurCible != nullptr && not(joueurCible->estEnVie())) // joueurCible est mort
-                        pioche.carteAEtaitJouer(joueurCible->avoirMain()[0]->avoirNum());
-
                     break;
 
                 case TypeCarte::Defensif: // sur soi (num : 0,4,6,9) le 9 ne protège pas vraiment ;) mais ce joue sur soie même
@@ -230,6 +220,12 @@ void Jeu::lancerTour(){
                     emit messageLog(joueurActuel->jouerCarte(carteEnCourDeJeux));
                     miseAJourCartesPotentiel(); // met à jour les connaisances des IA
             }
+
+            // vérifie si quelqu'un est mort il faut dire au paquet que sa carte est vue (visible)
+            if (not(joueurActuel->estEnVie())) // joueurActuel est mort
+                pioche.carteAEtaitJouer(joueurActuel->avoirMain()[0]->avoirNum());
+            else if (joueurCible != nullptr && not(joueurCible->estEnVie())) // joueurCible est mort
+                pioche.carteAEtaitJouer(joueurCible->avoirMain()[0]->avoirNum());
 
             // Vérification de l'invariant : tout joueur vivant doit avoir exactement 1 carte -----------------------------------------------------------------------------
             for (Joueur* joueur : joueurs){
@@ -252,23 +248,24 @@ void Jeu::lancerTour(){
 }
 
 void Jeu::finDeManche(bool finDuPaquet){
-    if(finDuPaquet){ // Si fin de la manche par la fin du paquet, on garde les joueurs avec la plus grosse carte
-        emit messageLog("La pioche est vide, on confronte les derniers survivants :");
+    if(finDuPaquet && JoueursRestant().size() > 1){ // Si fin de la manche par la fin du paquet et qu'il y a plus d'une persone, on garde les joueurs avec la plus grosse carte
+        emit messageLog("La pioche est vide, on confronte les joueurs en lice :");
         short int numMax = 0;
         // pour ceux qui sont en vie :
         for (Joueur* joueur : joueurs)
-            if (joueur->estEnVie() && joueur->avoirMain().at(0)->avoirNum() > numMax){ // si plus grand on le note + affichage de la personne
-                numMax = joueur->avoirMain()[0]->avoirNum();
-                emit messageLog(joueur->avoirNom() + " à la carte " + joueur->avoirMain()[0]->avoirNom());
+            if (joueur->estEnVie()){ // si plus grand on le note + affichage de la personne
+                emit messageLog(joueur->avoirNom() + " à la carte " + joueur->avoirMain()[0]->avoirNom() + " [" + QString::number(joueur->avoirMain().at(0)->avoirNum()) + "]");
+                if (joueur->avoirMain().at(0)->avoirNum() > numMax)
+                    numMax = joueur->avoirMain()[0]->avoirNum();
             }
         for (Joueur* joueur : joueurs)
             if(joueur->estEnVie() && joueur->avoirMain().at(0)->avoirNum() < numMax) // si plus petit que le max alors il meurt
                 joueur->eliminer();
     } else { // sinon on affiche la carte du gagnant
-        emit messageLog("Il ne reste plus qu'un seul joueur en liste :");
+        emit messageLog("Il ne reste plus qu'un seul joueur en lice :");
         for (Joueur* joueur : joueurs)
             if (joueur->estEnVie())
-                emit messageLog(joueur->avoirNom() + " à la carte " + joueur->avoirMain()[0]->avoirNom());
+                emit messageLog(joueur->avoirNom() + " à la carte " + joueur->avoirMain()[0]->avoirNom() + " [" + QString::number(joueur->avoirMain().at(0)->avoirNum()) + "]");
     }
 
     // recherche les pts bonnus, si deux, ils annulent
@@ -288,13 +285,13 @@ void Jeu::finDeManche(bool finDuPaquet){
     // On donne les points et on les affiches
     QVector<QString> nomJoueurs;
     QVector<short int> pointsJoueurs;
-    qDebug() << "Compte fin de manche";
     for (Joueur* joueur : joueurs){
         if (joueur->estEnVie())
             nomJoueurs.push_back(joueur->avoirNom()); // On le listes
         joueur->gainPoints(); // On donne les points (gainPoints donne des pt si enVie et si ptBonnus)
         pointsJoueurs.push_back(joueur->avoirPoints()); // met à jours l'affichage des points
     }
+    qDebug() << "Fin de manche";
     emit miseAJourPointsJoueurs(pointsJoueurs);
     emit afficherVictoireManche(nomJoueurs);
 
@@ -314,6 +311,8 @@ void Jeu::finDeManche(bool finDuPaquet){
 void Jeu::recevoirChoixCarte(short int idCarte){
     carteEnCourDeJeux = pioche[idCarte]; // On note la carte choisit
     pioche.carteAEtaitJouer(idCarte); // On signale à la pioche que cette carte à était jouer (visible)
+    // On change l'affichaque de ce qui reste en cartes
+    emit miseAJourCartesJouees(pioche.avoirCartesJouer());
 
     if (joueurActuel->avoirMain().at(0)->avoirNum() == idCarte)
         joueurActuel->retirerCarte(0);
@@ -332,7 +331,7 @@ void Jeu::recevoirChoixCarte(short int idCarte){
             if (carteEnCourDeJeux->estType() != TypeCarte::OffensifOuDefensif) // avec TypeCarte::OffensifOuDefensif on peut ce choisir soit même
                 joueursPossible.removeOne(joueurActuel); // Pour ne pas ce viser soit même
             if (joueursPossible.isEmpty()){ // cas où on ne peut pas choisir de joueur
-                emit messageLog(joueurActuel->avoirNom() + " joue la carte " + carteEnCourDeJeux->avoirNom() + " sur personne.");
+                emit messageLog(joueurActuel->avoirNom() + " joue la carte " + carteEnCourDeJeux->avoirNom() + " [" + QString::number(carteEnCourDeJeux->avoirNum()) + "] sur personne.");
                 // Vérification de l'invariant : tout joueur vivant doit avoir exactement 1 carte -----------------------------------------------------------------------------
                 for (Joueur* joueur : joueurs){
                     if (joueur->estEnVie()){
@@ -426,6 +425,8 @@ void Jeu::recevoirChoixCibleJoueur(short int joueur){
                 }
             }
             QTimer::singleShot(0, this, &Jeu::lancerTour); // de façon asynchrone // permet de continuer la partie // permet de continuer la partie
+            break;
+        default:
             break;
     }
 }
