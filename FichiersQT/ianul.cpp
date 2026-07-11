@@ -40,14 +40,14 @@ short int  IANul::choisirJoueur(Carte* carte, QVector<bool> joueursNonProteger, 
     case 1: // si garde (num 1)
         // Regarde les certitudes
         for (short int indice = 0; indice < cartesConnuesDesAutres.size(); indice++) // si non vide et qu'il ne contient pas seullement une garde
-            if (not(cartesConnuesDesAutres.at(indice).isEmpty()) && not(cartesConnuesDesAutres.at(indice).size() == 1 && cartesConnuesDesAutres.at(indice).at(0) == 1))
+            if (joueursNonProteger.at(indice) && (not(cartesConnuesDesAutres.at(indice).isEmpty()) && not(cartesConnuesDesAutres.at(indice).size() == 1 && cartesConnuesDesAutres.at(indice).at(0) == 1)))
                 listeDesjoueurChoisi.push_back(indice);
         break;
 
     case 2: // si prètre (num 2)
         // On cherche ceux qui n'ont pas de certitude
         for (short int indice = 0; indice < cartesConnuesDesAutres.size(); indice++)
-            if (cartesConnuesDesAutres.at(indice).isEmpty())
+            if (joueursNonProteger.at(indice) && (cartesConnuesDesAutres.at(indice).isEmpty()))
                 listeDesjoueurChoisi.push_back(indice);
         break;
     case 3: // si baron (num 3)
@@ -59,14 +59,14 @@ short int  IANul::choisirJoueur(Carte* carte, QVector<bool> joueursNonProteger, 
                 if (maxi < cartesConnuesDesAutres.at(indice).at(indiceC))
                     maxi = cartesConnuesDesAutres.at(indice).at(indiceC);
             // si la plus grosse carte connus est plus petite que la notre alors on choisis la personne
-            if (maxi != -1 &&  maxi < avoirMain().at(0)->avoirNum())
+            if (joueursNonProteger.at(indice) && (maxi != -1 &&  maxi < avoirMain().at(0)->avoirNum()))
                 listeDesjoueurChoisi.push_back(indice);
         }
         break;
     case 5: // si prince (num 5)
         // On cherche ceux qui on la princesse
         for (short int indice = 0; indice < cartesConnuesDesAutres.size(); indice++)
-            if (cartesConnuesDesAutres.at(indice).contains(9))
+            if (joueursNonProteger.at(indice) && cartesConnuesDesAutres.at(indice).contains(9))
                 listeDesjoueurChoisi.push_back(indice);
     case 7: // si roi (num 7)
         // le choix n'est pas important

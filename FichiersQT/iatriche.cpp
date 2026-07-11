@@ -120,20 +120,20 @@ short int IATriche::choisirJoueur(Carte* carte, QVector<bool> joueursNonProteger
     case 1: // si garde (num 1)
         // Regarde personne non protéger
         for (short int indice = 0; indice < joueurs.size(); indice++) // si il ne contient pas de garde
-            if (joueurs.at(indice)->avoirMain().at(0)->avoirNum() != 1)
+            if (joueursNonProteger.at(indice) && (joueurs.at(indice)->avoirMain().at(0)->avoirNum() != 1))
                 listeDesjoueurChoisi.push_back(indice);
         break;
     case 3: // si baron (num 3)
         // On cherce ceux qui ont une carte plus petites que la notre
         for (short int indice = 0; indice < joueurs.size(); indice++){
-            if (joueurs.at(indice)->avoirMain().at(0)->avoirNum() < avoirMain().at(0)->avoirNum())
+            if (joueursNonProteger.at(indice) && (joueurs.at(indice)->avoirMain().at(0)->avoirNum() < avoirMain().at(0)->avoirNum()))
                 listeDesjoueurChoisi.push_back(indice);
         }
         break;
     case 5: // si prince (num 5)
         // On cherche celui qui à la princesse
         for (short int indice = 0; indice < joueurs.size(); indice++)
-            if (joueurs.at(indice)->avoirMain().at(0)->avoirNum() == 9)
+            if (joueursNonProteger.at(indice) && (joueurs.at(indice)->avoirMain().at(0)->avoirNum() == 9))
                 listeDesjoueurChoisi.push_back(indice);
 
         // On vérifie si on est à découvert et que c'est rentable de retirer sa main
@@ -152,12 +152,16 @@ short int IATriche::choisirJoueur(Carte* carte, QVector<bool> joueursNonProteger
             listeDesjoueurChoisi.push_back(indice);
     }
 
+    qDebug() << "joueursNonProteger avant filtrage :" << listeDesjoueurChoisi << " / et filtre : " << joueursNonProteger;
+
     // On retire ceux qui sont protégé
     for (short int indice = 0; indice < joueursNonProteger.size(); indice++)
         if (not(joueursNonProteger.at(indice)))
             listeDesjoueurChoisi.removeOne(indice);
     if (numCarte != 5) // On peut se choisir avec le prince
         listeDesjoueurChoisi.removeOne(avoirID()); // On se retire (au cas où)
+
+    qDebug() << "joueursNonProteger après filtrage :" << listeDesjoueurChoisi;
 
     if (listeDesjoueurChoisi.isEmpty())
         return -1;
@@ -201,7 +205,7 @@ short int IATriche::demanderCarteAJoueur(Joueur* joueur, QVector<short int>) con
     if (numCarte != 1) // Si ce n'est pas un garde
         return joueur->avoirMain()[0]->avoirNum(); // c'est une victime à ce point
     // Sinon on prend une carte aléatoirement
-    while (numCarte != 1){
+    while (numCarte == 1){
         numCarte = QRandomGenerator::global()->bounded(10); // 0 à 9
         if (numCarte != 1) // Si il choisit le garde, c'est impossible
             return numCarte;

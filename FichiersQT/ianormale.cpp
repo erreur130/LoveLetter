@@ -122,20 +122,20 @@ short int  IANormale::choisirJoueur(Carte* carte, QVector<bool> joueursNonProteg
         case 1: // si garde (num 1)
             // Regarde les certitudes
             for (short int indice = 0; indice < cartesConnuesDesAutres.size(); indice++) // si non vide et qu'il ne contient pas seullement une garde
-                if (not(cartesConnuesDesAutres.at(indice).isEmpty()) && not(cartesConnuesDesAutres.at(indice).size() == 1 && cartesConnuesDesAutres.at(indice).at(0) == 1))
+                if (joueursNonProteger.at(indice) && (not(cartesConnuesDesAutres.at(indice).isEmpty()) && not(cartesConnuesDesAutres.at(indice).size() == 1 && cartesConnuesDesAutres.at(indice).at(0) == 1)))
                     listeDesjoueurChoisi.push_back(indice);
             if (not(listeDesjoueurChoisi.isEmpty()))
                 break;
 
             // Regarde les suposition
             for (short int indice = 0; indice < cartesPotentiellesDesAutres.size(); indice++) // si non vide et qu'il ne contient pas seullement une garde
-                if (not(cartesPotentiellesDesAutres.at(indice).isEmpty()) && not(cartesConnuesDesAutres.at(indice).size() == 1 && cartesConnuesDesAutres.at(indice).at(0) == 1))
+                if (joueursNonProteger.at(indice) && (not(cartesPotentiellesDesAutres.at(indice).isEmpty()) && not(cartesConnuesDesAutres.at(indice).size() == 1 && cartesConnuesDesAutres.at(indice).at(0) == 1)))
                     listeDesjoueurChoisi.push_back(indice);
             break;
         case 2: // si prètre (num 2)
             // On cherche ceux qui n'ont pas de certitude
             for (short int indice = 0; indice < cartesConnuesDesAutres.size(); indice++)
-                if (cartesConnuesDesAutres.at(indice).isEmpty())
+                if (joueursNonProteger.at(indice) && (cartesConnuesDesAutres.at(indice).isEmpty()))
                     listeDesjoueurChoisi.push_back(indice);
             break;
         case 3: // si baron (num 3)
@@ -147,7 +147,7 @@ short int  IANormale::choisirJoueur(Carte* carte, QVector<bool> joueursNonProteg
                     if (maxi < cartesConnuesDesAutres.at(indice).at(indiceC))
                         maxi = cartesConnuesDesAutres.at(indice).at(indiceC);
                 // si la plus grosse carte connus est plus petite que la notre alors on choisis la personne
-                if (maxi != -1 &&  maxi < avoirMain().at(0)->avoirNum())
+                if (joueursNonProteger.at(indice) && (maxi != -1 &&  maxi < avoirMain().at(0)->avoirNum()))
                     listeDesjoueurChoisi.push_back(indice);
             }
             if (not(listeDesjoueurChoisi.isEmpty()))
@@ -160,20 +160,20 @@ short int  IANormale::choisirJoueur(Carte* carte, QVector<bool> joueursNonProteg
                     if (maxi < cartesPotentiellesDesAutres.at(indice).at(indiceC))
                         maxi = cartesPotentiellesDesAutres.at(indice).at(indiceC);
                 // si la plus grosse carte connus est plus petite que la notre alors on choisis la personne
-                if (maxi != -1 &&  maxi < avoirMain().at(0)->avoirNum())
+                if (joueursNonProteger.at(indice) && (maxi != -1 &&  maxi < avoirMain().at(0)->avoirNum()))
                     listeDesjoueurChoisi.push_back(indice);
             }
             break;
         case 5: // si prince (num 5)
             // On cherche ceux qui on la princesse
             for (short int indice = 0; indice < cartesConnuesDesAutres.size(); indice++)
-                if (cartesConnuesDesAutres.at(indice).contains(9))
+                if (joueursNonProteger.at(indice) && cartesConnuesDesAutres.at(indice).contains(9))
                     listeDesjoueurChoisi.push_back(indice);
             if (not(listeDesjoueurChoisi.isEmpty()))
                 break;
             // On cherche ceux qui on peut être la princesse
             for (short int indice = 0; indice < cartesPotentiellesDesAutres.size(); indice++)
-                if (cartesPotentiellesDesAutres.at(indice).contains(9))
+                if (joueursNonProteger.at(indice) && cartesPotentiellesDesAutres.at(indice).contains(9))
                     listeDesjoueurChoisi.push_back(indice);
 
             // On vérifie si on est à découvert et que c'est rentable de retirer sa main
@@ -191,12 +191,16 @@ short int  IANormale::choisirJoueur(Carte* carte, QVector<bool> joueursNonProteg
             listeDesjoueurChoisi.push_back(indice);
     }
 
+    qDebug() << "joueursNonProteger avant filtrage :" << listeDesjoueurChoisi << " / et filtre : " << joueursNonProteger;
+
     // On retire ceux qui sont protégé
     for (short int indice = 0; indice < joueursNonProteger.size(); indice++)
         if (not(joueursNonProteger.at(indice)))
             listeDesjoueurChoisi.removeOne(indice);
     if (numCarte != 5) // On peut se choisir avec le prince
         listeDesjoueurChoisi.removeOne(avoirID()); // On se retire (au cas où)
+
+    qDebug() << "joueursNonProteger après filtrage :" << listeDesjoueurChoisi;
 
     if (listeDesjoueurChoisi.isEmpty())
         return -1;
@@ -433,7 +437,7 @@ short int IANormale::demanderCarteAJoueur(Joueur* joueur, QVector<short int> car
 
     // On regarde les supositions
     if (not(cartesPotentiellesDesAutres.at(joueur->avoirID()).isEmpty())){
-        while (val != 1){
+        while (val == 1){
             val = cartesPotentiellesDesAutres[joueur->avoirID()][QRandomGenerator::global()->bounded(cartesPotentiellesDesAutres[joueur->avoirID()].size())];
             if (val != 1) // Si il choisit le garde, c'est impossible
                 return val;

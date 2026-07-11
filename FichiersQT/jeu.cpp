@@ -164,8 +164,6 @@ void Jeu::lancerTour(){
         for (Joueur* joueur : joueurs)
             joueursChoix.push_back(not(joueur->estPorteger()) && joueur->estEnVie()); // si il est en vie et pas proteger
 
-        qDebug() << "joueurNonProteger à la construction : " << joueursChoix;
-
         Carte* choixCarte = joueurActuel->choisirCarte(pioche.avoirNbCartesRestantes(), joueursChoix);
 
         if (choixCarte == nullptr){ // Si hummain on affiche
@@ -191,7 +189,9 @@ void Jeu::lancerTour(){
             // les fonctions font en sorte de retirer this du choix des joueurs, donc on ne modifie pas joueursChoix
             switch (carteEnCourDeJeux->estType()){
                 case TypeCarte::Offensif: // sur autre personne et le choix d'une carte (num : 1)
+                    qDebug() << joueurActuel->avoirNom() << "choisirJoueur avec joueursChoix :" << joueursChoix;
                     cible = joueurActuel->choisirJoueur(carteEnCourDeJeux, joueursChoix, pioche.avoirNbCartesRestantes());
+                    qDebug() << "cible retournée :" << cible;
                     if (cible == -1){ // cas où on ne peut pas choisir de joueur
                         emit messageLog(joueurActuel->avoirNom() + " joue la carte " + carteEnCourDeJeux->avoirNom() + " [1] sur personne.");
                         miseAJourCartesPotentiel(); // met à jour les connaisances des IA, version normale
@@ -205,7 +205,9 @@ void Jeu::lancerTour(){
 
                 case TypeCarte::Duel: // sur une autres personne et soi même (num : 2,3,7) / num 2 car la personne qui la joue regarde l'autre
                 case TypeCarte::OffensifOuDefensif: // sur une autres personne et soi même! (num 5)
+                    qDebug() << joueurActuel->avoirNom() << "choisirJoueur avec joueursChoix :" << joueursChoix;
                     cible = joueurActuel->choisirJoueur(carteEnCourDeJeux, joueursChoix, pioche.avoirNbCartesRestantes());
+                    qDebug() << "cible retournée :" << cible;
                     if (cible == -1){ // cas où on ne peut pas choisir de joueur
                         emit messageLog(joueurActuel->avoirNom() + " joue la carte " + carteEnCourDeJeux->avoirNom() + " [" + QString::number(carteEnCourDeJeux->avoirNum()) + "] sur personne.");
                     } else {
