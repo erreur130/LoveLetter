@@ -3,8 +3,12 @@
 IANul::IANul(QString nom, short int nbJoueurs):
     Joueur(nom), cartesConnuesDesAutres(nbJoueurs, QVector<short int>()){}
 
-IANul::~IANul(){
+IANul::~IANul(){}
 
+void IANul::reinitialiser(){
+    Joueur::reinitialiser();
+    for(short int indice = 0; indice < cartesConnuesDesAutres.size(); indice++)
+        cartesConnuesDesAutres[indice].clear();
 }
 
 Carte* IANul::choisirCarte(short int, QVector<bool>) const{
@@ -38,6 +42,7 @@ short int  IANul::choisirJoueur(Carte* carte, QVector<bool> joueursNonProteger, 
 
     switch (numCarte) {
     case 1: // si garde (num 1)
+        qDebug() << "Liste les cartes de supositions faible : " << cartesConnuesDesAutres;
         // Regarde les certitudes
         for (short int indice = 0; indice < cartesConnuesDesAutres.size(); indice++) // si non vide et qu'il ne contient pas seullement une garde
             if (joueursNonProteger.at(indice) && (not(cartesConnuesDesAutres.at(indice).isEmpty()) && not(cartesConnuesDesAutres.at(indice).size() == 1 && cartesConnuesDesAutres.at(indice).at(0) == 1)))

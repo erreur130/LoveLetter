@@ -10,6 +10,7 @@ class IATriche : public Joueur{
 public:
     IATriche(QString, QVector<Joueur*>);
     ~IATriche();
+    void reinitialiser();
     Carte* choisirCarte(short int nbCartesRestantes, QVector<bool> joueursProteger) const;
     short int choisirJoueur(Carte*, QVector<bool> joueursProteger, short int nbCartesRestantes) const;
     void voirCarteDUnJoueur(Carte*, short int joueur);

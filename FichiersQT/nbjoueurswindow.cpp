@@ -18,11 +18,9 @@ void NbJoueursWindow::on_button_Jouer_clicked(){
     short int inorm = ui->spinBox_IANorm->value();
     short int itri = ui->spinBox_IATri->value();
 
-    accept(); // signale que le dialog est validé → exec() retourne QDialog::Accepted
-
     if (h+inul+inorm+itri <= 6 && h+inul+inorm+itri >= 2){ // min 2 personnes et max 6
         emit envoyerJoueur(h, inul, inorm, itri);
-        close();
+        accept(); // signale que le dialog est validé → exec() retourne QDialog::Accepted
     }
 }
 

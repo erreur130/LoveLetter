@@ -10,6 +10,7 @@ class IANul : public Joueur{
 public:
     IANul(QString, short int);
     ~IANul();
+    void reinitialiser();
     Carte* choisirCarte(short int nbCartesRestantes, QVector<bool> joueursNonProteger) const;
     short int  choisirJoueur(Carte*, QVector<bool> joueursNonProteger, short int nbCartesRestantes) const;
     void miseAJourCartesPotentiel(QVector<short int> cartesJouer, Joueur* joueurActuel, short int carteJouer, Joueur* autreJoueur = nullptr, short int cartePerdent = 0);

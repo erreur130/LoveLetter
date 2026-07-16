@@ -2,8 +2,10 @@
 
 IATriche::IATriche(QString nom, QVector<Joueur*> listeJoueurs) : Joueur(nom), joueurs(listeJoueurs){}
 
-IATriche::~IATriche(){
+IATriche::~IATriche(){}
 
+void IATriche::reinitialiser(){
+    Joueur::reinitialiser();
 }
 
 Carte* IATriche::choisirCarte(short int nbCartesRestantes, QVector<bool>) const{
@@ -34,7 +36,7 @@ Carte* IATriche::choisirCarte(short int nbCartesRestantes, QVector<bool>) const{
     if (main.at(0)->avoirNum() == 1 || main.at(1)->avoirNum() == 1){
         bool possible = false;
         for (Joueur* joueur : joueurs){
-            if (not(joueur->estPorteger()) && not(joueur != this)){ // Si non protéger et que ce n'est pas nous
+            if ((joueur->estEnVie() && not(joueur->estPorteger())) && joueur != this){ // Si non protéger et que ce n'est pas nous
                 possible = true;
                 break; // pas besoin de continuer
             }
@@ -46,28 +48,22 @@ Carte* IATriche::choisirCarte(short int nbCartesRestantes, QVector<bool>) const{
     }
 
     // si baron (num 3) et que tu as une plus grosse carte qu'un joueur non protégé
-    if (main.at(1)->avoirNum() == 3)
+    if(main.at(0)->avoirNum() == 3 || main.at(1)->avoirNum() == 3){
+        short int idAutreCarte = (main.at(0)->avoirNum()==3)?1:0; // pour connaitre l'autre carte que l'on a
         for (Joueur* joueur : joueurs)
-            if (not(joueur->estPorteger()) && main.at(0) > joueur->avoirMain().at(0)) // Si non protéger et en desous de notre carte
-                return main.at(1);
-    if (main.at(0)->avoirNum() == 3)
-        for (Joueur* joueur : joueurs)
-            if (not(joueur->estPorteger()) && main.at(1) > joueur->avoirMain().at(0)) // Si non protéger et en desous de notre carte
-                return main.at(0);
+            if (joueur != this && ( (joueur->estEnVie() && not(joueur->estPorteger())) && main.at(idAutreCarte)->avoirNum() > joueur->avoirMain().at(0)->avoirNum() )) // Si non protéger et en desous de notre carte
+                return main.at(1-idAutreCarte); // on joue le baron
+        // Si le baron n'est pas rentable on vérifie :
+        if (main.at(idAutreCarte)->avoirNum() < 7)
+            return main.at(idAutreCarte); // Si l'autre carte est < 7, c'est plus rentable de la jouer
+    }
 
     // si prince (num 5) et que quelqu'un à la princesse (num 9) et n'est pas protégé alors on le joue (et pas nous)
     if (main.at(1)->avoirNum() == 5 || main.at(0)->avoirNum() == 5){
-        bool onConnaisUn9 = false;
-        for (Joueur* joueur : joueurs){
-            if (joueur->avoirMain().at(0)->avoirNum() == 9 && (not(joueur->estPorteger()) && joueur != this)){ // Si la liste contient la princesse (num 9) et qu'on peut le viser
-                onConnaisUn9 = true;
-                break; // pas besoin de continuer
-            }
-        }
-        if (onConnaisUn9 && main.at(0)->avoirNum() == 5)
-            return main.at(0);
-        else if (onConnaisUn9 && main.at(1)->avoirNum() == 5)
-            return main.at(1);
+        short int idCartePrince = (main.at(0)->avoirNum()==5)?0:1; // pour savoir où est le prince dans la main
+        for (Joueur* joueur : joueurs)
+            if (joueur->avoirMain().at(0)->avoirNum() == 9 && ((joueur->estEnVie() && not(joueur->estPorteger())) && joueur != this)) // Si la liste contient la princesse (num 9) et qu'on peut le viser
+                return main.at(idCartePrince);
     }
 
     // si prince (num 5) et que on as une carte connue alors on joue le prince (si c'est une grosse carte et que l'ont est à la fin, on la garde)
@@ -83,10 +79,11 @@ Carte* IATriche::choisirCarte(short int nbCartesRestantes, QVector<bool>) const{
     else if (main.at(1)->avoirNum() == 0)
         return main.at(1);
 
-    // si servante (num 4) et que tu as une grosse carte connue alors on joue la servante
-    if (main.at(1)->avoirNum() == 4 && (estDecouvert() && main.at(0)->avoirNum() >= 7) ){
+    // si servante (num 4)
+    if (main.at(0)->avoirNum() == 4)
+        return main.at(0);
+    else if (main.at(1)->avoirNum() == 4)
         return main.at(1);
-    }
 
     // si 1ère carte est connue par quelqu'un (si c'est une grosse carte et que l'ont est à la fin, on la garde)
     if (estDecouvert() && (main.at(0)->avoirNum() <= 6 && nbCartesRestantes > joueurs.size())){
@@ -107,7 +104,8 @@ Carte* IATriche::choisirCarte(short int nbCartesRestantes, QVector<bool>) const{
     else if (main.at(1)->avoirNum() == 2)
         return main.at(1);
 
-    return main.at(0); // au cas où
+    qDebug() << "IA ne sait pas quoi jouer ! : " << QString::number(main.at(0)->avoirNum()) << " - " << QString::number(main.at(1)->avoirNum());
+    return main.at(QRandomGenerator::global()->bounded(2)); // on prend 0 ou 1 // au cas où
 }
 
 short int IATriche::choisirJoueur(Carte* carte, QVector<bool> joueursNonProteger, short int nbCartesRestantes) const{

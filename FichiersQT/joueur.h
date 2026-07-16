@@ -37,7 +37,7 @@ public:
     inline void ajouterDecouvert() {aDecouvert=true;};
     inline void retirerDecouvert() {aDecouvert=false;};
     inline void changerID(short int id_) {id = id_;};
-    void reinitialiser();
+    virtual void reinitialiser();
     inline void retirerPoints() {points = 0;};
     inline void eliminer() {enVie=false;};
     inline void ajouterCarte(Carte* carte) {main.append(carte);};

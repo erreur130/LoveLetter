@@ -8,6 +8,7 @@ class Humain : public Joueur{
 public:
     Humain(QString);
     ~Humain();
+    void reinitialiser();
     void afficheCartes() const; // juste dans QDebug()
     Carte* choisirCarte(short int nbCartesRestantes, QVector<bool> joueursNonProteger) const;
     short int  choisirJoueur(Carte*, QVector<bool> joueursNonProteger, short int nbCartesRestantes) const;

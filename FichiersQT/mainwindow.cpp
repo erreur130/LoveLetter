@@ -284,7 +284,7 @@ void MainWindow::recevoirAfficherCarte(Carte* carte){
     image->setAlignment(Qt::AlignCenter);
     layout->addWidget(image);
     // Le bouton
-    QPushButton* bouton = new QPushButton("OK, j'ai vu la carte");
+    QPushButton* bouton = new QPushButton(" OK, j'ai vu la carte ");
     connect(bouton, &QPushButton::clicked, popup, &QDialog::accept);
     layout->addWidget(bouton);
 

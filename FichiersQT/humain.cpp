@@ -4,6 +4,10 @@ Humain::Humain(QString nom) : Joueur(nom) {}
 
 Humain::~Humain() {}
 
+void Humain::reinitialiser(){
+    Joueur::reinitialiser();
+}
+
 void Humain::afficheCartes() const{
     qDebug() << "Main :";
     /*
@@ -21,6 +25,7 @@ short int Humain::choisirJoueur(Carte*, QVector<bool>, short int) const{
 }
 
 void Humain::voirCarteDUnJoueur(Carte*, short int){
+    // lancerTour() s'ocupe d'afficher la carte au joueur qui à fait l'action
 }
 
 short int Humain::choisir1DeNos3Cartes() const{

@@ -5,6 +5,14 @@ IANormale::IANormale(QString nom, short int nbJoueurs) :
 
 IANormale::~IANormale() {}
 
+void IANormale::reinitialiser(){
+    Joueur::reinitialiser();
+    for(short int indice = 0; indice < cartesPotentiellesDesAutres.size(); indice++){
+        cartesPotentiellesDesAutres[indice].clear();
+        cartesConnuesDesAutres[indice].clear();
+    }
+}
+
 Carte* IANormale::choisirCarte(short int nbCartesRestantes, QVector<bool> joueursNonProteger) const{
     // On considère que le joueur viens de pioché, donc il à 2 cartes (1ère carte est l'ancienne et la deuxème est celle pioché)
 
@@ -53,7 +61,7 @@ Carte* IANormale::choisirCarte(short int nbCartesRestantes, QVector<bool> joueur
     if (main.at(0)->avoirNum() == 1 || main.at(1)->avoirNum() == 1){
         bool onConnais = false;
         for (short int indice = 0; indice < cartesConnuesDesAutres.size(); indice++){
-            if (not(cartesConnuesDesAutres[indice].isEmpty()) && joueursNonProteger[indice]){ // Si la liste contient quelque chause et qu'on peut le viser
+            if (not(cartesConnuesDesAutres[indice].isEmpty()) && joueursNonProteger[indice]){ // Si la liste contient quelque chause et qu'on peut le viser (soie même aura isEmpty() == true)
                 onConnais = true;
                 break; // pas besoin de continuer
             }
@@ -83,6 +91,9 @@ Carte* IANormale::choisirCarte(short int nbCartesRestantes, QVector<bool> joueur
                     return main.at(1-idAutreCarte); // par défaut on peut jouer la baron
             }
         }
+        // Si le baron n'est pas rentable on vérifie :
+        if (main.at(idAutreCarte)->avoirNum() < 7)
+            return main.at(idAutreCarte); // Si l'autre carte est < 7, c'est plus rentable de la jouer
     }
 
     // si prince (num 5) et que l'on connais (sûr) que quelqu'un à la princesse (num 9) alors on le joue
@@ -114,6 +125,12 @@ Carte* IANormale::choisirCarte(short int nbCartesRestantes, QVector<bool> joueur
     else if (main.at(1)->avoirNum() == 2)
         return main.at(1);
 
+    // si servante (num 4)
+    if (main.at(0)->avoirNum() == 4)
+        return main.at(0);
+    else if (main.at(1)->avoirNum() == 4)
+        return main.at(1);
+
     // cas non prioritaires : -----------
 
     // si garde (num 1) ici, c'est un tir au pif (avec les supositions)
@@ -122,7 +139,8 @@ Carte* IANormale::choisirCarte(short int nbCartesRestantes, QVector<bool> joueur
     else if (main.at(1)->avoirNum() == 1)
         return main.at(1);
 
-    return main.at(0); // au cas où
+    qDebug() << "IA ne sait pas quoi jouer ! : " << QString::number(main.at(0)->avoirNum()) << " - " << QString::number(main.at(1)->avoirNum());
+    return main.at(QRandomGenerator::global()->bounded(2)); // on prend 0 ou 1 // au cas où
 }
 
 short int  IANormale::choisirJoueur(Carte* carte, QVector<bool> joueursNonProteger, short int nbCartesRestantes) const{
@@ -132,6 +150,7 @@ short int  IANormale::choisirJoueur(Carte* carte, QVector<bool> joueursNonProteg
 
     switch (numCarte) {
         case 1: // si garde (num 1)
+            qDebug() << "Liste les cartes de supositions forte : " << cartesConnuesDesAutres;
             // Regarde les certitudes
             for (short int indice = 0; indice < cartesConnuesDesAutres.size(); indice++) // si non vide et qu'il ne contient pas seullement une garde
                 if (joueursNonProteger.at(indice) && (not(cartesConnuesDesAutres.at(indice).isEmpty()) && not(cartesConnuesDesAutres.at(indice).size() == 1 && cartesConnuesDesAutres.at(indice).at(0) == 1)))
@@ -249,7 +268,7 @@ void IANormale::miseAJourCartesPotentiel(QVector<short int> cartesJouer, Joueur*
         case 9: // Il est déjà mort si il fait ça
             // listeCartePotentielDuJoueur reste vide
             break;
-        case 1: // On retire directement la suposition en question sur la personne, si -1 ça ne fera rien
+        case 1: // On retire directement la suposition en question sur la personne, si autreJoueur == nullptr ça ne fera rien
             if (autreJoueur != nullptr){ // si on à pue choisir le joueur
                 cartesConnuesDesAutres[autreJoueur->avoirID()].removeOne(cartePerdent); // Ici cartePerdent correspond à la carte suposé
                 cartesPotentiellesDesAutres[autreJoueur->avoirID()].removeOne(cartePerdent); // Ici cartePerdent correspond à la carte suposé
