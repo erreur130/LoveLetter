@@ -10,7 +10,7 @@ Carte* IANormale::choisirCarte(short int nbCartesRestantes, QVector<bool> joueur
 
     // cas obligatoires ---------------------------------------------------------------------------------- cas obligatoires
     QVector<Carte *> main = avoirMain();
-    if (main.at(0) == main.at(1)) // cas où les deux cartes sont les mêmes
+    if ((main.at(0)->avoirNum() == main.at(1)->avoirNum())) // cas où les deux cartes sont les mêmes
         return main.at(0);
 
     // si princesse (num 9) alors on joue l'autre carte
@@ -65,12 +65,24 @@ Carte* IANormale::choisirCarte(short int nbCartesRestantes, QVector<bool> joueur
     }
 
     // si baron (num 3) et que tu as une grosse carte (num 6 que au début) alors on joue le barron
-    if (main.at(1)->avoirNum() == 3 && main.at(0)->avoirNum() >= 6){
-        if (main.at(0)->avoirNum() > 6 || /*num 6 que si ->*/ nbCartesRestantes > 21/2)
-            return main.at(1);
-    } else if(main.at(0)->avoirNum() == 3 && main.at(1)->avoirNum() >= 6){
-        if (main.at(1)->avoirNum() > 6 || /*num 6 que si ->*/ nbCartesRestantes > 21/2)
-            return main.at(0);
+    if(main.at(0)->avoirNum() == 3 || main.at(1)->avoirNum() == 3){
+        short int idAutreCarte = (main.at(0)->avoirNum()==3)?1:0; // pour connaitre l'autre carte que l'on a
+        bool rentableSiCarteInconnues = (main.at(idAutreCarte)->avoirNum() >= 6 && (main.at(idAutreCarte)->avoirNum() > 6 || /*num 6 que si ->*/ nbCartesRestantes > 21/2));
+        for (short int indice = 0; indice < cartesConnuesDesAutres.size(); indice++){
+            if (joueursNonProteger.at(indice) && indice != avoirID()){
+                // Cherche le max connu
+                short int maxi = -1;
+                for (short int val : cartesConnuesDesAutres[indice])
+                    if (val > maxi)
+                        maxi = val;
+                // Si on sait qu'on est plus grand que quelqu'un
+                if (maxi != -1 && main.at(idAutreCarte)->avoirNum() > maxi)
+                    return main.at(1-idAutreCarte); // alors on joue le baron
+                // si vide alors on regarde si on pourrais être rentable sur l'action
+                if (maxi == -1 && rentableSiCarteInconnues)
+                    return main.at(1-idAutreCarte); // par défaut on peut jouer la baron
+            }
+        }
     }
 
     // si prince (num 5) et que l'on connais (sûr) que quelqu'un à la princesse (num 9) alors on le joue

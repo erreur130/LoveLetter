@@ -12,7 +12,7 @@ Carte* IANul::choisirCarte(short int, QVector<bool>) const{
 
     // cas obligatoires
     QVector<Carte *> main = avoirMain();
-    if (main.at(0) == main.at(1)) // cas où les deux cartes sont les mêmes
+    if ((main.at(0)->avoirNum() == main.at(1)->avoirNum())) // cas où les deux cartes sont les mêmes
         return main.at(0);
 
     // si princesse (num 9) alors on joue l'autre carte

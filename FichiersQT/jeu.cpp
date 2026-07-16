@@ -150,6 +150,12 @@ void Jeu::lancerManche(){
 }
 
 void Jeu::lancerTour(){
+    // vérifie si quelqu'un est mort au dernier tour il faut dire au paquet que sa carte est vue (visible)
+    if (not(joueurActuel->estEnVie())) // joueurActuel est mort
+        pioche.carteAEtaitJouer(joueurActuel->avoirMain()[0]->avoirNum());
+    else if (joueurCible != nullptr && not(joueurCible->estEnVie())) // joueurCible est mort
+        pioche.carteAEtaitJouer(joueurCible->avoirMain()[0]->avoirNum());
+
     if (tourSuivant()){ // Si on peut continuer
 
         joueurActuel->retirerProtection(); // On retire sa protection (servante ne protège qu'un seul tour)
@@ -223,12 +229,6 @@ void Jeu::lancerTour(){
                     miseAJourCartesPotentiel(); // met à jour les connaisances des IA
             }
 
-            // vérifie si quelqu'un est mort il faut dire au paquet que sa carte est vue (visible)
-            if (not(joueurActuel->estEnVie())) // joueurActuel est mort
-                pioche.carteAEtaitJouer(joueurActuel->avoirMain()[0]->avoirNum());
-            else if (joueurCible != nullptr && not(joueurCible->estEnVie())) // joueurCible est mort
-                pioche.carteAEtaitJouer(joueurCible->avoirMain()[0]->avoirNum());
-
             // Vérification de l'invariant : tout joueur vivant doit avoir exactement 1 carte -----------------------------------------------------------------------------
             for (Joueur* joueur : joueurs){
                 if (joueur->estEnVie()){
@@ -242,10 +242,8 @@ void Jeu::lancerTour(){
             QTimer::singleShot(0, this, &Jeu::lancerTour); // de façon asynchrone // permet de continuer la partie // permet de continuer pour le tour d'une IA
         }
     } else {
-        if (pioche.avoirNbCartesRestantes() <= 0)
-            finDeManche(true);
-        else
-            finDeManche(false);
+        emit miseAJourCartesJouees(pioche.avoirCartesJouer());
+        finDeManche(pioche.avoirNbCartesRestantes() <= 0);
     }
 }
 
@@ -377,10 +375,6 @@ void Jeu::recevoirChoixValeurGarde(short int valeur){
     emit messageLog(joueurActuel->jouerCarte(carteEnCourDeJeux /*num 1*/, joueurCible, pioche[valeur]));
     miseAJourCartesPotentiel(pioche[valeur]); // met à jour les connaisances des IA
 
-    // vérifie si quelqu'un est mort il faut dire au paquet que sa carte est vue
-    if (not(joueurCible->estEnVie())) // joueurCible est mort
-        pioche.carteAEtaitJouer(joueurCible->avoirMain()[0]->avoirNum());
-
     // Vérification de l'invariant : tout joueur vivant doit avoir exactement 1 carte -----------------------------------------------------------------------------
     for (Joueur* joueur : joueurs){
         if (joueur->estEnVie()){
@@ -410,12 +404,6 @@ void Jeu::recevoirChoixCibleJoueur(short int joueur){
                 emit afficherCarte(joueurCible->avoirMain()[0]);
             else if (carteEnCourDeJeux->avoirNum() == 7) // si Roi (num 7) on affiche la carte que l'on a récupéré
                 emit afficherCarte(joueurActuel->avoirMain()[0]);
-
-            // vérifie si quelqu'un est mort il faut dire au paquet que sa carte est vue
-            if (not(joueurActuel->estEnVie())) // joueurActuel est mort
-                pioche.carteAEtaitJouer(joueurActuel->avoirMain()[0]->avoirNum());
-            else if (not(joueurCible->estEnVie())) // joueurCible est mort
-                pioche.carteAEtaitJouer(joueurCible->avoirMain()[0]->avoirNum());
 
             // Vérification de l'invariant : tout joueur vivant doit avoir exactement 1 carte -----------------------------------------------------------------------------
             for (Joueur* joueur : joueurs){

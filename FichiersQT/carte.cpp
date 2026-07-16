@@ -121,12 +121,16 @@ QString Carte6::action(Joueur* joueur1, Joueur*, Carte*) const{
 
         // il choisis la quelle gardé
         short int carteAGarder = joueur1->choisir1DeNos3Cartes();
-        if (carteAGarder == -1) // cas du joueur = Humain
+        if (carteAGarder == -1){ // cas du joueur = Humain
             emit choixCarteAGarder(joueur1);
+            qDebug() << "joueur à le choix";
+        }
         else {
             suiteAction6(joueur1, carteAGarder, false);
         }
-    }
+    } else // Si on ne peut pas faire l'action, on continue
+        QTimer::singleShot(0, this, [this](){ emit continuer(); }); // fonction lambda pour que le singleShot fonctionne et se fait après le return
+
     return " à jouer le chancelier [6].";
 }
 
