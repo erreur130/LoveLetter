@@ -49,7 +49,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
 
     // On cache les Wigets inutiles au début
-    ui->listeCarteChoixGarde->setVisible(false);
     ui->listeCarteMain->setVisible(false);
     ui->listeJoueursCible->setVisible(false);
     ui->listeCarteAGarder->setVisible(false);
@@ -128,17 +127,68 @@ void MainWindow::recevoirReinitialiserLog(){
 }
 
 void MainWindow::recevoirDemanderChoixValeurGarde(QVector<Carte*> cartes, QVector<short int> cartesJouer){
-    ui->listeCarteChoixGarde->setVisible(true);
     ui->labelInfoActionJoueur->setVisible(true);
     ui->labelInfoActionJoueur->setText("Choisissez une carte pour l'action du grade :");
 
-    ui->listeCarteChoixGarde->clear();
+    // Nettoyage du layout
+    QLayoutItem *child;
+    while ((child = ui->listeCarteChoixGarde->takeAt(0)) != nullptr) {
+        child->widget()->deleteLater();
+        delete child;
+    }
+
+
+
+    int nbColonnes = 0; // le nombre max de cartes par ligne
+    for (short int indice = 0; indice < cartes.size(); indice++) // on compte cb de carte sera afficher
+        if (cartes.at(indice)->avoirNbExemplaires() > cartesJouer.at(indice) && indice != 1)
+            nbColonnes++;
+    nbColonnes = nbColonnes/2 + nbColonnes%2; // on calcule pour faire deux lignes (si impaire la première ligne sera plus remplis)
+
+    double diviseur = 1.75;
+    int ligne = 0;
+    int colonne = 0;
+    // On rajoute toutes les cartes possibles
     for (short int indice = 0; indice < cartes.size(); indice++){
         if (cartes.at(indice)->avoirNbExemplaires() > cartesJouer.at(indice) && indice != 1){ // si la carte est possible à demander
-            QListWidgetItem* carteItem = new QListWidgetItem(ui->listeCarteChoixGarde);
-            carteItem->setIcon(QIcon(cartes[indice]->avoirImage()));
-            carteItem->setData(Qt::UserRole, cartes[indice]->avoirNum());
+            // Création du bouton avec l'image de la carte
+            QPushButton *btnCarte = new QPushButton();
+            btnCarte->setIcon(QIcon(cartes[indice]->avoirImage()));
+
+            btnCarte->setIconSize(QSize(200/diviseur, 285/diviseur)); //  taille de l'icône
+            btnCarte->setFixedSize(210/diviseur, 290/diviseur); // Taille du boutton
+
+            // équivalent de item->data(Qt::UserRole) mais ici la fonction se crée individuellement pour chaque immages
+            connect(btnCarte, &QPushButton::clicked, this, [=]() {
+                ui->labelInfoActionJoueur->setVisible(true);
+
+                // Nettoyage du layout
+                QLayoutItem *child;
+                while ((child = ui->listeCarteChoixGarde->takeAt(0)) != nullptr) {
+                    child->widget()->deleteLater();
+                    delete child;
+                }
+
+                emit envoyerChoixValeurGarde(indice); // puis on donne le numéro de la carte
+            });
+
+            // Ajout au QGridLayout
+            ui->listeCarteChoixGarde->addWidget(btnCarte, ligne, colonne);
+
+            // calcule de l'emplacement du prochain boutton
+            colonne++;
+            if (colonne >= nbColonnes) {
+                colonne = 0;
+                ligne++;
+            }
         }
+    }
+    // On réorganise le placement des bouttons
+
+
+    if (ui->listeCarteChoixGarde->count() == 0){ // si vide, on ne peut pas choisir
+        ui->labelInfoActionJoueur->setVisible(false);
+        emit envoyerChoixValeurGarde(-1); // Pour signaler que c'est impossible
     }
 }
 
@@ -294,13 +344,6 @@ void MainWindow::recevoirAfficherCarte(Carte* carte){
 }
 
 // ---------------------------- ui -------------------------------------
-
-void MainWindow::on_listeCarteChoixGarde_itemClicked(QListWidgetItem *item){
-    ui->listeCarteChoixGarde->setVisible(false);
-    ui->labelInfoActionJoueur->setVisible(false);
-
-    emit envoyerChoixValeurGarde(item->data(Qt::UserRole).toInt());
-}
 
 
 void MainWindow::on_listeJoueursCible_itemClicked(QListWidgetItem *item){

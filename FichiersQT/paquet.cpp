@@ -25,6 +25,14 @@ Paquet::~Paquet() {
     qDebug() << "fin boucle ~Paquet";
 }
 
+Carte* Paquet::operator[](short int indice) const {
+    if (indice >= 0 && indice < listeDesCartes.size()) { // Si dans le tableau
+        return listeDesCartes[indice];
+    }
+    // sinon on dit inconnue sans planter
+    return nullptr;
+}
+
 Carte* Paquet::piocher(){
     return cartes.dequeue();
 }

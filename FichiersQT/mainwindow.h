@@ -33,7 +33,6 @@ class MainWindow : public QMainWindow{
         void on_actionListe_des_cartes_triggered();
         void on_actionProjet_triggered();
         void recevoirJoueur(short int h, short int inul, short int inorm, short int itri);
-        void on_listeCarteChoixGarde_itemClicked(QListWidgetItem *item);
         void on_listeJoueursCible_itemClicked(QListWidgetItem *item);
         void on_listeCarteMain_itemClicked(QListWidgetItem *item);
         void on_listeCarteAGarder_itemClicked(QListWidgetItem *item);

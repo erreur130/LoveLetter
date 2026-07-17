@@ -18,7 +18,7 @@ public:
     inline void carteAEtaitJouer(short int indice){cartesJouer[indice]++; /*qDebug() << "VUE carte :" + QString::number(indice);*/};
     inline QVector<short int> avoirCartesJouer() {return cartesJouer;};
     inline QVector<Carte*> avoirListeDesCartes() const {return listeDesCartes;};
-    inline Carte* operator[](short int indice) const {return listeDesCartes[indice];};
+    Carte* operator[](short int indice) const;
     Carte* piocher();
     void defausser(Carte*);
     void remplir();

@@ -478,15 +478,12 @@ short int IANormale::demanderCarteAJoueur(Joueur* joueur, QVector<short int> car
     // On fait au "pif", on regarde pour toutes les cartes de 0 à 9 sauf le 1 car on peut pas le demander
     QVector<short int> listeCartePotentielDuJoueur;
     for (short int indiceCarte = 0; indiceCarte < cartesJouer.size(); indiceCarte++){ // pour chaque cartes
-        if (indiceCarte != 1 && carteEstPossible(indiceCarte, ((indiceCarte == 1) ? 6 : (indiceCarte > 6) ? 1 : 2) , cartesJouer[indiceCarte]))
+        if (indiceCarte != 1 && carteEstPossible(indiceCarte, (indiceCarte > 6) ? 1 : 2 , cartesJouer[indiceCarte]))
             listeCartePotentielDuJoueur.push_back(indiceCarte);
     }
-
     // On prend aléatoirement dans la liste des cartes plausibles
-    while (val == 1){
-        val = listeCartePotentielDuJoueur[QRandomGenerator::global()->bounded(listeCartePotentielDuJoueur.size())];
-        if (val != 1) // Si il choisit le garde, c'est impossible
-            return val;
-    }
-    return val; // par défaut mais cas impossible
+    if (not(listeCartePotentielDuJoueur.isEmpty()))
+        return listeCartePotentielDuJoueur[QRandomGenerator::global()->bounded(listeCartePotentielDuJoueur.size())];
+    // sinon cela veut dire qu'il n'y a que des gardes, donc impossible de choisir
+    return -1;
 }

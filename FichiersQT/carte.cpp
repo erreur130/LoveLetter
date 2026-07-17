@@ -29,14 +29,16 @@ Carte1::Carte1(short int nbExemplaires_, short int num_, QString nom_, QString i
 Carte1::~Carte1() {}
 
 QString Carte1::action(Joueur* joueur1, Joueur*, Carte* carte) const {
-    QString message = " à jouer un garde [1] contre " + joueur1->avoirNom() + " et pense que sa carte est : " + carte->avoirNom() + " [" + QString::number(carte->avoirNum()) + "]";
-
-    // On verifie si il à bien deviné
-    if (carte->avoirNum() == joueur1->avoirMain().at(0)->avoirNum()){
-        joueur1->eliminer();
-        return message + "\n↳ Ce qui est vrais ! " + joueur1->avoirNom() + " Eliminé !";
-    }
-    return message + "\n↳ Ce qui est faux ...";
+    if (carte != nullptr){ // si on à pue choisir une carte
+        QString message = " à jouer un garde [1] contre " + joueur1->avoirNom() + " et pense que sa carte est : " + carte->avoirNom() + " [" + QString::number(carte->avoirNum()) + "]";
+        // On verifie si il à bien deviné
+        if (carte->avoirNum() == joueur1->avoirMain().at(0)->avoirNum()){
+            joueur1->eliminer();
+            return message + "\n↳ Ce qui est vrais ! " + joueur1->avoirNom() + " Eliminé !";
+        }
+        return message + "\n↳ Ce qui est faux ...";
+    } // sinon on dit que c'est impossible
+    return " à jouer un garde [1] mais aucune cartes ne peut être choisie !";
 }
 
 // ---------------------------- num 2 ----------------------------
