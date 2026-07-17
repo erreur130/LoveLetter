@@ -145,7 +145,7 @@ void MainWindow::recevoirDemanderChoixValeurGarde(QVector<Carte*> cartes, QVecto
             nbColonnes++;
     nbColonnes = nbColonnes/2 + nbColonnes%2; // on calcule pour faire deux lignes (si impaire la première ligne sera plus remplis)
 
-    double diviseur = 1.75;
+    double diviseur = 1.75; // pour ajouster la taille des cartes
     int ligne = 0;
     int colonne = 0;
     // On rajoute toutes les cartes possibles
