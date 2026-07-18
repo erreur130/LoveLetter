@@ -35,6 +35,7 @@ class Jeu : public QObject {
         void lancerManche();
         void lancerTour();
         void finDeManche(bool finDuPaquet);
+        void changerNomsJoueurs();
     signals: // Jeu -> MainWindow
         void messageLog(QString);
         void reinitialiserLog(); // à chaque manche
@@ -49,11 +50,13 @@ class Jeu : public QObject {
         void miseAJourCartesJouees(QVector<short int>);
         void miseAJourNbCartesRestantes(short int);
         void afficherCarte(Carte*);
+        void demanderChangementNom(short int, QString);
     public slots: // MainWindow -> Jeu
         void recevoirChoixCarte(short int idCarte);
         void recevoirChoixValeurGarde(short int valeur);
         void recevoirChoixCibleJoueur(short int joueur);
         void rejouer();
+        void recevoirChangementNom(short int, QString);
         // Carte6 -> Jeu
         void recevoirContinuer();
 

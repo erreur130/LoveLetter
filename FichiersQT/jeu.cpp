@@ -306,6 +306,10 @@ void Jeu::finDeManche(bool finDuPaquet){
     }
 }
 
+void Jeu::changerNomsJoueurs(){
+    emit demanderChangementNom(0, joueurs[0]->avoirNom());
+}
+
 // ---------------------------slots------------------------------------------- MainWindow -> Jeu
 
 void Jeu::recevoirChoixCarte(short int idCarte){
@@ -452,4 +456,11 @@ void Jeu::recevoirContinuer(){
         }
     }
     QTimer::singleShot(0, this, &Jeu::lancerTour); // de façon asynchrone // permet de continuer la partie
+}
+
+void Jeu::recevoirChangementNom(short int idJoueur, QString nom){
+    joueurs[idJoueur]->changerNom(nom);
+
+    if (idJoueur + 1 < joueurs.size())
+        emit demanderChangementNom(idJoueur + 1, joueurs[idJoueur + 1]->avoirNom());
 }

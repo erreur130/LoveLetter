@@ -5,6 +5,7 @@
 #include "ui_InfoProjet.h"
 #include "ui_affichageRegles.h"
 #include "nbjoueurswindow.h"
+#include "choixnomjoueur.h"
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), jeu(nullptr), joueursCible(QVector<QString>()), AFermer(false){
     ui->setupUi(this);
@@ -35,11 +36,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(jeu, &Jeu::miseAJourCartesJouees, this, &MainWindow::recevoirMiseAJourCartesJouees);
     connect(jeu, &Jeu::miseAJourNbCartesRestantes, this, &MainWindow::recevoirMiseAJourNbCartesRestantes);
     connect(jeu, &Jeu::afficherCarte, this, &MainWindow::recevoirAfficherCarte);
+    connect(jeu, &Jeu::demanderChangementNom, this, &MainWindow::recevoirDemanderChangementNom);
     // connection à tout les signals/slots MainWindow -> Jeu
     connect(this, &MainWindow::envoyerChoixCarte, jeu, &Jeu::recevoirChoixCarte);
     connect(this, &MainWindow::envoyerChoixValeurGarde, jeu, &Jeu::recevoirChoixValeurGarde);
     connect(this, &MainWindow::envoyerChoixCibleJoueur, jeu, &Jeu::recevoirChoixCibleJoueur);
     connect(this, &MainWindow::rejouer, jeu, &Jeu::rejouer);
+    connect(this, &MainWindow::changementNom, jeu, &Jeu::recevoirChangementNom);
     // connection à tout les signals/slots MainWindow -> Carte6 et Carte6 -> MainWindow
     connect(this, &MainWindow::envoyerSuiteAction6, dynamic_cast<Carte6*>(jeu->avoirPaquet()[6]), &Carte6::suiteAction6);
     connect(dynamic_cast<Carte6*>(jeu->avoirPaquet()[6]), &Carte6::choixCarteAGarder, this, &MainWindow::recevoirChoixCarteAGarder);
@@ -53,6 +56,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->listeJoueursCible->setVisible(false);
     ui->listeCarteAGarder->setVisible(false);
     ui->labelInfoActionJoueur->setVisible(false);
+
+    // On demande le nom des joueurs
+    if (not(AFermer)) // si on ne doit pas avotré le jeu
+        jeu->changerNomsJoueurs();
 }
 
 MainWindow::~MainWindow(){
@@ -341,6 +348,18 @@ void MainWindow::recevoirAfficherCarte(Carte* carte){
     popup->setLayout(layout);
     popup->exec(); // bloquant
     delete popup;
+}
+
+void MainWindow::recevoirDemanderChangementNom(short int idJoueur, QString nom){
+    ChoixNomJoueur *fenetre = new ChoixNomJoueur(this, idJoueur, nom);
+    connect(fenetre, SIGNAL(envoyerNom(short int, QString)), this, SLOT(recevoirNom(short int, QString)));
+    fenetre->setFixedSize(fenetre->size());  // taille fixe basée sur la taille
+    fenetre->setWindowTitle("Choix du nom de Joueur");
+    fenetre->exec(); // bloque la fenetre
+}
+
+void MainWindow::recevoirNom(short int idJoueur, QString nom){
+    emit changementNom(idJoueur, nom);
 }
 
 // ---------------------------- ui -------------------------------------

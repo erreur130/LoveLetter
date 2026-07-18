@@ -26,6 +26,7 @@ public:
     inline bool estDecouvert() const {return aDecouvert;};
     inline const QVector<Carte*>& avoirMain() const {return main;};
     inline const QString& avoirNom() const {return nom;};
+    inline void changerNom(QString nom_) {nom = nom_;};
     inline short int avoirPoints() const {return points;};
     inline short int avoirID() const {return id;};
     inline bool avoirPointBonus() const {return pointBonusManche;};

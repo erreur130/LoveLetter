@@ -33,16 +33,17 @@ class MainWindow : public QMainWindow{
         void on_actionListe_des_cartes_triggered();
         void on_actionProjet_triggered();
         void recevoirJoueur(short int h, short int inul, short int inorm, short int itri);
+        void recevoirNom(short int idJoueur, QString nom);
         void on_listeJoueursCible_itemClicked(QListWidgetItem *item);
         void on_listeCarteMain_itemClicked(QListWidgetItem *item);
         void on_listeCarteAGarder_itemClicked(QListWidgetItem *item);
-
     signals:
         void envoyerSuiteAction6(Joueur*, short int carteAGarder, bool faireContinuer);
         void envoyerChoixCarte(short int idCarte);
         void envoyerChoixValeurGarde(short int valeur);
         void envoyerChoixCibleJoueur(short int joueur);
         void rejouer();
+        void changementNom(short int, QString);
     public slots:
         void recevoirChoixCarteAGarder(Joueur* joueurARenvoyer);
         void recevoirMessageLog(QString);
@@ -58,6 +59,7 @@ class MainWindow : public QMainWindow{
         void recevoirMiseAJourCartesJouees(QVector<short int>);
         void recevoirMiseAJourNbCartesRestantes(short int);
         void recevoirAfficherCarte(Carte*);
+        void recevoirDemanderChangementNom(short int, QString);
 
 };
 #endif // MAINWINDOW_H

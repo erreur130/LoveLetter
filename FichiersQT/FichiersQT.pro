@@ -8,6 +8,7 @@ CONFIG += c++17
 
 SOURCES += \
     carte.cpp \
+    choixnomjoueur.cpp \
     humain.cpp \
     ianormale.cpp \
     ianul.cpp \
@@ -21,6 +22,7 @@ SOURCES += \
 
 HEADERS += \
     carte.h \
+    choixnomjoueur.h \
     humain.h \
     ianormale.h \
     ianul.h \
@@ -35,6 +37,7 @@ FORMS += \
     InfoProjet.ui \
     affichageRegles.ui \
     affichageactionscartes.ui \
+    choixnomjoueur.ui \
     mainwindow.ui \
     nbjoueurswindow.ui
 
