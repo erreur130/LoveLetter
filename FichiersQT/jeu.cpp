@@ -2,43 +2,32 @@
 #include <QDebug>
 
 Jeu::Jeu(QObject* parent)
-    :QObject(parent), objectifPoints(0), joueurs(QVector<Joueur*>()), joueurActuel(nullptr), joueurCible(nullptr), carteEnCourDeJeux(nullptr), pioche(Paquet())
+    :QObject(parent), objectifPoints(0), joueurs(new QVector<Joueur*>()), joueurActuel(nullptr), joueurCible(nullptr), carteEnCourDeJeux(nullptr), pioche(Paquet()), nbManches(0)
 {}
 
 Jeu::Jeu(QObject* parent, short int h, short int inul, short int inorm, short int itri)
-    :QObject(parent), objectifPoints(0), joueurs(QVector<Joueur*>()), joueurActuel(nullptr), joueurCible(nullptr), carteEnCourDeJeux(nullptr), pioche(Paquet()){
+    :QObject(parent), objectifPoints(0), joueurs(new QVector<Joueur*>()), joueurActuel(nullptr), joueurCible(nullptr), carteEnCourDeJeux(nullptr), pioche(Paquet()), nbManches(0){
     // création des différent type ce joueurs
     for (short int indice = 0; indice < h; indice++)
-        joueurs.push_back(new Humain(QString("Joueur_") + QString::number(indice + 1)));
+        joueurs->push_back(new Humain(QString("Joueur_") + QString::number(indice + 1)));
     for (short int indice = 0; indice < inul; indice++)
-        joueurs.push_back(new IANul(QString("IAnul_") + QString::number(indice + 1), h+inul+inorm+itri));
+        joueurs->push_back(new IANul(QString("IAnul_") + QString::number(indice + 1), h+inul+inorm+itri));
     for (short int indice = 0; indice < inorm; indice++)
-        joueurs.push_back(new IANormale(QString("IAnormale_") + QString::number(indice + 1), h+inul+inorm+itri));
+        joueurs->push_back(new IANormale(QString("IAnormale_") + QString::number(indice + 1), h+inul+inorm+itri));
     for (short int indice = 0; indice < itri; indice++)
-        joueurs.push_back(new IATriche(QString("IAtriche_") + QString::number(indice + 1), joueurs));
+        joueurs->push_back(new IATriche(QString("IAtriche_") + QString::number(indice + 1), joueurs));
 
     // Détermine le nb de points à faire
-    if (joueurs.size() > 4) // 5,6
+    if (joueurs->size() > 4) // 5,6
         objectifPoints = 3;
-    else if (joueurs.size() == 4)
+    else if (joueurs->size() == 4)
         objectifPoints = 4;
-    else if (joueurs.size() == 3)
+    else if (joueurs->size() == 3)
         objectifPoints = 5;
-    else if (joueurs.size() == 2)
+    else if (joueurs->size() == 2)
         objectifPoints = 6;
 
-    // On mélange l'ordre des joueurs
-    for (short int indice = joueurs.size() - 1; indice > 0; --indice){
-        int nb = QRandomGenerator::global()->bounded(indice + 1);
-        joueurs.swapItemsAt(indice, nb); // échange les cartes entre 2 endroit aléatoire
-    }
-    // On leur donne la bonne id
-    for (short int indice = 0; indice < joueurs.size(); indice++){
-        joueurs[indice]->changerID(indice);
-    }
-
-    joueurActuel = joueurs[0]; // On choisis le premier joueur
-
+    joueurActuel = joueurs->at(0); // On choisis le premier joueur (inutile car modif plus ploins, mais au cas où)
 }
 
 Jeu::~Jeu(){
@@ -46,26 +35,39 @@ Jeu::~Jeu(){
     joueurCible = nullptr;
     carteEnCourDeJeux = nullptr;
 
-    qDebug() << "~Jeu, nb joueurs à détruire :" << joueurs.size();
-    for (short int indice = 0; indice < joueurs.size(); indice++){
+    qDebug() << "~Jeu, nb joueurs à détruire :" << joueurs->size();
+    for (short int indice = 0; indice < joueurs->size(); indice++){
         qDebug() << "delete joueur" << indice;
-        delete joueurs[indice];
+        delete joueurs->at(indice);
+    }
+    delete joueurs;
+}
+
+void Jeu::melangerJoueurs(){
+    // On mélange l'ordre des joueurs
+    for (short int indice = joueurs->size() - 1; indice > 0; --indice){
+        int nb = QRandomGenerator::global()->bounded(indice + 1);
+        joueurs->swapItemsAt(indice, nb); // échange les cartes entre 2 endroit aléatoire
+    }
+    // On leur donne la bonne id
+    for (short int indice = 0; indice < joueurs->size(); indice++){
+        joueurs->at(indice)->changerID(indice);
     }
 }
 
 QVector<Joueur*> Jeu::JoueursRestant() const{
     QVector<Joueur*> result;
-    for (short int indice = 0; indice < joueurs.size(); indice++)
-        if (joueurs[indice]->estEnVie() == true)
-            result.push_back(joueurs[indice]);
+    for (short int indice = 0; indice < joueurs->size(); indice++)
+        if (joueurs->at(indice)->estEnVie() == true)
+            result.push_back(joueurs->at(indice));
     return result;
 }
 
 QVector<Joueur*> Jeu::JoueursChoixPossible() const{
     QVector<Joueur*> result;
-    for (short int indice = 0; indice < joueurs.size(); indice++)
-        if (joueurs[indice]->estEnVie() == true && joueurs[indice]->estPorteger() == false)
-            result.push_back(joueurs[indice]);
+    for (short int indice = 0; indice < joueurs->size(); indice++)
+        if (joueurs->at(indice)->estEnVie() == true && joueurs->at(indice)->estPorteger() == false)
+            result.push_back(joueurs->at(indice));
     return result;
 }
 
@@ -73,16 +75,21 @@ bool Jeu::tourSuivant(){
     joueurCible = nullptr; // On vide les actions dernier tour
     carteEnCourDeJeux = nullptr; // On vide les actions dernier tour
 
+    QVector<bool> joueursMort;
+    for (Joueur* joueur : *joueurs)
+        joueursMort.push_back(not(joueur->estEnVie())); // si il est en vie et pas proteger
+    emit afficherJoueursEliminer(joueursMort); // On remet l'affichage des joueurs à la normale
+
     if (pioche.avoirNbCartesRestantes() > 0){ // si il y a encore des cartes
         if (JoueursRestant().size() > 1){ // si plusieurs joueurs en jeu
             // ici on peut continuer, donc on cherche le joueur suivant:
             // en partant de l'ID actuel + 1, et en sautant les morts
             short int idActuel = joueurActuel->avoirID();
 
-            for (short int i = 1; i <= joueurs.size(); i++){
-                short int idSuivant = (idActuel + i) % joueurs.size(); // indice du suivant
-                if (joueurs[idSuivant]->estEnVie()){ // on vérifie si c'est possible
-                    joueurActuel = joueurs[idSuivant];
+            for (short int i = 1; i <= joueurs->size(); i++){
+                short int idSuivant = (idActuel + i) % joueurs->size(); // indice du suivant
+                if (joueurs->at(idSuivant)->estEnVie()){ // on vérifie si c'est possible
+                    joueurActuel = joueurs->at(idSuivant);
                     return true;
                 }
             }
@@ -102,24 +109,24 @@ void Jeu::miseAJourCartesPotentiel(Carte* cartePerdent){
         numCartePerdent = cartePerdent->avoirNum();
 
     short int indiceActuel = joueurActuel->avoirID();
-    for (short int indice = 0; indice < joueurs.size(); indice++){
-        if (indice != indiceActuel && joueurs[indice]->estEnVie() == true)
-            joueurs[indice]->miseAJourCartesPotentiel(pioche.avoirCartesJouer(), joueurActuel, numCarte, joueurCible, numCartePerdent); // j'aurais pue faire en fonction du type
+    for (short int indice = 0; indice < joueurs->size(); indice++){
+        if (indice != indiceActuel && joueurs->at(indice)->estEnVie() == true)
+            joueurs->at(indice)->miseAJourCartesPotentiel(pioche.avoirCartesJouer(), joueurActuel, numCarte, joueurCible, numCartePerdent); // j'aurais pue faire en fonction du type
     }
 }
 
 QVector<Joueur*> Jeu::verifSiGagnants() const{
     // recherche du max au dessus de objectifPoints
     short int maxi = objectifPoints;
-    for (short int indice = 0; indice < joueurs.size(); indice++)
-        if (joueurs[indice]->avoirPoints() >= objectifPoints)
-            if (joueurs[indice]->avoirPoints() > maxi)
-                maxi = joueurs[indice]->avoirPoints();
+    for (short int indice = 0; indice < joueurs->size(); indice++)
+        if (joueurs->at(indice)->avoirPoints() >= objectifPoints)
+            if (joueurs->at(indice)->avoirPoints() > maxi)
+                maxi = joueurs->at(indice)->avoirPoints();
     // tri au max
     QVector<Joueur*> result;
-    for (short int indice = 0; indice < joueurs.size(); indice++)
-        if (joueurs[indice]->avoirPoints() == maxi)
-            result.push_back(joueurs[indice]);
+    for (short int indice = 0; indice < joueurs->size(); indice++)
+        if (joueurs->at(indice)->avoirPoints() == maxi)
+            result.push_back(joueurs->at(indice));
     return result;
 }
 
@@ -127,13 +134,16 @@ void Jeu::reinitialiserManche(){
     pioche.remplir();
 
     // On remet à 0 l'état des joueurs et on donne 1 carte à tout le monde
-    for (short int indice = 0; indice < joueurs.size(); indice++){
-        Joueur* joueur = joueurs[indice];
+    for (short int indice = 0; indice < joueurs->size(); indice++){
+        Joueur* joueur = joueurs->at(indice);
         joueur->reinitialiser();
         joueur->ajouterCarte(pioche.piocher());
     }
 
-    joueurActuel = joueurs[joueurs.size()-1]; // on remet le premier joueur (toursuivant vas faire revenir à 0)
+    joueurActuel = joueurs->at((joueurs->size()-1 + nbManches)%joueurs->size()); // on remet le premier joueur (toursuivant vas faire revenir à 0) + le joueurs qui suis celui qui avait commancer à la manche d'avant
+
+    nbManches = (nbManches+1)%joueurs->size(); // permet de désigner le prochain joueur
+    // se fait aussi au cours des parties qui suivent (ne revient pas à 0 à chaque partie)
 
     emit reinitialiserLog();
 }
@@ -167,7 +177,7 @@ void Jeu::lancerTour(){
 
         // On fournit les infos nésésaire pour une ia
         QVector<bool> joueursChoix;
-        for (Joueur* joueur : joueurs)
+        for (Joueur* joueur : *joueurs)
             joueursChoix.push_back(not(joueur->estPorteger()) && joueur->estEnVie()); // si il est en vie et pas proteger
 
         Carte* choixCarte = joueurActuel->choisirCarte(pioche.avoirNbCartesRestantes(), joueursChoix);
@@ -203,7 +213,7 @@ void Jeu::lancerTour(){
                         miseAJourCartesPotentiel(); // met à jour les connaisances des IA, version normale
                         break;
                     }
-                    joueurCible = joueurs[cible];
+                    joueurCible = joueurs->at(cible);
                     carteADemander = joueurActuel->demanderCarteAJoueur(joueurCible, pioche.avoirCartesJouer());
                     emit messageLog(joueurActuel->jouerCarte(carteEnCourDeJeux, joueurCible, pioche[carteADemander]));
                     miseAJourCartesPotentiel(pioche[carteADemander]); // il faut la carte demander pour la mise à jour
@@ -217,7 +227,7 @@ void Jeu::lancerTour(){
                     if (cible == -1){ // cas où on ne peut pas choisir de joueur
                         emit messageLog(joueurActuel->avoirNom() + " joue la carte " + carteEnCourDeJeux->avoirNom() + " [" + QString::number(carteEnCourDeJeux->avoirNum()) + "] sur personne.");
                     } else {
-                        joueurCible = joueurs[cible];
+                        joueurCible = joueurs->at(cible);
                         emit messageLog(joueurActuel->jouerCarte(carteEnCourDeJeux, joueurCible));
                     }
                     miseAJourCartesPotentiel(); // met à jour les connaisances des IA, version normale
@@ -230,7 +240,7 @@ void Jeu::lancerTour(){
             }
 
             // Vérification de l'invariant : tout joueur vivant doit avoir exactement 1 carte -----------------------------------------------------------------------------
-            for (Joueur* joueur : joueurs){
+            for (Joueur* joueur : *joueurs){
                 if (joueur->estEnVie()){
                     if (joueur->avoirMain().isEmpty())
                         qDebug() << "BUG : " << joueur->avoirNom() << " est vivant mais n'a pas de carte !";
@@ -252,25 +262,25 @@ void Jeu::finDeManche(bool finDuPaquet){
         emit messageLog("La pioche est vide, on confronte les joueurs en lice :");
         short int numMax = 0;
         // pour ceux qui sont en vie :
-        for (Joueur* joueur : joueurs)
+        for (Joueur* joueur : *joueurs)
             if (joueur->estEnVie()){ // si plus grand on le note + affichage de la personne
                 emit messageLog(joueur->avoirNom() + " à la carte " + joueur->avoirMain()[0]->avoirNom() + " [" + QString::number(joueur->avoirMain().at(0)->avoirNum()) + "]");
                 if (joueur->avoirMain().at(0)->avoirNum() > numMax)
                     numMax = joueur->avoirMain()[0]->avoirNum();
             }
-        for (Joueur* joueur : joueurs)
+        for (Joueur* joueur : *joueurs)
             if(joueur->estEnVie() && joueur->avoirMain().at(0)->avoirNum() < numMax) // si plus petit que le max alors il meurt
                 joueur->eliminer();
     } else { // sinon on affiche la carte du gagnant
         emit messageLog("Il ne reste plus qu'un seul joueur en lice :");
-        for (Joueur* joueur : joueurs)
+        for (Joueur* joueur : *joueurs)
             if (joueur->estEnVie())
                 emit messageLog(joueur->avoirNom() + " à la carte " + joueur->avoirMain()[0]->avoirNom() + " [" + QString::number(joueur->avoirMain().at(0)->avoirNum()) + "]");
     }
 
     // recherche les pts bonnus, si deux, ils annulent
     Joueur* joueur1 = nullptr;
-    for (Joueur* joueur : joueurs){
+    for (Joueur* joueur : *joueurs){
         if (joueur->avoirPointBonus()){
             if (joueur1 == nullptr)
                 joueur1 = joueur;
@@ -285,7 +295,7 @@ void Jeu::finDeManche(bool finDuPaquet){
     // On donne les points et on les affiches
     QVector<QString> nomJoueurs;
     QVector<short int> pointsJoueurs;
-    for (Joueur* joueur : joueurs){
+    for (Joueur* joueur : *joueurs){
         if (joueur->estEnVie())
             nomJoueurs.push_back(joueur->avoirNom()); // On le listes
         joueur->gainPoints(); // On donne les points (gainPoints donne des pt si enVie et si ptBonnus)
@@ -307,7 +317,7 @@ void Jeu::finDeManche(bool finDuPaquet){
 }
 
 void Jeu::changerNomsJoueurs(){
-    emit demanderChangementNom(0, joueurs[0]->avoirNom());
+    emit demanderChangementNom(0, joueurs->at(0)->avoirNom());
 }
 
 // ---------------------------slots------------------------------------------- MainWindow -> Jeu
@@ -337,7 +347,7 @@ void Jeu::recevoirChoixCarte(short int idCarte){
             if (joueursPossible.isEmpty()){ // cas où on ne peut pas choisir de joueur
                 emit messageLog(joueurActuel->avoirNom() + " joue la carte " + carteEnCourDeJeux->avoirNom() + " [" + QString::number(carteEnCourDeJeux->avoirNum()) + "] sur personne.");
                 // Vérification de l'invariant : tout joueur vivant doit avoir exactement 1 carte -----------------------------------------------------------------------------
-                for (Joueur* joueur : joueurs){
+                for (Joueur* joueur : *joueurs){
                     if (joueur->estEnVie()){
                         if (joueur->avoirMain().isEmpty())
                             qDebug() << "BUG : " << joueur->avoirNom() << " est vivant mais n'a pas de carte !";
@@ -361,7 +371,7 @@ void Jeu::recevoirChoixCarte(short int idCarte){
             miseAJourCartesPotentiel(); // met à jour les connaisances des IA
             if (carteEnCourDeJeux->avoirNum() != 6){ // pour le chancelier on vas demander la carte à garder, lancerTour() est autre part
                 // Vérification de l'invariant : tout joueur vivant doit avoir exactement 1 carte -----------------------------------------------------------------------------
-                for (Joueur* joueur : joueurs){
+                for (Joueur* joueur : *joueurs){
                     if (joueur->estEnVie()){
                         if (joueur->avoirMain().isEmpty())
                             qDebug() << "BUG : " << joueur->avoirNom() << " est vivant mais n'a pas de carte !";
@@ -380,7 +390,7 @@ void Jeu::recevoirChoixValeurGarde(short int valeur){
     miseAJourCartesPotentiel(pioche[valeur]); // met à jour les connaisances des IA
 
     // Vérification de l'invariant : tout joueur vivant doit avoir exactement 1 carte -----------------------------------------------------------------------------
-    for (Joueur* joueur : joueurs){
+    for (Joueur* joueur : *joueurs){
         if (joueur->estEnVie()){
             if (joueur->avoirMain().isEmpty())
                 qDebug() << "BUG : " << joueur->avoirNom() << " est vivant mais n'a pas de carte !";
@@ -392,7 +402,7 @@ void Jeu::recevoirChoixValeurGarde(short int valeur){
 }
 
 void Jeu::recevoirChoixCibleJoueur(short int joueur){
-    joueurCible = joueurs[joueur]; // On note la cible choisit
+    joueurCible = joueurs->at(joueur); // On note la cible choisit
 
     // soit Offensif / Duel / OffensifOuDefensif
     switch (carteEnCourDeJeux->estType()) {
@@ -410,7 +420,7 @@ void Jeu::recevoirChoixCibleJoueur(short int joueur){
                 emit afficherCarte(joueurActuel->avoirMain()[0]);
 
             // Vérification de l'invariant : tout joueur vivant doit avoir exactement 1 carte -----------------------------------------------------------------------------
-            for (Joueur* joueur : joueurs){
+            for (Joueur* joueur : *joueurs){
                 if (joueur->estEnVie()){
                     if (joueur->avoirMain().isEmpty())
                         qDebug() << "BUG : " << joueur->avoirNom() << " est vivant mais n'a pas de carte !";
@@ -426,14 +436,14 @@ void Jeu::recevoirChoixCibleJoueur(short int joueur){
 }
 
 void Jeu::rejouer(){
-    if (not(joueurs.isEmpty())){ // sécurité si on quite avant la sélection des joueurs
-        joueurActuel = joueurs[0]; // On choisis le premier joueur
-        for (Joueur* joueur : joueurs)
+    if (not(joueurs->isEmpty())){ // sécurité si on quite avant la sélection des joueurs
+        joueurActuel = joueurs->at(0); // On choisis le premier joueur
+        for (Joueur* joueur : *joueurs)
             joueur->retirerPoints(); // On remet les compteurs à 0
 
         // On affiche la liste des joueurs
         QVector<QString> nomJoueurs;
-        for (Joueur* joueur : joueurs)
+        for (Joueur* joueur : *joueurs)
             nomJoueurs.push_back(joueur->avoirNom());
         emit initialiserListeJoueurs(nomJoueurs);
 
@@ -447,7 +457,7 @@ void Jeu::rejouer(){
 
 void Jeu::recevoirContinuer(){
     // Vérification de l'invariant : tout joueur vivant doit avoir exactement 1 carte -----------------------------------------------------------------------------
-    for (Joueur* joueur : joueurs){
+    for (Joueur* joueur : *joueurs){
         if (joueur->estEnVie()){
             if (joueur->avoirMain().isEmpty())
                 qDebug() << "BUG : " << joueur->avoirNom() << " est vivant mais n'a pas de carte !";
@@ -459,8 +469,8 @@ void Jeu::recevoirContinuer(){
 }
 
 void Jeu::recevoirChangementNom(short int idJoueur, QString nom){
-    joueurs[idJoueur]->changerNom(nom);
+    joueurs->at(idJoueur)->changerNom(nom);
 
-    if (idJoueur + 1 < joueurs.size())
-        emit demanderChangementNom(idJoueur + 1, joueurs[idJoueur + 1]->avoirNom());
+    if (idJoueur + 1 < joueurs->size())
+        emit demanderChangementNom(idJoueur + 1, joueurs->at(idJoueur + 1)->avoirNom());
 }

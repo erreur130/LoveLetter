@@ -1,6 +1,6 @@
 #include "iatriche.h"
 
-IATriche::IATriche(QString nom, QVector<Joueur*> listeJoueurs) : Joueur(nom), joueurs(listeJoueurs){}
+IATriche::IATriche(QString nom, QVector<Joueur*> *listeJoueurs) : Joueur(nom), joueurs(listeJoueurs){}
 
 IATriche::~IATriche(){}
 
@@ -35,7 +35,7 @@ Carte* IATriche::choisirCarte(short int nbCartesRestantes, QVector<bool>) const{
     // si garde (num 1) et que des joueurs ne sont pas protégé
     if (main.at(0)->avoirNum() == 1 || main.at(1)->avoirNum() == 1){
         bool possible = false;
-        for (Joueur* joueur : joueurs){
+        for (Joueur* joueur : *joueurs){
             if ((joueur->estEnVie() && not(joueur->estPorteger())) && joueur != this){ // Si non protéger et que ce n'est pas nous
                 possible = true;
                 break; // pas besoin de continuer
@@ -50,7 +50,7 @@ Carte* IATriche::choisirCarte(short int nbCartesRestantes, QVector<bool>) const{
     // si baron (num 3) et que tu as une plus grosse carte qu'un joueur non protégé
     if(main.at(0)->avoirNum() == 3 || main.at(1)->avoirNum() == 3){
         short int idAutreCarte = (main.at(0)->avoirNum()==3)?1:0; // pour connaitre l'autre carte que l'on a
-        for (Joueur* joueur : joueurs)
+        for (Joueur* joueur : *joueurs)
             if (joueur != this && ( (joueur->estEnVie() && not(joueur->estPorteger())) && main.at(idAutreCarte)->avoirNum() > joueur->avoirMain().at(0)->avoirNum() )) // Si non protéger et en desous de notre carte
                 return main.at(1-idAutreCarte); // on joue le baron
         // Si le baron n'est pas rentable on vérifie :
@@ -61,13 +61,13 @@ Carte* IATriche::choisirCarte(short int nbCartesRestantes, QVector<bool>) const{
     // si prince (num 5) et que quelqu'un à la princesse (num 9) et n'est pas protégé alors on le joue (et pas nous)
     if (main.at(1)->avoirNum() == 5 || main.at(0)->avoirNum() == 5){
         short int idCartePrince = (main.at(0)->avoirNum()==5)?0:1; // pour savoir où est le prince dans la main
-        for (Joueur* joueur : joueurs)
+        for (Joueur* joueur : *joueurs)
             if (joueur->avoirMain().at(0)->avoirNum() == 9 && ((joueur->estEnVie() && not(joueur->estPorteger())) && joueur != this)) // Si la liste contient la princesse (num 9) et qu'on peut le viser
                 return main.at(idCartePrince);
     }
 
     // si prince (num 5) et que on as une carte connue alors on joue le prince (si c'est une grosse carte et que l'ont est à la fin, on la garde)
-    if ( (estDecouvert() && main.at(1)->avoirNum() == 5) && (main.at(0)->avoirNum() <= 6 && nbCartesRestantes > joueurs.size()) ){
+    if ( (estDecouvert() && main.at(1)->avoirNum() == 5) && (main.at(0)->avoirNum() <= 6 && nbCartesRestantes > joueurs->size()) ){
         return main.at(1);
     }
 
@@ -86,7 +86,7 @@ Carte* IATriche::choisirCarte(short int nbCartesRestantes, QVector<bool>) const{
         return main.at(1);
 
     // si 1ère carte est connue par quelqu'un (si c'est une grosse carte et que l'ont est à la fin, on la garde)
-    if (estDecouvert() && (main.at(0)->avoirNum() <= 6 && nbCartesRestantes > joueurs.size())){
+    if (estDecouvert() && (main.at(0)->avoirNum() <= 6 && nbCartesRestantes > joueurs->size())){
         return main.at(0);
     }
 
@@ -117,25 +117,25 @@ short int IATriche::choisirJoueur(Carte* carte, QVector<bool> joueursNonProteger
     switch (numCarte) {
     case 1: // si garde (num 1)
         // Regarde personne non protéger
-        for (short int indice = 0; indice < joueurs.size(); indice++) // si il ne contient pas de garde
-            if (joueursNonProteger.at(indice) && (joueurs.at(indice)->avoirMain().at(0)->avoirNum() != 1))
+        for (short int indice = 0; indice < joueurs->size(); indice++) // si il ne contient pas de garde
+            if (joueursNonProteger.at(indice) && (joueurs->at(indice)->avoirMain().at(0)->avoirNum() != 1))
                 listeDesjoueurChoisi.push_back(indice);
         break;
     case 3: // si baron (num 3)
         // On cherce ceux qui ont une carte plus petites que la notre
-        for (short int indice = 0; indice < joueurs.size(); indice++){
-            if (joueursNonProteger.at(indice) && (joueurs.at(indice)->avoirMain().at(0)->avoirNum() < avoirMain().at(0)->avoirNum()))
+        for (short int indice = 0; indice < joueurs->size(); indice++){
+            if (joueursNonProteger.at(indice) && (joueurs->at(indice)->avoirMain().at(0)->avoirNum() < avoirMain().at(0)->avoirNum()))
                 listeDesjoueurChoisi.push_back(indice);
         }
         break;
     case 5: // si prince (num 5)
         // On cherche celui qui à la princesse
-        for (short int indice = 0; indice < joueurs.size(); indice++)
-            if (joueursNonProteger.at(indice) && (joueurs.at(indice)->avoirMain().at(0)->avoirNum() == 9))
+        for (short int indice = 0; indice < joueurs->size(); indice++)
+            if (joueursNonProteger.at(indice) && (joueurs->at(indice)->avoirMain().at(0)->avoirNum() == 9))
                 listeDesjoueurChoisi.push_back(indice);
 
         // On vérifie si on est à découvert et que c'est rentable de retirer sa main
-        if ((estDecouvert() && listeDesjoueurChoisi.isEmpty()) && (avoirMain().at(0)->avoirNum() <= 6 && nbCartesRestantes > joueurs.size())) // "cartesConnuesDesAutres.size()" = nb de joueur
+        if ((estDecouvert() && listeDesjoueurChoisi.isEmpty()) && (avoirMain().at(0)->avoirNum() <= 6 && nbCartesRestantes > joueurs->size())) // "cartesConnuesDesAutres.size()" = nb de joueur
             return avoirID(); // On se choisis soit même (pas besoin de continuer)
         break;
     case 2: // si prètre (num 2)
@@ -146,7 +146,7 @@ short int IATriche::choisirJoueur(Carte* carte, QVector<bool> joueursNonProteger
     }
 
     if (listeDesjoueurChoisi.isEmpty()){ // si on arrive toujours pas à trouver, on prend tout le monde
-        for (short int indice = 0; indice < joueurs.size(); indice++)
+        for (short int indice = 0; indice < joueursNonProteger.size(); indice++)
             listeDesjoueurChoisi.push_back(indice);
     }
 

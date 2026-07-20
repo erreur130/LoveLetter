@@ -55,6 +55,9 @@
         <property name="verticalScrollBarPolicy">
          <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
         </property>
+        <property name="editTriggers">
+         <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+        </property>
         <property name="dragEnabled">
          <bool>false</bool>
         </property>
@@ -67,6 +70,9 @@
         <attribute name="horizontalHeaderMinimumSectionSize">
          <number>100</number>
         </attribute>
+        <attribute name="horizontalHeaderHighlightSections">
+         <bool>false</bool>
+        </attribute>
         <attribute name="verticalHeaderVisible">
          <bool>true</bool>
         </attribute>
@@ -75,6 +81,9 @@
         </attribute>
         <attribute name="verticalHeaderMinimumSectionSize">
          <number>30</number>
+        </attribute>
+        <attribute name="verticalHeaderHighlightSections">
+         <bool>false</bool>
         </attribute>
         <row>
          <property name="text">

@@ -17,7 +17,7 @@ ChoixNomJoueur::~ChoixNomJoueur(){
 void ChoixNomJoueur::on_boutton_Valider_clicked(){
     if (ui->lineNom->text() == "")
         ui->labelErreur->setText("Le nom est vide !");
-    else if (ui->lineNom->text().size() > 10)
+    else if (ui->lineNom->text().size() > 15)
         ui->labelErreur->setText("Le nom est trop grand !");
     else {
         emit envoyerNom(idJoueur, ui->lineNom->text());

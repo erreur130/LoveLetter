@@ -12,20 +12,22 @@
 class Jeu : public QObject {
     Q_OBJECT
     short int objectifPoints;
-    QVector<Joueur*> joueurs;
+    QVector<Joueur*> *joueurs;
     Joueur* joueurActuel;
     Joueur* joueurCible;
     Carte* carteEnCourDeJeux;
     Paquet pioche;
+    short int nbManches;
 
     public:
         Jeu(QObject*);
         Jeu(QObject*, short int, short int, short int, short int);
         ~Jeu();
+        void melangerJoueurs();
         QVector<Joueur*> JoueursRestant() const;
         QVector<Joueur*> JoueursChoixPossible() const;
         inline Joueur* avoirJoueurActuel() const {return joueurActuel;};
-        inline QVector<Joueur*> avoirJoueurs() const {return joueurs;};
+        inline QVector<Joueur*> avoirJoueurs() const {return *joueurs;};
         inline const Paquet& avoirPaquet() const {return pioche;};
         bool tourSuivant();
         void miseAJourCartesPotentiel(Carte* cartePerdent = nullptr); //  paramètre nésésaire en cas de baron (num 3) et garde (num 1)
@@ -51,6 +53,7 @@ class Jeu : public QObject {
         void miseAJourNbCartesRestantes(short int);
         void afficherCarte(Carte*);
         void demanderChangementNom(short int, QString);
+        void afficherJoueursEliminer(QVector<bool>);
     public slots: // MainWindow -> Jeu
         void recevoirChoixCarte(short int idCarte);
         void recevoirChoixValeurGarde(short int valeur);

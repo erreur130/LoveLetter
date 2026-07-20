@@ -60,6 +60,7 @@ class MainWindow : public QMainWindow{
         void recevoirMiseAJourNbCartesRestantes(short int);
         void recevoirAfficherCarte(Carte*);
         void recevoirDemanderChangementNom(short int, QString);
+        void recevoirJoueursEliminer(QVector<bool>);
 
 };
 #endif // MAINWINDOW_H

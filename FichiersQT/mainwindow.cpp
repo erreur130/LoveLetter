@@ -37,6 +37,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(jeu, &Jeu::miseAJourNbCartesRestantes, this, &MainWindow::recevoirMiseAJourNbCartesRestantes);
     connect(jeu, &Jeu::afficherCarte, this, &MainWindow::recevoirAfficherCarte);
     connect(jeu, &Jeu::demanderChangementNom, this, &MainWindow::recevoirDemanderChangementNom);
+    connect(jeu, &Jeu::afficherJoueursEliminer, this, &MainWindow::recevoirJoueursEliminer);
     // connection à tout les signals/slots MainWindow -> Jeu
     connect(this, &MainWindow::envoyerChoixCarte, jeu, &Jeu::recevoirChoixCarte);
     connect(this, &MainWindow::envoyerChoixValeurGarde, jeu, &Jeu::recevoirChoixValeurGarde);
@@ -60,6 +61,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     // On demande le nom des joueurs
     if (not(AFermer)) // si on ne doit pas avotré le jeu
         jeu->changerNomsJoueurs();
+
+    // Puis on les mélange pour pas faire des groupes de type de Joueurs
+    jeu->melangerJoueurs();
 }
 
 MainWindow::~MainWindow(){
@@ -207,6 +211,9 @@ void MainWindow::recevoirInitialiserListeJoueurs(QVector<QString> nomJoueurs){
     for (short int indice = 0; indice < nomJoueurs.size(); indice++){ // On liste les joueurs avec leur nom et points (0 au début)
         ui->listeJoueurs->setItem(0, indice, new QTableWidgetItem(nomJoueurs[indice]));
         ui->listeJoueurs->setItem(1, indice, new QTableWidgetItem("0"));
+        // Pour ne pas avoir la casse en surbiance si on passe dessus :
+        ui->listeJoueurs->item(0, indice)->setFlags(ui->listeJoueurs->item(0, indice)->flags() & ~Qt::ItemIsSelectable & ~Qt::ItemIsEnabled);
+        ui->listeJoueurs->item(1, indice)->setFlags(ui->listeJoueurs->item(1, indice)->flags() & ~Qt::ItemIsSelectable & ~Qt::ItemIsEnabled);
     }
 }
 
@@ -230,6 +237,7 @@ void MainWindow::recevoirMiseAJourPointsJoueurs(QVector<short int> ptJoueurs){
 
 void MainWindow::recevoirMessageAlerteMainJoueurVasEtreMontre(QString nom, bool popup){
     ui->labelTourDe->setText("Tour de " + nom);
+    // On signal au joueur que c'est son tour
     if (popup){
         QMessageBox alerteMessage(this);
         alerteMessage.setWindowTitle("Tour suivant");
@@ -237,6 +245,14 @@ void MainWindow::recevoirMessageAlerteMainJoueurVasEtreMontre(QString nom, bool 
         alerteMessage.addButton("Continuer", QMessageBox::AcceptRole);
         alerteMessage.setStyleSheet("margin: auto;"); // tente de centrer
         alerteMessage.exec(); // bloquant, attend le clic
+    }
+    // On le met en surbriance dans la liste, les couleurs son rénitialiser à chaque tour avec recevoirJoueursEliminer(), donc on colore par dessus
+    for (int indice = 0; indice < ui->listeJoueurs->columnCount(); indice++){
+        QTableWidgetItem* item = ui->listeJoueurs->item(0, indice);
+        if (item != nullptr && item->text() == nom){
+            item->setBackground(Qt::red);
+            break;
+        }
     }
 }
 
@@ -276,6 +292,15 @@ void MainWindow::recevoirAfficherVictoireManche(QVector<QString> nomJoueurs){
     else
         message += " a gagné la manche !";
 
+    // On surligne le ou les gagants :
+    for (int indice = 0; indice < ui->listeJoueurs->columnCount(); indice++){
+        QTableWidgetItem* item = ui->listeJoueurs->item(0, indice);
+        if (item != nullptr && nomJoueurs.contains(item->text()))
+            item->setBackground(QColor("orange")); // si gagant
+        else
+            item->setBackground(Qt::FDiagPattern); // sinon mort
+    }
+
     alerteMessage->setText(message);
     alerteMessage->addButton("Continuer", QMessageBox::AcceptRole);
     alerteMessage->setStyleSheet("margin: auto;"); // tente de centrer
@@ -297,6 +322,16 @@ void MainWindow::recevoirAfficherVictoireJeu(QVector<QString> nomJoueurs){
         message += " ont gagné la partie !";
     else
         message += " a gagné la partie !";
+
+    // On surligne le ou les gagants :
+    for (int indice = 0; indice < ui->listeJoueurs->columnCount(); indice++){
+        QTableWidgetItem* item = ui->listeJoueurs->item(0, indice);
+        if (item != nullptr && nomJoueurs.contains(item->text())){
+            item->setBackground(QColor("green")); // si gagant
+            ui->listeJoueurs->item(1, indice)->setBackground(QColor("green"));
+        } else
+            item->setBackground(Qt::FDiagPattern); // sinon mort
+    }
 
     alerteMessage.setText(message);
     alerteMessage.addButton("Quitter", QMessageBox::RejectRole);
@@ -360,6 +395,16 @@ void MainWindow::recevoirDemanderChangementNom(short int idJoueur, QString nom){
 
 void MainWindow::recevoirNom(short int idJoueur, QString nom){
     emit changementNom(idJoueur, nom);
+}
+
+void MainWindow::recevoirJoueursEliminer(QVector<bool> joueursMort){
+    for (int indice = 0; indice < ui->listeJoueurs->columnCount(); indice++){
+        QTableWidgetItem* item = ui->listeJoueurs->item(0, indice);
+        if (item != nullptr && joueursMort.at(indice))
+            item->setBackground(Qt::FDiagPattern);
+        else
+            item->setBackground(Qt::NoBrush);
+    }
 }
 
 // ---------------------------- ui -------------------------------------

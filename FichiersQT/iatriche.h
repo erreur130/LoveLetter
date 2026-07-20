@@ -6,9 +6,9 @@
 #include <QVector>
 
 class IATriche : public Joueur{
-    QVector<Joueur*> joueurs;
+    QVector<Joueur*> *joueurs;
 public:
-    IATriche(QString, QVector<Joueur*>);
+    IATriche(QString, QVector<Joueur*>*);
     ~IATriche();
     void reinitialiser();
     Carte* choisirCarte(short int nbCartesRestantes, QVector<bool> joueursProteger) const;
