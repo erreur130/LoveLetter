@@ -157,7 +157,7 @@
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 
-- joueurs : QVector&lt;Joueur*&gt;
+- joueurs : QVector&lt;Joueur*&gt; *
 - joueurActuel, joueurCible : Joueur*
 m1=1..1
 m2=0..n
@@ -168,17 +168,18 @@ m2=0..n
     <id>UMLClass</id>
     <coordinates>
       <x>484</x>
-      <y>28</y>
+      <y>16</y>
       <w>276</w>
-      <h>272</h>
+      <h>284</h>
     </coordinates>
     <panel_attributes>Jeu
 --
-- objectifPoints : short int
+- objectifPoints, nbManches : short int
 --
 + Constructeur (parent : QObject*)
 + Constructeur(parent : QObject*, h, inul, inorm, itri : short int)
 + Destructeur()
++ melangerJoueurs()
 + JoueursRestant() : QVector&lt;Joueur*&gt;
 + JoueursChoixPossible() : QVector&lt;Joueur*&gt;
 + avoirJoueurActuel() : Joueur*
@@ -214,7 +215,7 @@ m2=0..n
 + miseAJourNbCartesRestantes(cartesRestantes : short int)
 + recevoirAfficherCarte(carte : Carte*)
 + demanderChangementNom(idJoueur : short int, nom : QString)
-</panel_attributes>
++ afficherJoueursEliminer(joueursMort : QVector&lt;bool&gt;)</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -478,9 +479,9 @@ SansEffet</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>952</x>
-      <y>32</y>
+      <y>24</y>
       <w>300</w>
-      <h>264</h>
+      <h>272</h>
     </coordinates>
     <panel_attributes>MainWindow
 --
@@ -515,6 +516,7 @@ AFermer : bool
 + recevoirMiseAJourNbCartesRestantes(cartesRestantes : short int)
 + recevoirAfficherCarte(carte : Carte*)
 + recevoirDemanderChangementNom(idJoueur : short int, nom : QString)
++ recevoirJoueursEliminer(joueursMort : QVector&lt;bool&gt;)
 
 «signals»
 + fairesuiteAction6(carteAGarder : short int, faireContinuer : bool)
@@ -754,7 +756,7 @@ bg=blue</panel_attributes>
     </coordinates>
     <panel_attributes>IATriche
 --
-- joueurs : QVector&lt;Joueur*&gt;
+- joueurs : QVector&lt;Joueur*&gt; *
 --
 + Constructeur(nom : string, listesJoueurs : QVector&lt;Joueur*&gt;)
 + Destructeur()
