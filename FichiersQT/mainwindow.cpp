@@ -53,9 +53,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
 
     // On cache les Wigets inutiles au début
-    ui->listeCarteMain->setVisible(false);
-    ui->listeJoueursCible->setVisible(false);
-    ui->listeCarteAGarder->setVisible(false);
     ui->labelInfoActionJoueur->setVisible(false);
 
     // On demande le nom des joueurs
@@ -115,16 +112,32 @@ void MainWindow::lancer(){
 // -----------------public slots---------------------- Jeu -> MainWindow
 
 void MainWindow::recevoirChoixCarteAGarder(Joueur* joueurARenvoyer){
-    ui->listeCarteAGarder->setVisible(true);
     ui->labelInfoActionJoueur->setVisible(true);
     ui->labelInfoActionJoueur->setText("Choisissez une carte à garder :");
 
-    ui->listeCarteAGarder->clear();
-    for (short int indice =0; indice < joueurARenvoyer->avoirMain().size(); indice++){
-        QListWidgetItem* joueurItem = new QListWidgetItem(ui->listeCarteAGarder);
-        joueurItem->setIcon(QIcon(joueurARenvoyer->avoirMain()[indice]->avoirImage()));
-        joueurItem->setData(Qt::UserRole, indice);
-        joueurItem->setData(Qt::UserRole + 1, QVariant::fromValue(joueurARenvoyer));
+    for (short int indice =0; indice < joueurARenvoyer->avoirMain().size(); indice++){ // On affiche toutes les cartes du joueur
+        QPushButton* btnJoueur= new QPushButton();
+        btnJoueur->setIcon(QIcon(joueurARenvoyer->avoirMain()[indice]->avoirImage()));
+
+        btnJoueur->setIconSize(QSize(200, 285)); //  taille de l'icône
+        btnJoueur->setFixedSize(210, 290); // Taille du boutton
+
+        // équivalent de item->data(Qt::UserRole) mais ici la fonction se crée individuellement pour chaque immages
+        connect(btnJoueur, &QPushButton::clicked, this, [=]() {
+            ui->labelInfoActionJoueur->setVisible(false);
+
+            // Nettoyage du layout
+            QLayoutItem *child;
+            while ((child = ui->listeCarteAGarder->takeAt(0)) != nullptr) {
+                child->widget()->deleteLater();
+                delete child;
+            }
+
+            emit envoyerSuiteAction6(joueurARenvoyer, indice, true); // On renvoie les infos nésésaire pour l'action
+        });
+
+        // Ajout au Layout
+        ui->listeCarteAGarder->addWidget(btnJoueur);
     }
 }
 
@@ -140,15 +153,6 @@ void MainWindow::recevoirReinitialiserLog(){
 void MainWindow::recevoirDemanderChoixValeurGarde(QVector<Carte*> cartes, QVector<short int> cartesJouer){
     ui->labelInfoActionJoueur->setVisible(true);
     ui->labelInfoActionJoueur->setText("Choisissez une carte pour l'action du grade :");
-
-    // Nettoyage du layout
-    QLayoutItem *child;
-    while ((child = ui->listeCarteChoixGarde->takeAt(0)) != nullptr) {
-        child->widget()->deleteLater();
-        delete child;
-    }
-
-
 
     int nbColonnes = 0; // le nombre max de cartes par ligne
     for (short int indice = 0; indice < cartes.size(); indice++) // on compte cb de carte sera afficher
@@ -171,7 +175,7 @@ void MainWindow::recevoirDemanderChoixValeurGarde(QVector<Carte*> cartes, QVecto
 
             // équivalent de item->data(Qt::UserRole) mais ici la fonction se crée individuellement pour chaque immages
             connect(btnCarte, &QPushButton::clicked, this, [=]() {
-                ui->labelInfoActionJoueur->setVisible(true);
+                ui->labelInfoActionJoueur->setVisible(false);
 
                 // Nettoyage du layout
                 QLayoutItem *child;
@@ -195,8 +199,6 @@ void MainWindow::recevoirDemanderChoixValeurGarde(QVector<Carte*> cartes, QVecto
         }
     }
     // On réorganise le placement des bouttons
-
-
     if (ui->listeCarteChoixGarde->count() == 0){ // si vide, on ne peut pas choisir
         ui->labelInfoActionJoueur->setVisible(false);
         emit envoyerChoixValeurGarde(-1); // Pour signaler que c'est impossible
@@ -213,20 +215,35 @@ void MainWindow::recevoirInitialiserListeJoueurs(QVector<QString> nomJoueurs){
         ui->listeJoueurs->setItem(1, indice, new QTableWidgetItem("0"));
         // Pour ne pas avoir la casse en surbiance si on passe dessus :
         ui->listeJoueurs->item(0, indice)->setFlags(ui->listeJoueurs->item(0, indice)->flags() & ~Qt::ItemIsSelectable & ~Qt::ItemIsEnabled);
-        ui->listeJoueurs->item(1, indice)->setFlags(ui->listeJoueurs->item(1, indice)->flags() & ~Qt::ItemIsSelectable & ~Qt::ItemIsEnabled);
+        ui->listeJoueurs->item(1, indice)->setFlags(ui->listeJoueurs->item(0, indice)->flags());
     }
 }
 
 void MainWindow::recevoirDemanderChoixCibleJoueur(QVector<QString> nomJoueurs, QVector<short int> idJoueurs){
-    ui->listeJoueursCible->setVisible(true);
     ui->labelInfoActionJoueur->setVisible(true);
     ui->labelInfoActionJoueur->setText("Choisissez un joueur à cibler :");
 
-    ui->listeJoueursCible->clear();
     for (short int indice =0; indice < nomJoueurs.size(); indice++){
-        QListWidgetItem* joueurItem = new QListWidgetItem(ui->listeJoueursCible);
-        joueurItem->setText(nomJoueurs[indice]);
-        joueurItem->setData(Qt::UserRole, idJoueurs[indice]);
+        QPushButton* btnJoueur = new QPushButton();
+        btnJoueur->setText(nomJoueurs[indice]);
+        btnJoueur->setMaximumWidth(120);
+
+        // équivalent de item->data(Qt::UserRole) mais ici la fonction se crée individuellement pour chaque immages
+        connect(btnJoueur, &QPushButton::clicked, this, [=]() {
+            ui->labelInfoActionJoueur->setVisible(false);
+
+            // Nettoyage du layout
+            QLayoutItem *child;
+            while ((child = ui->listeJoueursCible->takeAt(0)) != nullptr) {
+                child->widget()->deleteLater();
+                delete child;
+            }
+
+            emit envoyerChoixCibleJoueur(idJoueurs[indice]); // puis on donne l'id du joueur
+        });
+
+        // Ajout au QGridLayout
+        ui->listeJoueursCible->addWidget(btnJoueur);
     }
 }
 
@@ -410,14 +427,6 @@ void MainWindow::recevoirJoueursEliminer(QVector<bool> joueursMort){
 // ---------------------------- ui -------------------------------------
 
 
-void MainWindow::on_listeJoueursCible_itemClicked(QListWidgetItem *item){
-    ui->listeJoueursCible->setVisible(false);
-    ui->labelInfoActionJoueur->setVisible(false);
-
-    emit envoyerChoixCibleJoueur(item->data(Qt::UserRole).toInt());
-}
-
-
 void MainWindow::on_listeCarteMain_itemClicked(QListWidgetItem *item){
     if (!(item->flags() == Qt::NoItemFlags)){ // Si on ne doit pas sélectionner la carte, alors on ne fait rien
         ui->listeCarteMain->setVisible(false);
@@ -425,13 +434,5 @@ void MainWindow::on_listeCarteMain_itemClicked(QListWidgetItem *item){
 
         emit envoyerChoixCarte(item->data(Qt::UserRole).toInt());
     }
-}
-
-
-void MainWindow::on_listeCarteAGarder_itemClicked(QListWidgetItem *item){
-    ui->listeCarteAGarder->setVisible(false);
-    ui->labelInfoActionJoueur->setVisible(false);
-
-    emit envoyerSuiteAction6(item->data(Qt::UserRole + 1).value<Joueur*>(), item->data(Qt::UserRole).toInt(), true);
 }
 

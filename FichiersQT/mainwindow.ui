@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1429</width>
-    <height>805</height>
+    <width>1211</width>
+    <height>543</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -60,6 +60,9 @@
         </property>
         <property name="dragEnabled">
          <bool>false</bool>
+        </property>
+        <property name="selectionMode">
+         <enum>QAbstractItemView::SelectionMode::NoSelection</enum>
         </property>
         <property name="showGrid">
          <bool>false</bool>
@@ -154,7 +157,7 @@
               <property name="maximumSize">
                <size>
                 <width>416</width>
-                <height>300</height>
+                <height>285</height>
                </size>
               </property>
               <property name="verticalScrollBarPolicy">
@@ -193,58 +196,15 @@
               </property>
              </layout>
             </item>
-            <item alignment="Qt::AlignmentFlag::AlignHCenter">
-             <widget class="QListWidget" name="listeJoueursCible"/>
-            </item>
            </layout>
           </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_5">
             <item>
-             <widget class="QListWidget" name="listeCarteAGarder">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>632</width>
-                <height>285</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>632</width>
-                <height>285</height>
-               </size>
-              </property>
-              <property name="verticalScrollBarPolicy">
-               <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
-              </property>
-              <property name="horizontalScrollBarPolicy">
-               <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
-              </property>
-              <property name="dragDropMode">
-               <enum>QAbstractItemView::DragDropMode::DragDrop</enum>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>200</width>
-                <height>300</height>
-               </size>
-              </property>
-              <property name="flow">
-               <enum>QListView::Flow::LeftToRight</enum>
-              </property>
-              <property name="viewMode">
-               <enum>QListView::ViewMode::IconMode</enum>
-              </property>
-              <property name="itemAlignment">
-               <set>Qt::AlignmentFlag::AlignCenter</set>
-              </property>
-             </widget>
+             <layout class="QVBoxLayout" name="listeJoueursCible"/>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="listeCarteAGarder"/>
             </item>
            </layout>
           </item>
@@ -253,13 +213,10 @@
             <property name="orientation">
              <enum>Qt::Orientation::Vertical</enum>
             </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Policy::Expanding</enum>
-            </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>20</width>
-              <height>40</height>
+              <width>0</width>
+              <height>0</height>
              </size>
             </property>
            </spacer>
@@ -508,7 +465,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1429</width>
+     <width>1211</width>
      <height>23</height>
     </rect>
    </property>
