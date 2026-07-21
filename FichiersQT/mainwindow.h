@@ -59,6 +59,8 @@ class MainWindow : public QMainWindow{
         void recevoirAfficherCarte(Carte*);
         void recevoirDemanderChangementNom(short int, QString);
         void recevoirJoueursEliminer(QVector<bool>);
+    protected:
+        void resizeEvent(QResizeEvent *event) override;
 
 };
 #endif // MAINWINDOW_H

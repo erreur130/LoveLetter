@@ -109,21 +109,73 @@ void MainWindow::lancer(){
     jeu->rejouer(); // démarre la première manche, premier tour et s'enchaine à la suite
 }
 
+void MainWindow::resizeEvent(QResizeEvent *event){
+    QMainWindow::resizeEvent(event); //pour conserver le comportement par défaut
+
+    // On redimentionne toutes les cartes
+
+    // Les cartes pour le choix du garde:
+    {
+        int nbBtn = ui->listeCarteChoixGarde->count();
+        if (nbBtn != 0){
+            // on calcule le multiplicateur de taille en fonction de la fenetre
+            double multHauteur = ((ui->verticalLayout_5->geometry().height() - 6) /2.0) / 290.0; // -6 = marge       /2 car 2 carte sur la hauteur
+            double multLargeur = ((ui->verticalLayout_5->geometry().width() - 6*4) /5.0) / 210.0; // *4 = 4 marges       /5 car 5 carte sur la hauteur
+            double mult = (multHauteur<multLargeur)?multHauteur:multLargeur; // pour ajouster la taille des cartes on prend le multiplicateur le plus petit entre la largeur et hauteur
+            for (short int indice = 0; indice < nbBtn; indice++){ // pour chaque carte on change leurs tailles
+                QWidget* widget = ui->listeCarteChoixGarde->itemAt(indice)->widget();
+                if (widget){ // si possible
+                    QPushButton* btnCarte = qobject_cast<QPushButton*>(widget);
+                    if (btnCarte){ // si la convertion à marché
+                        btnCarte->setIconSize(QSize(200*mult, 285*mult)); //  taille de l'icône
+                        btnCarte->setFixedSize(QSize(210*mult, 290*mult)); // Taille du boutton
+                    }
+                }
+            }
+        }
+    }
+    // Les cartes pour le choix du chancelier :
+    {
+        int nbBtn = ui->listeCarteAGarder->count();
+        if (nbBtn != 0){
+            // on calcule le multiplicateur de taille en fonction de la fenetre
+            double multHauteur = ui->verticalLayout_5->geometry().height() / 290.0; // Une seul ligne
+            double multLargeur = ((ui->verticalLayout_5->geometry().width() - 6*(nbBtn-1)) / nbBtn) / 210.0; // en fonction du nb de carte qui seront montrées
+            double mult = (multHauteur<multLargeur)?multHauteur:multLargeur; // pour ajouster la taille des cartes on prend le multiplicateur le plus petit entre la largeur et hauteur
+            for (short int indice = 0; indice < nbBtn; indice++){ // pour chaque carte on change leurs tailles
+                QWidget* widget = ui->listeCarteAGarder->itemAt(indice)->widget();
+                if (widget){ // si possible
+                    QPushButton* btnCarte = qobject_cast<QPushButton*>(widget);
+                    if (btnCarte){ // si la convertion à marché
+                        btnCarte->setIconSize(QSize(200*mult, 285*mult)); //  taille de l'icône
+                        btnCarte->setFixedSize(QSize(210*mult, 290*mult)); // Taille du boutton
+                    }
+                }
+            }
+        }
+    }
+    // Les cartes de la main :
+    /*suite ici*/
+}
+
 // -----------------public slots---------------------- Jeu -> MainWindow
 
 void MainWindow::recevoirChoixCarteAGarder(Joueur* joueurARenvoyer){
     ui->labelInfoActionJoueur->setVisible(true);
     ui->labelInfoActionJoueur->setText("Choisissez une carte à garder :");
 
+    double multHauteur = ((ui->verticalLayout_5->geometry().height())) / 290.0;
+    double multLargeur = ((ui->verticalLayout_5->geometry().width() - 6*(joueurARenvoyer->avoirMain().size()-1)) / joueurARenvoyer->avoirMain().size()) / 210.0; // en fonction du nb de carte qui seront montrées
+    double mult = (multHauteur<multLargeur)?multHauteur:multLargeur; // pour ajouster la taille des cartes on prend le multiplicateur le plus petit entre la largeur et hauteur
     for (short int indice =0; indice < joueurARenvoyer->avoirMain().size(); indice++){ // On affiche toutes les cartes du joueur
-        QPushButton* btnJoueur= new QPushButton();
-        btnJoueur->setIcon(QIcon(joueurARenvoyer->avoirMain()[indice]->avoirImage()));
+        QPushButton* btnCarte= new QPushButton();
+        btnCarte->setIcon(QIcon(joueurARenvoyer->avoirMain()[indice]->avoirImage()));
 
-        btnJoueur->setIconSize(QSize(200, 285)); //  taille de l'icône
-        btnJoueur->setFixedSize(210, 290); // Taille du boutton
+        btnCarte->setIconSize(QSize(200*mult, 285*mult)); //  taille de l'icône
+        btnCarte->setFixedSize(QSize(210*mult, 290*mult)); // Taille du boutton
 
         // équivalent de item->data(Qt::UserRole) mais ici la fonction se crée individuellement pour chaque immages
-        connect(btnJoueur, &QPushButton::clicked, this, [=]() {
+        connect(btnCarte, &QPushButton::clicked, this, [=]() {
             ui->labelInfoActionJoueur->setVisible(false);
 
             // Nettoyage du layout
@@ -137,7 +189,7 @@ void MainWindow::recevoirChoixCarteAGarder(Joueur* joueurARenvoyer){
         });
 
         // Ajout au Layout
-        ui->listeCarteAGarder->addWidget(btnJoueur);
+        ui->listeCarteAGarder->addWidget(btnCarte);
     }
 }
 
@@ -160,7 +212,9 @@ void MainWindow::recevoirDemanderChoixValeurGarde(QVector<Carte*> cartes, QVecto
             nbColonnes++;
     nbColonnes = nbColonnes/2 + nbColonnes%2; // on calcule pour faire deux lignes (si impaire la première ligne sera plus remplis)
 
-    double diviseur = 1.75; // pour ajouster la taille des cartes
+    double multHauteur = ((ui->verticalLayout_5->geometry().height() - 6) /2.0) / 290.0; // -6 = marge       /2 car 2 carte sur la hauteur
+    double multLargeur = ((ui->verticalLayout_5->geometry().width() - 6*4) /5.0) / 210.0; // *4 = 4 marges       /5 car 5 carte sur la hauteur
+    double mult = (multHauteur<multLargeur)?multHauteur:multLargeur; // pour ajouster la taille des cartes on prend le multiplicateur le plus petit entre la largeur et hauteur
     int ligne = 0;
     int colonne = 0;
     // On rajoute toutes les cartes possibles
@@ -170,8 +224,8 @@ void MainWindow::recevoirDemanderChoixValeurGarde(QVector<Carte*> cartes, QVecto
             QPushButton *btnCarte = new QPushButton();
             btnCarte->setIcon(QIcon(cartes[indice]->avoirImage()));
 
-            btnCarte->setIconSize(QSize(200/diviseur, 285/diviseur)); //  taille de l'icône
-            btnCarte->setFixedSize(210/diviseur, 290/diviseur); // Taille du boutton
+            btnCarte->setIconSize(QSize(200*mult, 285*mult)); //  taille de l'icône
+            btnCarte->setFixedSize(QSize(210*mult, 290*mult)); // Taille du boutton
 
             // équivalent de item->data(Qt::UserRole) mais ici la fonction se crée individuellement pour chaque immages
             connect(btnCarte, &QPushButton::clicked, this, [=]() {
