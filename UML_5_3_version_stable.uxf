@@ -498,6 +498,7 @@ AFermer : bool
 - on_listeCarteMain_itemClicked(item : QListWidgetItem*)
 + lancer()
 + doitEtreFerme() : bool
+# resizeEvent(event : QResizeEvent*)
 
 + recevoirChoixCarteAGarder(joueurARenvoyer : Joueur*)
 + recevoirMessageLog(msg : QString)
