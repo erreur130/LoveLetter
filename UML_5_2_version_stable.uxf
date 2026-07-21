@@ -496,8 +496,6 @@ AFermer : bool
 - recevoirJoueur(h, inul, inorm, itri : short int)
 - recevoirNom(idJoueur : short int, nom : QString)
 - on_listeCarteMain_itemClicked(item : QListWidgetItem*)
-- on_listeJoueursCible_itemClicked(item : QListWidgetItem*)
-- on_listeCarteAGarder_itemClicked(item : QListWidgetItem*)
 + lancer()
 + doitEtreFerme() : bool
 
