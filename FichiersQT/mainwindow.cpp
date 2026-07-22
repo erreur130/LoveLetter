@@ -155,7 +155,21 @@ void MainWindow::resizeEvent(QResizeEvent *event){
         }
     }
     // Les cartes de la main :
-    /*suite ici*/
+    if(ui->listeCarteMain->count() != 0){
+        // calcule pour la taille de l'affichage des cartes de la main
+        double multHauteur = ui->verticalLayout_5->geometry().height() / 290.0;
+        double multLargeur = ((ui->verticalLayout_5->geometry().width() - 6) /2.0) / 210.0; // -6 = 1 marges       /2.0 car 2 carte sur la largeur
+        double mult = (multHauteur<multLargeur)?multHauteur:multLargeur; // pour ajouster la taille des cartes on prend le multiplicateur le plus petit entre la largeur et hauteur
+        ui->listeCarteMain->setIconSize(QSize(200*mult,285*mult));
+        ui->listeCarteMain->setFixedSize(QSize(200*mult*2+13,285*mult+4)); // +13 et + 4 car y a des margre (j'ai pas fait de calcule, mais comme ça c'est plutôt clean)
+        for (int i = 0; i < ui->listeCarteMain->count(); i++){ // *2 mais for() au cas où
+            QListWidgetItem* item = ui->listeCarteMain->item(i);
+            if (item != nullptr){
+                short int numCarte = item->data(Qt::UserRole).toInt();
+                item->setIcon(QIcon(QPixmap(jeu->avoirPaquet()[numCarte]->avoirImage()).scaled(QSize(200*mult,285*mult), Qt::IgnoreAspectRatio, Qt::SmoothTransformation))); // permet de faire plus grand que la taille originale
+            }
+        }
+    }
 }
 
 // -----------------public slots---------------------- Jeu -> MainWindow
@@ -213,7 +227,7 @@ void MainWindow::recevoirDemanderChoixValeurGarde(QVector<Carte*> cartes, QVecto
     nbColonnes = nbColonnes/2 + nbColonnes%2; // on calcule pour faire deux lignes (si impaire la première ligne sera plus remplis)
 
     double multHauteur = ((ui->verticalLayout_5->geometry().height() - 6) /2.0) / 290.0; // -6 = marge       /2 car 2 carte sur la hauteur
-    double multLargeur = ((ui->verticalLayout_5->geometry().width() - 6*4) /5.0) / 210.0; // *4 = 4 marges       /5 car 5 carte sur la hauteur
+    double multLargeur = ((ui->verticalLayout_5->geometry().width() - 6*4) /5.0) / 210.0; // *4 = 4 marges       /5 car 5 carte sur la largeur
     double mult = (multHauteur<multLargeur)?multHauteur:multLargeur; // pour ajouster la taille des cartes on prend le multiplicateur le plus petit entre la largeur et hauteur
     int ligne = 0;
     int colonne = 0;
@@ -333,11 +347,11 @@ void MainWindow::recevoirAfficherMain(Carte* carte1, Carte* carte2){
     ui->labelInfoActionJoueur->setText("Choisissez une carte de votre main :");
 
     ui->listeCarteMain->clear();
+
+    // on crée les deux cartes
     QListWidgetItem* itemCarte1 = new QListWidgetItem(ui->listeCarteMain);
-    itemCarte1->setIcon(QIcon(carte1->avoirImage()));
     itemCarte1->setData(Qt::UserRole, carte1->avoirNum());
     QListWidgetItem* itemCarte2 = new QListWidgetItem(ui->listeCarteMain);
-    itemCarte2->setIcon(QIcon(carte2->avoirImage()));
     itemCarte2->setData(Qt::UserRole, carte2->avoirNum());
 
     // si on as la comptesse avec le prince ou le roi on doit sélectionner seullement la comptesse
@@ -345,6 +359,20 @@ void MainWindow::recevoirAfficherMain(Carte* carte1, Carte* carte2){
         itemCarte2->setFlags(Qt::NoItemFlags);
     else if (carte2->avoirNum() == 8 && (carte1->avoirNum() == 5 || carte1->avoirNum() == 7)) // comptesse = carte2
         itemCarte1->setFlags(Qt::NoItemFlags);
+
+    // calcule pour la taille de l'affichage des cartes de la main
+    double multHauteur = ui->verticalLayout_5->geometry().height() / 290.0;
+    double multLargeur = ((ui->verticalLayout_5->geometry().width() - 6) /2.0) / 210.0; // -6 = 1 marges       /2.0 car 2 carte sur la largeur
+    double mult = (multHauteur<multLargeur)?multHauteur:multLargeur; // pour ajouster la taille des cartes on prend le multiplicateur le plus petit entre la largeur et hauteur
+    ui->listeCarteMain->setIconSize(QSize(200*mult,285*mult));
+    ui->listeCarteMain->setFixedSize(QSize(200*mult*2+13,285*mult+4)); // +13 et + 4 car y a des margre (j'ai pas fait de calcule, mais comme ça c'est plutôt clean)
+    for (int i = 0; i < ui->listeCarteMain->count(); i++){ // *2 mais for() au cas où
+        QListWidgetItem* item = ui->listeCarteMain->item(i);
+        if (item != nullptr){
+            short int numCarte = item->data(Qt::UserRole).toInt();
+            item->setIcon(QIcon(QPixmap(jeu->avoirPaquet()[numCarte]->avoirImage()).scaled(QSize(200*mult,285*mult), Qt::IgnoreAspectRatio, Qt::SmoothTransformation))); // permet de faire plus grand que la taille originale
+        }
+    }
 }
 
 void MainWindow::recevoirAfficherVictoireManche(QVector<QString> nomJoueurs){
