@@ -10,5 +10,7 @@
         <file>Images/Roi.png</file>
         <file>Images/Servante.png</file>
         <file>Images/Princesse.png</file>
+        <file>Images/Love_Letter_icon.icns</file>
+        <file>Images/Love_Letter_icon.ico</file>
     </qresource>
 </RCC>

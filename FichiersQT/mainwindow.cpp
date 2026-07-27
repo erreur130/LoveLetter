@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     NbJoueursWindow *fenetre = new NbJoueursWindow(this);
     connect(fenetre, SIGNAL(envoyerJoueur(short int, short int, short int, short int)), this, SLOT(recevoirJoueur(short int, short int, short int, short int)));
     fenetre->setFixedSize(fenetre->size());  // taille fixe basée sur la taille
-    fenetre->setWindowTitle("Choix des joueurs");
+    fenetre->setWindowTitle("Répartition");
     if (not(fenetre->exec() == QDialog::Accepted)){ // si la croix
         qDebug() << "close";
         jeu = new Jeu(this); // car non définit avant (sinon free nullptr)
@@ -183,7 +183,11 @@ void MainWindow::recevoirChoixCarteAGarder(Joueur* joueurARenvoyer){
     double mult = (multHauteur<multLargeur)?multHauteur:multLargeur; // pour ajouster la taille des cartes on prend le multiplicateur le plus petit entre la largeur et hauteur
     for (short int indice =0; indice < joueurARenvoyer->avoirMain().size(); indice++){ // On affiche toutes les cartes du joueur
         QPushButton* btnCarte= new QPushButton();
-        btnCarte->setIcon(QIcon(joueurARenvoyer->avoirMain()[indice]->avoirImage()));
+
+        QPixmap pixmap(joueurARenvoyer->avoirMain()[indice]->avoirImage());
+        pixmap = pixmap.scaled(200*10, 285*10, Qt::KeepAspectRatio, Qt::SmoothTransformation); // pour que la taille puisse s'adapter à une taille plus petite
+        btnCarte->setIcon(QIcon(pixmap));
+        //btnCarte->setIcon(QIcon(joueurARenvoyer->avoirMain()[indice]->avoirImage())); // remplacé
 
         btnCarte->setIconSize(QSize(200*mult, 285*mult)); //  taille de l'icône
         btnCarte->setFixedSize(QSize(210*mult, 290*mult)); // Taille du boutton
