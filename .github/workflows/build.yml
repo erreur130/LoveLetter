@@ -10,13 +10,13 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-22.04
+          - os: ubuntu-latest
             target: linux
             qt-version: '6.8.0'
           - os: windows-latest
             target: windows
             qt-version: '6.8.0'
-          - os: macos-13
+          - os: macos-latest
             target: macos
             qt-version: '6.7.3'
 
@@ -68,20 +68,19 @@ jobs:
 
     # --- DÉPLOIEMENT MACOS ---
     - name: Deploy macOS
-      if: matrix.os == 'macos-13'
+      if: matrix.os == 'macos-latest'
       run: |
         cd build
         macdeployqt LoveLetter.app -dmg -always-overwrite
 
     # --- DÉPLOIEMENT LINUX ---
     - name: Deploy Linux (AppImage)
-      if: matrix.os == 'ubuntu-22.04'
+      if: matrix.os == 'ubuntu-latest'
       run: |
         cd build
         wget -O linuxdeployqt.AppImage https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage
         chmod +x linuxdeployqt.AppImage
-        ./linuxdeployqt.AppImage --appimage-extract
-        ./squashfs-root/AppRun LoveLetter -appimage -bundle-non-qt-libs
+        ./linuxdeployqt.AppImage LoveLetter -appimage -bundle-non-qt-libs
 
     - name: Upload Artifacts
       uses: actions/upload-artifact@v4
