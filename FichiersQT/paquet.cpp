@@ -4,7 +4,7 @@ Paquet::Paquet() : cartes(QQueue<Carte*>()), cartesJouer(QVector<short int>(10, 
     // On créé les dif cartes ici et on les mélanges
     listeDesCartes.push_back(new Carte0(        2 /*nbExemplaires*/, 0 /*num*/, "Espionne"  , ":/Images/Espionne.png"   , TypeCarte::Defensif));
     listeDesCartes.push_back(new Carte1(        6 /*nbExemplaires*/, 1 /*num*/, "Garde"     , ":/Images/Garde.png"      , TypeCarte::Offensif));
-    listeDesCartes.push_back(new Carte2(        2 /*nbExemplaires*/, 2 /*num*/, "Prêtre"    , ":/Images/Prêtre.png"     , TypeCarte::Duel));
+    listeDesCartes.push_back(new Carte2(        2 /*nbExemplaires*/, 2 /*num*/, "Prêtre"    , ":/Images/Pretre.png"     , TypeCarte::Duel));
     listeDesCartes.push_back(new Carte3(        2 /*nbExemplaires*/, 3 /*num*/, "Baron"     , ":/Images/Baron.png"      , TypeCarte::Duel));
     listeDesCartes.push_back(new Carte4(        2 /*nbExemplaires*/, 4 /*num*/, "Servante"  , ":/Images/Servante.png"   , TypeCarte::Defensif));
     listeDesCartes.push_back(new Carte5(        2 /*nbExemplaires*/, 5 /*num*/, "Prince"    , ":/Images/Prince.png"     , TypeCarte::OffensifOuDefensif , this));
