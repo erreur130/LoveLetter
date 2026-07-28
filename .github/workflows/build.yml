@@ -1,0 +1,86 @@
+name: Build Qt (QMake) Multi-Platform
+
+on:
+  push:
+    branches: [ "main", "master" ]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        qt-version: ['6.8.0']
+        include:
+          - os: ubuntu-latest
+            target: linux
+          - os: windows-latest
+            target: windows
+          - os: macos-latest
+            target: macos
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v4
+      with:
+        version: ${{ matrix.qt-version }}
+        target: desktop
+        setup-python: false
+
+    - name: Configure (QMake)
+      shell: bash
+      run: |
+        mkdir build
+        cd build
+        qmake ../FichiersQT/FichiersQT.pro
+
+    - name: Build (Linux/macOS)
+      if: matrix.os != 'windows-latest'
+      run: |
+        cd build
+        make -j$(nproc 2>/dev/null || sysctl -n hw.ncpu)
+
+    - name: Build (Windows)
+      if: matrix.os == 'windows-latest'
+      shell: cmd
+      run: |
+        cd build
+        nmake
+
+    # --- DÉPLOIEMENT WINDOWS ---
+    - name: Deploy Windows
+      if: matrix.os == 'windows-latest'
+      shell: cmd
+      run: |
+        cd build\release
+        windeployqt LoveLetter.exe --release --compiler-runtime
+
+    # --- DÉPLOIEMENT MACOS ---
+    - name: Deploy macOS
+      if: matrix.os == 'macos-latest'
+      run: |
+        cd build
+        macdeployqt LoveLetter.app -dmg -always-overwrite
+
+    # --- DÉPLOIEMENT LINUX ---
+    - name: Deploy Linux (AppImage)
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        cd build
+        wget -O linuxdeployqt.AppImage https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage
+        chmod +x linuxdeployqt.AppImage
+        ./linuxdeployqt.AppImage LoveLetter -appimage -bundle-non-qt-libs
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.target }}-build
+        retention-days: 5
+        path: |
+          build/release/
+          build/*.dmg
+          build/*.AppImage

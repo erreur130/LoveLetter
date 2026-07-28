@@ -27,7 +27,6 @@ qrc_*.cpp
 # Objets/binaires
 *.o
 *.obj
-*.exe
 *.app
 *.so
 *.dylib
