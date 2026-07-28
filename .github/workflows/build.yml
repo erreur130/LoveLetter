@@ -7,6 +7,7 @@ on:
 jobs:
   build:
     strategy:
+      fail-fast: false  # ← ajouter cette ligne
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         qt-version: ['6.8.0']
@@ -29,7 +30,7 @@ jobs:
       with:
         version: ${{ matrix.qt-version }}
         target: desktop
-        setup-python: false
+        setup-python: true
 
     - name: Configure (QMake)
       shell: bash
