@@ -31,6 +31,7 @@ jobs:
         version: ${{ matrix.qt-version }}
         target: desktop
         setup-python: true
+        cache: true  # permet de ne pas recommencer de 0 à chaque build
 
     - name: Configure (QMake)
       shell: bash
