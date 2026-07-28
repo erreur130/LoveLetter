@@ -278,16 +278,12 @@ void MainWindow::recevoirDemanderChoixValeurGarde(QVector<Carte*> cartes, QVecto
 }
 
 void MainWindow::recevoirInitialiserListeJoueurs(QVector<QString> nomJoueurs){
-    ui->listeJoueurs->setSelectionMode(QAbstractItemView::NoSelection);
     ui->listeJoueurs->setColumnCount(nomJoueurs.size());
     ui->listeJoueurs->setRowCount(2);
 
     for (short int indice = 0; indice < nomJoueurs.size(); indice++){ // On liste les joueurs avec leur nom et points (0 au début)
         ui->listeJoueurs->setItem(0, indice, new QTableWidgetItem(nomJoueurs[indice]));
         ui->listeJoueurs->setItem(1, indice, new QTableWidgetItem("0"));
-        // Pour ne pas avoir la casse en surbiance si on passe dessus :
-        ui->listeJoueurs->item(0, indice)->setFlags(ui->listeJoueurs->item(0, indice)->flags() & ~Qt::ItemIsSelectable & ~Qt::ItemIsEnabled);
-        ui->listeJoueurs->item(1, indice)->setFlags(ui->listeJoueurs->item(0, indice)->flags());
     }
 }
 

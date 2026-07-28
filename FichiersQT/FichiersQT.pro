@@ -9,7 +9,7 @@ CONFIG += c++17
 RC_ICONS = Images/Love_Letter_icon.ico  # Windows
 ICON = Images/Love_Letter_icon.icns     # macOS
 
-TARGET = LoveLetter # Nom de l'exécutable
+TARGET = LoveLetter # Nom de l'exécutable par défaut
 
 SOURCES += \
     carte.cpp \
