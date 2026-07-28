@@ -7,7 +7,7 @@ on:
 jobs:
   build:
     strategy:
-      fail-fast: false  # ← ajouter cette ligne
+      fail-fast: false # permet de continuer à construire les autres plateformes même si une échoue
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         qt-version: ['6.8.0']
@@ -31,7 +31,11 @@ jobs:
         version: ${{ matrix.qt-version }}
         target: desktop
         setup-python: true
-        cache: true  # permet de ne pas recommencer de 0 à chaque build
+        cache: true
+
+    - name: Setup MSVC
+      if: matrix.os == 'windows-latest'
+      uses: ilammy/msvc-dev-cmd@v1
 
     - name: Configure (QMake)
       shell: bash
