@@ -16,9 +16,9 @@ jobs:
           - os: windows-latest
             target: windows
             qt-version: '6.8.0'
-          - os: macos-13
+          - os: macos-latest
             target: macos
-            qt-version: '6.7.3'
+            qt-version: '6.6.3'
 
     runs-on: ${{ matrix.os }}
 
@@ -68,7 +68,7 @@ jobs:
 
     # --- DÉPLOIEMENT MACOS ---
     - name: Deploy macOS
-      if: matrix.os == 'macos-13'
+      if: matrix.os == 'macos-latest'
       run: |
         cd build
         macdeployqt LoveLetter.app -dmg -always-overwrite
@@ -84,9 +84,16 @@ jobs:
       if: matrix.os == 'ubuntu-22.04'
       run: |
         cd build
-        wget -O linuxdeployqt https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage
-        chmod +x linuxdeployqt
-        APPIMAGE_EXTRACT_AND_RUN=1 ./linuxdeployqt LoveLetter -appimage -bundle-non-qt-libs
+        cat > LoveLetter.desktop << 'EOF'
+[Desktop Entry]
+Name=LoveLetter
+Exec=LoveLetter
+Icon=LoveLetter
+Type=Application
+Categories=Game;CardGame;
+EOF
+        cp ../FichiersQT/Images/Love_Letter_icon.png LoveLetter.png
+        APPIMAGE_EXTRACT_AND_RUN=1 ./linuxdeployqt LoveLetter -appimage -bundle-non-qt-libs -desktop=LoveLetter.desktop
 
     - name: Upload Artifacts
       uses: actions/upload-artifact@v4
