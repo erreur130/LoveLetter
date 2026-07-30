@@ -88,7 +88,7 @@ jobs:
         cd build
         printf '[Desktop Entry]\nName=LoveLetter\nExec=LoveLetter\nIcon=LoveLetter\nType=Application\nCategories=Game;CardGame;\n' > LoveLetter.desktop
         cp ../FichiersQT/Images/Love_Letter_icon.png LoveLetter.png
-        APPIMAGE_EXTRACT_AND_RUN=1 ../linuxdeployqt LoveLetter -appimage -bundle-non-qt-libs -desktop=LoveLetter.desktop
+        APPIMAGE_EXTRACT_AND_RUN=1 ../linuxdeployqt LoveLetter -appimage -bundle-non-qt-libs
 
     - name: Upload Artifacts
       uses: actions/upload-artifact@v4
