@@ -45,6 +45,13 @@ jobs:
         cd build
         qmake ../FichiersQT/FichiersQT.pro
 
+    - name: Remove AGL framework (macOS)
+      if: matrix.os == 'macos-latest'
+      run: |
+        sed -i '' 's/-framework AGL//g' build/Makefile
+        sed -i '' 's/-framework AGL//g' build/Makefile.Release 2>/dev/null || true
+        sed -i '' 's/-framework AGL//g' build/Makefile.Debug 2>/dev/null || true
+
     - name: Build (Linux/macOS)
       if: matrix.os != 'windows-latest'
       run: |

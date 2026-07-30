@@ -11,8 +11,6 @@ ICON = Images/Love_Letter_icon.icns     # macOS
 
 TARGET = LoveLetter # Nom de l'exécutable par défaut
 
-macx: LIBS -= -framework AGL                                # pour la compilation macOS
-macx: QMAKE_LFLAGS -= -framework AGL                        # pour la compilation macOS
 macx: QMAKE_CXXFLAGS += -Wno-implicit-function-declaration  # pour la compilation macOS
 
 SOURCES += \
