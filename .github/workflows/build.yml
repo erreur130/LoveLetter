@@ -15,7 +15,7 @@ jobs:
             qt-version: '6.11.1'
           - os: windows-latest
             target: windows
-            qt-version: '6.11.1'
+            qt-version: '6.11.*'
           - os: macos-latest
             target: macos
             qt-version: '6.11.1'
