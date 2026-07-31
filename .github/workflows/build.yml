@@ -3,7 +3,10 @@ name: Build Qt (QMake) Multi-Platform
 on:
   push:
     tags:
-      - 'v*'  # compile UNIQUEMENT quand un tag est poussé
+      - 'v*'
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -85,7 +88,7 @@ jobs:
       if: matrix.os == 'windows-latest'
       shell: pwsh
       run: |
-        Compress-Archive -Path build\release\* -DestinationPath build\LoveLetter-windows.zip
+        Compress-Archive -Path build\release\* -DestinationPath "build\LoveLetter-${{ github.ref_name }}-windows.zip"
 
     # --- DÉPLOIEMENT MACOS ---
     - name: Deploy macOS
@@ -93,6 +96,7 @@ jobs:
       run: |
         cd build
         macdeployqt LoveLetter.app -dmg -always-overwrite
+        mv LoveLetter.dmg "LoveLetter-${{ github.ref_name }}-macos.dmg"
 
     # --- DÉPLOIEMENT LINUX ---
     - name: Install dependencies Linux
@@ -111,22 +115,28 @@ jobs:
         cp ../FichiersQT/Images/Love_Letter_icon.png LoveLetter.png
         APPIMAGE_EXTRACT_AND_RUN=1 ../linuxdeployqt LoveLetter -appimage -bundle-non-qt-libs
 
+    - name: Package Linux
+      if: matrix.os == 'ubuntu-22.04'
+      run: |
+        cd build
+        chmod +x *.AppImage
+        mv *.AppImage "LoveLetter-${{ github.ref_name }}-linux.AppImage"
+        tar -czf "LoveLetter-${{ github.ref_name }}-linux.tar.gz" "LoveLetter-${{ github.ref_name }}-linux.AppImage"
+
     - name: Upload Artifacts
       uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.target }}-build
         retention-days: 5
         path: |
-          build/LoveLetter-windows.zip
-          build/*.dmg
-          build/*.AppImage
+          build/LoveLetter-${{ github.ref_name }}-windows.zip
+          build/LoveLetter-${{ github.ref_name }}-macos.dmg
+          build/LoveLetter-${{ github.ref_name }}-linux.tar.gz
 
   release:
     needs: build
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/')
-    permissions:
-      contents: write
 
     steps:
     - name: Download all artifacts
@@ -135,13 +145,18 @@ jobs:
         path: artifacts/
 
     - name: Create GitHub Release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with:
         name: "LoveLetter ${{ github.ref_name }}"
-        body: "Release automatique de LoveLetter"
+        body: |
+          ## Téléchargement
+
+          - **Windows** : Télécharge `LoveLetter-${{ github.ref_name }}-windows.zip`, extrais et lance `LoveLetter.exe`
+          - **macOS** : Télécharge `LoveLetter-${{ github.ref_name }}-macos.dmg`, ouvre et glisse dans Applications
+          - **Linux** : Télécharge `LoveLetter-${{ github.ref_name }}-linux.tar.gz`, extrais et lance l'AppImage
         files: |
-          artifacts/linux-build/*.AppImage
-          artifacts/windows-build/LoveLetter-windows.zip
-          artifacts/macos-build/*.dmg
+          artifacts/linux-build/LoveLetter-${{ github.ref_name }}-linux.tar.gz
+          artifacts/windows-build/LoveLetter-${{ github.ref_name }}-windows.zip
+          artifacts/macos-build/LoveLetter-${{ github.ref_name }}-macos.dmg
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
