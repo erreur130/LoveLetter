@@ -222,7 +222,7 @@ void MainWindow::recevoirReinitialiserLog(){
 
 void MainWindow::recevoirDemanderChoixValeurGarde(QVector<Carte*> cartes, QVector<short int> cartesJouer){
     ui->labelInfoActionJoueur->setVisible(true);
-    ui->labelInfoActionJoueur->setText("Choisissez une carte pour l'action du grade :");
+    ui->labelInfoActionJoueur->setText("Choisissez une carte pour l'action du garde :");
 
     int nbColonnes = 0; // le nombre max de cartes par ligne
     for (short int indice = 0; indice < cartes.size(); indice++) // on compte cb de carte sera afficher
@@ -395,7 +395,7 @@ void MainWindow::recevoirAfficherVictoireManche(QVector<QString> nomJoueurs){
     for (int indice = 0; indice < ui->listeJoueurs->columnCount(); indice++){
         QTableWidgetItem* item = ui->listeJoueurs->item(0, indice);
         if (item != nullptr && nomJoueurs.contains(item->text()))
-            item->setBackground(QColor("orange")); // si gagant
+            item->setBackground(QColor("orange")); // si gagnant
         else
             item->setBackground(Qt::FDiagPattern); // sinon mort
     }
@@ -426,7 +426,7 @@ void MainWindow::recevoirAfficherVictoireJeu(QVector<QString> nomJoueurs){
     for (int indice = 0; indice < ui->listeJoueurs->columnCount(); indice++){
         QTableWidgetItem* item = ui->listeJoueurs->item(0, indice);
         if (item != nullptr && nomJoueurs.contains(item->text())){
-            item->setBackground(QColor("green")); // si gagant
+            item->setBackground(QColor("green")); // si gagnant
             ui->listeJoueurs->item(1, indice)->setBackground(QColor("green"));
         } else
             item->setBackground(Qt::FDiagPattern); // sinon mort
@@ -488,7 +488,7 @@ void MainWindow::recevoirDemanderChangementNom(short int idJoueur, QString nom){
     ChoixNomJoueur *fenetre = new ChoixNomJoueur(this, idJoueur, nom);
     connect(fenetre, SIGNAL(envoyerNom(short int, QString)), this, SLOT(recevoirNom(short int, QString)));
     fenetre->setFixedSize(fenetre->size());  // taille fixe basée sur la taille
-    fenetre->setWindowTitle("Choix du nom de Joueur");
+    fenetre->setWindowTitle("Choix du nom de joueur");
     fenetre->exec(); // bloque la fenetre
 }
 

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1211</width>
-    <height>543</height>
+    <height>547</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -137,7 +137,7 @@
           <item>
            <widget class="QLabel" name="labelInfoActionJoueur">
             <property name="text">
-             <string>Choisisez une carte :</string>
+             <string>Choisissez une carte :</string>
             </property>
            </widget>
           </item>
@@ -476,7 +476,7 @@
      <x>0</x>
      <y>0</y>
      <width>1211</width>
-     <height>23</height>
+     <height>25</height>
     </rect>
    </property>
    <addaction name="actionRegles_de_jeu"/>

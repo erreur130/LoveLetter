@@ -149,7 +149,7 @@ void Jeu::reinitialiserManche(){
 }
 
 void Jeu::eliminationJoueur(Joueur* joueur){
-    emit messageLog(joueur->avoirNom() + "est éliminé !");
+    emit messageLog(joueur->avoirNom() + " est éliminé !");
     joueur->eliminer();
 }
 
@@ -264,7 +264,7 @@ void Jeu::finDeManche(bool finDuPaquet){
         // pour ceux qui sont en vie :
         for (Joueur* joueur : *joueurs)
             if (joueur->estEnVie()){ // si plus grand on le note + affichage de la personne
-                emit messageLog(joueur->avoirNom() + " à la carte " + joueur->avoirMain()[0]->avoirNom() + " [" + QString::number(joueur->avoirMain().at(0)->avoirNum()) + "]");
+                emit messageLog(joueur->avoirNom() + " a la carte " + joueur->avoirMain()[0]->avoirNom() + " [" + QString::number(joueur->avoirMain().at(0)->avoirNum()) + "]");
                 if (joueur->avoirMain().at(0)->avoirNum() > numMax)
                     numMax = joueur->avoirMain()[0]->avoirNum();
             }

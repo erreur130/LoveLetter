@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>227</width>
-    <height>183</height>
+    <width>229</width>
+    <height>187</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -55,7 +55,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Nombre d'IA nuls :</string>
+          <string>Nombre d'IA nulles :</string>
          </property>
         </widget>
        </item>
@@ -69,7 +69,7 @@
        <item row="2" column="0">
         <widget class="QLabel" name="label_3">
          <property name="text">
-          <string>Nombre d'IA normaux :</string>
+          <string>Nombre d'IA normales :</string>
          </property>
         </widget>
        </item>
@@ -82,7 +82,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Nombre d'humain :</string>
+          <string>Nombre d'humains :</string>
          </property>
         </widget>
        </item>
@@ -96,7 +96,7 @@
        <item row="3" column="0">
         <widget class="QLabel" name="label_5">
          <property name="text">
-          <string>Nombre d'IA tricheurs : </string>
+          <string>Nombre d'IA tricheuses :</string>
          </property>
         </widget>
        </item>
@@ -124,7 +124,7 @@
        <item alignment="Qt::AlignmentFlag::AlignHCenter">
         <widget class="QLabel" name="label_4">
          <property name="text">
-          <string>2 à 6 Joueurs</string>
+          <string>2 à 6 joueurs</string>
          </property>
         </widget>
        </item>
